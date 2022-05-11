@@ -1,3 +1,3 @@
-# DNExT Client
+# MKCL EXAM LIVE
 
-Project for DNExT Client
+This project is created for development of functionality to register the students for competitive exam

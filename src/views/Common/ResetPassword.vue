@@ -3,7 +3,10 @@
     <div class="card-login">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <router-link to="/login" class="btn btn-back">
+          <router-link
+            to="/login"
+            class="btn btn-back"
+          >
             Back to Login
           </router-link>
           <div class="logo-wrapper">
@@ -13,11 +16,13 @@
             <!-- <h1>MKCL EXAM LIVE</h1> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/logo_mockexams.png"
+              src="../../../public/assets/images/DNEXT_logo final-01.png"
               alt="MKCL Mock Exams"
-            />
+            >
           </div>
-          <div class="card-header">Reset Password</div>
+          <div class="card-header">
+            Reset Password
+          </div>
           <div class="form-wrapper">
             <div class="form-group">
               <label class="sr-only">Mobile Number</label>
@@ -36,7 +41,7 @@
                       $v.otp_d.mobileNumber.$invalid &&
                       $v.otp_d.mobileNumber.$anyDirty,
                   }"
-                />
+                >
                 <div class="input-group-append">
                   <button
                     class="btn btn-primary"
@@ -51,7 +56,7 @@
                 class="text-danger"
                 v-if="
                   $v.otp_d.mobileNumber.required &&
-                  $v.otp_d.mobileNumber.$anyDirty
+                    $v.otp_d.mobileNumber.$anyDirty
                 "
               >
                 Please Provide Your 10-digits Mobile Number !
@@ -60,7 +65,7 @@
                 class="text-danger"
                 v-if="
                   !$v.otp_d.mobileNumber.numeric &&
-                  $v.otp_d.mobileNumber.$anyDirty
+                    $v.otp_d.mobileNumber.$anyDirty
                 "
               >
                 Mobile Number must be numeric !
@@ -70,13 +75,16 @@
                 v-if="
                   (!$v.otp_d.mobileNumber.minLength ||
                     !$v.otp_d.mobileNumber.maxLength) &&
-                  $v.otp_d.mobileNumber.$anyDirty
+                    $v.otp_d.mobileNumber.$anyDirty
                 "
               >
                 Mobile Number must be of 10 digit !
               </div>
             </div>
-            <div class="form-group" v-if="showOtpField == true">
+            <div
+              class="form-group"
+              v-if="showOtpField == true"
+            >
               <label class="sr-only">Enter OTP</label>
               <div class="input-group">
                 <input
@@ -88,7 +96,7 @@
                   :class="{
                     'is-invalid': otp_submitted && $v.otp_d.votp.$invalid,
                   }"
-                />
+                >
                 <div class="input-group-append">
                   <button
                     type="button"
@@ -107,7 +115,10 @@
                 OTP is required !
               </div>
             </div>
-            <div class="box-otp" v-if="otp_verified">
+            <div
+              class="box-otp"
+              v-if="otp_verified"
+            >
               <div class="form-group">
                 <label class="sr-only">Password</label>
                 <div class="ic-holder">
@@ -183,12 +194,13 @@
                   src="../../../public/assets/images/logo_mkcl.svg"
                   class="img-adj"
                   alt="MKCL"
-                />
+                >
                 <div class="copyright">
                   Powered by
-                  <a href="https://www.mkcl.org" target="_blank"
-                    >Maharashtra Knowledge Corporation Ltd</a
-                  >. (MKCL), Copyright © 2020. All rights reserved.<br />
+                  <a
+                    href="https://www.mkcl.org"
+                    target="_blank"
+                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2020. All rights reserved.<br>
                   The copyright of eBalbharati duly acknowledged.
                 </div>
               </div>
@@ -201,34 +213,34 @@
 </template>
 
 <script>
-import Response from "@/plugins/response.js";
-import MQL from "@/plugins/mql.js";
+import Response from '@/plugins/response.js'
+import MQL from '@/plugins/mql.js'
 import {
   required,
   numeric,
   minLength,
   maxLength,
-  sameAs,
-} from "vuelidate/lib/validators";
+  sameAs
+} from 'vuelidate/lib/validators'
 export default {
-  data() {
+  data () {
     return {
       otp_d: {},
-      password: "",
-      ConfirmPassword: "",
-      button: "Verify OTP",
+      password: '',
+      ConfirmPassword: '',
+      button: 'Verify OTP',
       flag: 0,
-      PasswordInputType: "password",
-      PasswordInput: "password",
-      iconChange: "mdi mdi-eye",
-      iconChangeCnf: "mdi mdi-eye",
+      PasswordInputType: 'password',
+      PasswordInput: 'password',
+      iconChange: 'mdi mdi-eye',
+      iconChangeCnf: 'mdi mdi-eye',
       mobileNumberCopy: 0,
       sendOtpFlag: false,
       showOtpField: false,
       otp_submitted: false,
       otp_verified: false,
-      submitted: false,
-    };
+      submitted: false
+    }
   },
   validations: {
     otp_d: {
@@ -236,9 +248,9 @@ export default {
         // required,
         numeric,
         minLength: minLength(10),
-        maxLength: maxLength(10),
+        maxLength: maxLength(10)
       },
-      votp: { required },
+      votp: { required }
     },
 
     password: {
@@ -250,162 +262,162 @@ export default {
           /[a-z]/.test(Password) &&
           /[A-Z]/.test(Password) &&
           /[0-9]/.test(Password)
-        );
-      },
+        )
+      }
     },
 
-    ConfirmPassword: { required, sameAsPassword: sameAs("password") },
+    ConfirmPassword: { required, sameAsPassword: sameAs('password') }
   },
-  mounted() {
-    const vm = this;
+  mounted () {
+    const vm = this
     if (
-      vm.$route.query.for === "medical-officer" ||
-      vm.$route.query.for === "taluka-health-officer"
+      vm.$route.query.for === 'medical-officer' ||
+      vm.$route.query.for === 'taluka-health-officer'
     ) {
-      vm.otp_verified = true;
-      vm.mobileNumberCopy = vm.$route.query.username;
-      vm.submitted = true;
+      vm.otp_verified = true
+      vm.mobileNumberCopy = vm.$route.query.username
+      vm.submitted = true
     }
   },
   methods: {
-    resetPassword() {
+    resetPassword () {
       new MQL()
-        .setActivity("o.[ResetPassword]")
+        .setActivity('o.[ResetPassword]')
         .setData({ username: this.mobileNumberCopy, password: this.password })
         .fetch()
         .then((rs) => {
-          const res = rs.getActivity("ResetPassword", true);
-          if (rs.isValid("ResetPassword")) {
-            this.$toasted.success("Password reset successfull", {
-              theme: "bubble",
-              position: "top-center",
-              duration: 3000,
-            });
-            this.$router.push({ name: "Login" });
+          const res = rs.getActivity('ResetPassword', true)
+          if (rs.isValid('ResetPassword')) {
+            this.$toasted.success('Password reset successfull', {
+              theme: 'bubble',
+              position: 'top-center',
+              duration: 3000
+            })
+            this.$router.push({ name: 'Login' })
           } else {
-            rs.showErrorToast("ResetPassword");
+            rs.showErrorToast('ResetPassword')
           }
-        });
+        })
     },
-    passwordVisibility() {
+    passwordVisibility () {
       this.PasswordInputType =
-        this.PasswordInputType === "password" ? "text" : "password";
+        this.PasswordInputType === 'password' ? 'text' : 'password'
       this.iconChange =
-        this.iconChange === "mdi mdi-eye-off"
-          ? "mdi mdi-eye-off"
-          : "mdi mdi-eye";
+        this.iconChange === 'mdi mdi-eye-off'
+          ? 'mdi mdi-eye-off'
+          : 'mdi mdi-eye'
     },
-    passwordVisibilityCnf() {
+    passwordVisibilityCnf () {
       this.PasswordInput =
-        this.PasswordInput === "password" ? "text" : "password";
+        this.PasswordInput === 'password' ? 'text' : 'password'
       this.iconChangeCnf =
-        this.iconChangeCnf === "mdi mdi-eye-off"
-          ? "mdi mdi-eye"
-          : "mdi mdi-eye-off";
+        this.iconChangeCnf === 'mdi mdi-eye-off'
+          ? 'mdi mdi-eye'
+          : 'mdi mdi-eye-off'
     },
-    getUserUsername() {
-      this.$v.$touch();
+    getUserUsername () {
+      this.$v.$touch()
       if (!this.$v.otp_d.mobileNumber.$invalid) {
-        const vm = this;
+        const vm = this
 
         new MQL()
-          .setActivity("o.[query_1haFv3r28MreI18VSKSZTRh3wBL]")
+          .setActivity('o.[query_1haFv3r28MreI18VSKSZTRh3wBL]')
           .setData({ username: this.otp_d.mobileNumber })
           .fetch()
           .then((rs) => {
             const res = rs.getActivity(
-              "query_1haFv3r28MreI18VSKSZTRh3wBL",
+              'query_1haFv3r28MreI18VSKSZTRh3wBL',
               true
-            );
-            if (rs.isValid("query_1haFv3r28MreI18VSKSZTRh3wBL")) {
+            )
+            if (rs.isValid('query_1haFv3r28MreI18VSKSZTRh3wBL')) {
               if (res != null) {
-                vm.getOtp();
+                vm.getOtp()
               } else {
-                this.$toasted.error("Invalid Username", {
-                  theme: "bubble",
-                  position: "top-center",
-                  duration: 3000,
-                });
+                this.$toasted.error('Invalid Username', {
+                  theme: 'bubble',
+                  position: 'top-center',
+                  duration: 3000
+                })
               }
             } else {
-              rs.showErrorToast("query_1haFv3r28MreI18VSKSZTRh3wBL");
+              rs.showErrorToast('query_1haFv3r28MreI18VSKSZTRh3wBL')
             }
-          });
+          })
       }
     },
-    getOtp() {
-      const vm = this;
+    getOtp () {
+      const vm = this
 
       new MQL()
-        .setActivity("o.[SendOtp]")
+        .setActivity('o.[SendOtp]')
         .setData(this.otp_d)
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity("SendOtp", true);
-          if (rs.isValid("SendOtp")) {
-            vm.showOtpField = true;
-            this.$toasted.success("OTP sent to your phone number", {
-              theme: "bubble",
-              position: "top-center",
-              duration: 3000,
-            });
+          let res = rs.getActivity('SendOtp', true)
+          if (rs.isValid('SendOtp')) {
+            vm.showOtpField = true
+            this.$toasted.success('OTP sent to your phone number', {
+              theme: 'bubble',
+              position: 'top-center',
+              duration: 3000
+            })
             this.$toasted.error(
-              "Please wait for 30 seconds before resending OTP",
+              'Please wait for 30 seconds before resending OTP',
               {
-                theme: "bubble",
-                position: "top-center",
-                duration: 3000,
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
               }
-            );
-            this.sendOtpFlag = true;
+            )
+            this.sendOtpFlag = true
             setTimeout(function () {
-              vm.sendOtpFlag = false;
-            }, 30000);
+              vm.sendOtpFlag = false
+            }, 30000)
           } else {
-            rs.showErrorToast("SendOtp");
+            rs.showErrorToast('SendOtp')
           }
-        });
+        })
     },
-    verifyOtp() {
+    verifyOtp () {
       new MQL()
-        .setActivity("o.[VerifyOtp]")
+        .setActivity('o.[VerifyOtp]')
         .setData(this.otp_d)
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity("VerifyOtp", true);
-          if (rs.isValid("VerifyOtp")) {
-            if (res.result.votp === "OTPFOUND") {
-              this.sendOtpFlag = true;
-              this.submitted = true;
-              this.flag = 1;
-              this.otp_verified = true;
-              this.button = "Verified";
-              this.mobileNumberCopy = this.otp_d.mobileNumber;
+          let res = rs.getActivity('VerifyOtp', true)
+          if (rs.isValid('VerifyOtp')) {
+            if (res.result.votp === 'OTPFOUND') {
+              this.sendOtpFlag = true
+              this.submitted = true
+              this.flag = 1
+              this.otp_verified = true
+              this.button = 'Verified'
+              this.mobileNumberCopy = this.otp_d.mobileNumber
               setTimeout(function () {
-                this.sendOtpFlag = false;
-              }, 300000);
-              this.$toasted.success("OTP Verified", {
-                theme: "bubble",
-                position: "top-center",
-                duration: 3000,
-              });
+                this.sendOtpFlag = false
+              }, 300000)
+              this.$toasted.success('OTP Verified', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
             }
-            if (res.result.votp === "OTPNOTFOUND") {
-              this.flag = 0;
+            if (res.result.votp === 'OTPNOTFOUND') {
+              this.flag = 0
 
-              this.$toasted.error("Invalid OTP ", {
-                theme: "bubble",
-                position: "top-center",
-                duration: 3000,
-              });
+              this.$toasted.error('Invalid OTP ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
             }
           } else {
-            rs.showErrorToast("VerifyOtp");
+            rs.showErrorToast('VerifyOtp')
           }
-        });
-    },
-  },
-};
+        })
+    }
+  }
+}
 </script>
 
 <style lang="scss"></style>

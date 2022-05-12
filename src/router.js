@@ -6,6 +6,9 @@ Vue.use(Router)
 function loadView(view) {
   return () => import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
 }
+function loadNewStudentView(view) {
+  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/NewRegistration/${view}.vue`)
+}
 
 function loadStudentView(view) {
   return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Student/${view}.vue`)
@@ -25,6 +28,15 @@ const router = new Router({
       path: '/studentregistration',
       name: 'StudentRegistration',
       component: loadStudentView('StudentRegistration'),
+      meta: {
+        title: 'Registration | MKCL Mock Exams',
+        icon: 'mdi mdi-information-variant',
+      },
+    },
+    {
+      path: '/registration',
+      name: 'Registration',
+      component: loadNewStudentView('Registration'),
       meta: {
         title: 'Registration | MKCL Mock Exams',
         icon: 'mdi mdi-information-variant',
@@ -190,7 +202,17 @@ router.beforeEach((to, from, next) => {
   ){
     next();
   }
+  // else if(
+  //   store.state.roles.some((obj) => obj === "NewRegistration") &&
+  //   (
+  //   to.name === "Registration" 
+    
+  // )
+  // ){
+  //   next();
+  // }
    else if (
+          to.name === "Registration" ||
            to.name === 'ThankyouPageAfterRegistration' ||
            to.name === 'About' ||
            to.name === 'MKCLTRYHomePage' ||

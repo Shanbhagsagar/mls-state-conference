@@ -34,7 +34,7 @@
             <!-- <img class="img-fluid" src="../../public/assets/images/emblem.png" alt="GOI">
             <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP">-->
             <!--<h1>MKCL EXAM LIVE</h1>-->
-            <img class="img-fluid" src="../../../public/assets/images/logo_mockexams.png" alt="MKCL Mock Exams">
+            <img class="img-fluid" src="../../../public/assets/images/DNEXT_logo final-01.png" alt="MKCL Mock Exams">
           </div>
           <!-- <div class="alert-warning">We are updating the portal, the Mock exams will start from Thursday 22nd October 2020 at 10.00 AM</div>
           <br> -->
@@ -93,7 +93,7 @@
                   type="submit"
                   name="btnlogin"
                   class="btn btn-page"
-                  value="लॉगिन/Login"
+                  value="Login"
                 >
               </div>
               <div class="form-action-alter mt-3">

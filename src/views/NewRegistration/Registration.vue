@@ -987,26 +987,29 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('SendEmailOTP', true)
           if (rs.isValid('SendEmailOTP')) {
-            this.$toasted.success('OTP sent to your phone number', {
-              theme: 'bubble',
-              position: 'top-center',
-              duration: 3000
-            })
-            this.$toasted.info(
-              'Please wait for 30 seconds before resending OTP',
-              {
+            if (res.result.result === undefined) {
+              this.$toasted.success('OTP sent to your phone number', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
-              }
-            )
-            this.sendEmailOtpFlag = true
+              })
+              this.$toasted.info(
+                'Please wait for 30 seconds before resending OTP',
+                {
+                  theme: 'bubble',
+                  position: 'top-center',
+                  duration: 3000
+                }
+              )
+              this.sendEmailOtpFlag = true
 
-            vm.timer = setTimeout(function () {
-              vm.sendEmailOtpFlag = false
-            }, 30000)
-          } else {
-            rs.showErrorToast('SendEmailOTP')
+              vm.timer = setTimeout(function () {
+                vm.sendEmailOtpFlag = false
+              }, 30000)
+            } else {
+              this.$toasted.error('email already exists', { duration: 3000 })
+              rs.showErrorToast('SendEmailOTP')
+            }
           }
         })
     },
@@ -1022,24 +1025,29 @@ export default {
           let res = rs.getActivity('SendMobileOTP', true)
           console.log(res)
           if (rs.isValid('SendMobileOTP')) {
-            this.$toasted.success('OTP sent to your phone number', {
-              theme: 'bubble',
-              position: 'top-center',
-              duration: 3000
-            })
-            this.$toasted.info(
-              'Please wait for 30 seconds before resending OTP',
-              {
+            if (res.result.result === undefined) {
+              this.$toasted.success('OTP sent to your phone number', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
-              }
-            )
-            this.sendOtpFlag = true
+              })
+              this.$toasted.info(
+                'Please wait for 30 seconds before resending OTP',
+                {
+                  theme: 'bubble',
+                  position: 'top-center',
+                  duration: 3000
+                }
+              )
+              this.sendOtpFlag = true
 
-            vm.timer = setTimeout(function () {
-              vm.sendOtpFlag = false
-            }, 30000)
+              vm.timer = setTimeout(function () {
+                vm.sendOtpFlag = false
+              }, 30000)
+            } else {
+              this.$toasted.error('mobile number already exists', { duration: 3000 })
+              rs.showErrorToast('SendMobileOTP')
+            }
           } else {
             rs.showErrorToast('SendMobileOTP')
           }

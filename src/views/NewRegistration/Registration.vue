@@ -17,7 +17,7 @@
             <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/DNEXT_logo final-01.png"
+              src="../../../public/assets/images/logo_dnext.png"
               alt="MKCL Mock Exams"
             >
           </div>
@@ -38,11 +38,11 @@
               <div class="col-md-12 col-lg-6">
                 <div class="form-group">
                   <label class="control-label form-label">
-                    Student Name
+                    Applicant Name
                     <span class="text-danger">*</span>
                   </label>
                   <input
-                   oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                     class="form-control"
                     v-model="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"
@@ -166,6 +166,7 @@
                             minlength="10"
                             v-model="contact.mobileNumber"
                             id="mobileNumber"
+                           
                             :placeholder="$t('registration.mobilePlaceholder')"
                             :disabled="flag == 1"
                             :class="{
@@ -783,7 +784,8 @@ export default {
         required,
         numeric,
         minLength: minLength(10),
-        maxLength: maxLength(10)
+        maxLength: maxLength(10),
+        regex: /^((?![0-5])[0-9]{10})$/
       },
       votp: { required },
       eotp: { required }
@@ -840,6 +842,18 @@ export default {
         this.isAgeValid = true
       }
       // })
+    },
+    phonenumber (mobileNumber) {
+      var phoneNo = /^((?![0-5])[0-9]{10})$/
+
+      if (!mobileNumber.target.value.match(phoneNo)) {
+        this.isMobileValid = false
+
+        return false
+      } else {
+        this.isMobileValid = true
+        return true
+      }
     },
     onAccept () {
       const vm = this
@@ -1136,19 +1150,19 @@ export default {
       if (vm.flag === 1) {
         if (!vm.$v.$invalid) {
           this.basic.fullName = this.basic.fullName
-          this.basic.gender = this.basic.gender
-          this.basic.dateOfBirth = this.basic.dateOfBirth
+          this.basic.gender = this.basic.gender.value
+          this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
           this.basic.userName = this.basic.userName
 
-          this.address.state = this.address.state
-          this.address.district = this.address.district
+          this.address.state = this.address.state.displayName
+          this.address.district = this.address.district.displayName
           this.address.pincode = this.address.pincode
 
           this.contact.emailID = this.contact.emailID
           this.contact.mobileNumber = this.contact.mobileNumber
 
-          this.qualification.qualificationId = this.qualification.qualificationId
-          this.qualification.qualificationName = this.qualification.qualificationName
+          this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+          this.qualification.qualificationName = this.qualification.qualificationName.displayName
 
           new MQL()
             .setActivity('o.[RegisterUser]')
@@ -1160,7 +1174,7 @@ export default {
                 if (res.result) {
                   console.log(res.result)
                   this.$router.push({
-                    name: 'Login'
+                    name: 'thankYou'
                   })
                 }
               } else {

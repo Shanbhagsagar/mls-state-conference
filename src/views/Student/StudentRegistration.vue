@@ -17,8 +17,7 @@
             <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/logo_mockexams.png"
-              alt="MKCL Mock Exams"
+              src="../../../public/assets/images/logo_dnext.png" alt="MKCL DNExT"
             >
           </div>
           <div class="d-block text-center">
@@ -30,8 +29,12 @@
           <div class="card-header card-header-alt mt-0">
             वैयक्तिक माहिती/Personal Details
           </div>
-          <div class="text-info">
+          <!-- <div class="text-info">
             महत्वाचे: ही माहिती विद्यार्थ्याच्या इ-गुणपत्रकावर दिसणार आहे.
+            त्यामुळे कृपया अचूक माहिती भरावी.
+          </div> -->
+          <div class="alert alert-info alert-info-alt" role="alert">
+            <i class="mdi mdi-information-outline"></i><strong>महत्वाचे:</strong> ही माहिती विद्यार्थ्याच्या इ-गुणपत्रकावर दिसणार आहे.
             त्यामुळे कृपया अचूक माहिती भरावी.
           </div>
           <div class="card-form">
@@ -293,6 +296,10 @@
                       >
                         {{ $t('registration.vmobile3') }}
                       </div>
+                      <div class="text-info text-info-no">
+                        सूचना: मोबाईल क्रमांक हाच लॉगीन आय-डी असणार आहे. त्यामुळे
+                        अचूक क्रमांक भरावा.
+                      </div>
                     </div>
                   </div>
                   <div
@@ -333,15 +340,7 @@
                         {{ $t('registration.venterOtp') }}
                       </div>
                     </div>
-                  </div>
-                  <div class="text-info col-md-12">
-                    सूचना: मोबाईल क्रमांक हाच लॉगीन आय-डी असणार आहे. त्यामुळे
-                    अचूक क्रमांक भरावा.<br>
-                    <!-- पालकांसाठी सूचना: एकच मोबाईल नंबर वापरून तुम्हाला एकापेक्षा
-                    अधिक पाल्यांना रजिस्टर करता येईल. त्यासाठी पहिल्या पाल्याची
-                    नोंदणी केल्यानंतर लॉगीन करावे व दुसऱ्या पाल्याची माहिती
-                    भरावी. -->
-                  </div>
+                  </div>                  
                 </div>
               </div>
               <div class="col-md-12 col-lg-6">
@@ -563,7 +562,7 @@
                     {{ $t('registration.vpassword1') }}
                   </div>
                   <div
-                    class="text-info"
+                    class="text-info text-info-pw"
                     v-if="!submitted && !$v.password.goodPassword"
                   >
                     {{ $t('registration.vpassword2') }}
@@ -1404,7 +1403,7 @@
           </h3>
         </div>
         <div class="modal-content-alt">
-          <ol>
+          <ol class="mb-2">
             <li>
               {{ $t('registration.term1') }}
             </li>
@@ -1445,14 +1444,17 @@
             <li>{{ $t('registration.term11') }}</li>
             <li>{{ $t('registration.term12') }}</li>
           </ol>
+          <strong>
+            I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE
+            ABOVE TERMS & CONDITIONS RELATING TO USAGE OF “MKCL Mock Exams”
+            PORTAL.
+          </strong>
         </div>
-        <strong>I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE
-          ABOVE TERMS & CONDITIONS RELATING TO USAGE OF “MKCL Mock Exams”
-          PORTAL.</strong>
         <div class="modal-button">
           <!-- <b-button  class="btn btn-rounded btn-white" type="submit" @click="onAccept()">Accept</b-button> -->
           <b-button
             class="btn-page"
+            variant="modal-close"
             type="submit"
             @click="$bvModal.hide('tc-modal')"
           >

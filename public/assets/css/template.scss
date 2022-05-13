@@ -1,6 +1,6 @@
-$fontcolor        : /*#576989*/ #58666e;
-$pricolor         : #813993/*#399bff*/;
-$pricolor-alt    : #3498db;
+$fontcolor        : /*#576989*/ #555;
+$pricolor         : #ce0052/*#399bff*/;
+$pricolor-alt    : #e0004b;
 $bgcolor          : #f5f5f5;
 $bgcolor-alt      : #f7f7f7;
 
@@ -8,7 +8,8 @@ body {
   /*overflow: hidden;*/
   color: $fontcolor;
   background: $bgcolor;
-  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-family: 'Source Sans Pro', sans-serif;
   .wrapper {
     /*display: flex;
     align-items: stretch;*/
@@ -103,8 +104,8 @@ body {
   }
 }
 
-a {color: lighten($pricolor, 15%);
-  &:hover, &:focus {color: lighten($pricolor, 5%);}
+a {color: lighten($pricolor, 5%);
+  &:hover, &:focus {color: lighten($pricolor, 15%);}
 }
 
 .applogo .logo {font-size: 18px;}
@@ -210,7 +211,7 @@ a {color: lighten($pricolor, 15%);
     text-align: center;
     color:#fff;
     font-size:30px;
-    font-weight:500;
+    font-weight:600;
     margin: 0;
     line-height: 40px;
   }
@@ -283,10 +284,22 @@ a {color: lighten($pricolor, 15%);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
+  position: relative;
+  &::before{
+    content: "";
+    position: absolute;
+    background: #811756;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+  }
   // background: url(../../../public/assets/images/bg.jpg) no-repeat center / cover;
   .card-login {
     width: 580px;
     padding: 0 15px;
+    position: relative;
     &.card-register {
       width: 1170px;
     }
@@ -336,9 +349,9 @@ a {color: lighten($pricolor, 15%);
         font-size: 26px;
         margin: 0 0 10px;
         line-height: 32px;
-        font-weight: 500;
+        font-weight: 600;
         text-align: center;
-        color: #813993;
+        color: #c1055f;
       }
       h3 {
         margin-top: 0;
@@ -389,12 +402,12 @@ a {color: lighten($pricolor, 15%);
     }
     .btn-login {
       margin: 0;
-      background-color: #813993/*#4e6ee4*/;
+      background-color: #c1055f/*#4e6ee4*/;
       color: #fff;
     }
     label {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       color: #252525;
     }
     input {
@@ -416,8 +429,8 @@ a {color: lighten($pricolor, 15%);
   .copyright-holder {
     padding: 25px 0;
     margin: 0;
-    font-size: 12px;
-    line-height: 18px;
+    font-size: 13px;
+    line-height: 20px;
     /*display: flex;
     align-items: center;*/
     a {
@@ -598,13 +611,56 @@ header {
   > [class*="col"] {padding-left: 5px; padding-right: 5px;}
 }
 
+// Thank You Page
+.welcome-holder{
+  margin-bottom: 60px;
+  margin-top: 40px;
+}
+.welcome-head{
+  font-size: 54px;
+  line-height: 1;
+  text-align: center;
+  color: #161616;
+  font-weight: 600;
+}
+.welcome-subhead{
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 26px;
+  text-align: center;
+  color: #747474;
+}
+
+.text-info{font-size:14px; line-height: 18px; }
+.text-info-no{
+  margin-top: 8px;
+}
+.text-info-pw{
+  margin-top: 6px;
+}
+
+.alert-info-alt{
+  background-color: #e9fdff;
+  color: darken(#17a2b8, 10%);
+  i{
+    margin-right: 5px;
+    font-size: 16px;
+  }
+}
+
 @media (max-width:575px){
-.section-regi .regi-block  > .row > [class*="col"] {margin-bottom: 30px;
-  &:last-child {margin-bottom: 0;}
-}
-.section-regi .regi-block .regi-img.img-adjust {
-  img {width: 180px;}
-}
+  .section-regi .regi-block  > .row > [class*="col"] {margin-bottom: 30px;
+    &:last-child {margin-bottom: 0;}
+  }
+  .section-regi .regi-block .regi-img.img-adjust {
+    img {width: 180px;}
+  }
+
+  //Thank You Page
+  .welcome-holder{
+    margin-bottom: 40px;
+  }
+  .welcome-head{margin-bottom: 8px;}
 }
 @media (max-width:767px){
   .section-welcome{
@@ -916,7 +972,7 @@ header {
       font-size: 26px;
       margin: 0 0 10px;
       line-height: 32px;
-      font-weight: 500;
+      font-weight: 600;
       color: darken(#3498db, 10%);
     }
     h2 {
@@ -1768,13 +1824,13 @@ header {
   top: 4px;
   right: 0;
   padding: 12px 20px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 18px;
-  color: lighten(#813993, 10%)/*#399bff*/;
+  color:  #c1055f/*#399bff*/;
   background: transparent;
   &:hover,
   &:focus {
-    color: #813993;
+    color: lighten(#c1055f, 15%);
     background: transparent;
   }
   &.btn-back-alt {left: 0; right: auto;}
@@ -1785,7 +1841,7 @@ header {
 
 .btn-purple{
   color: #fff;
-  background-image: linear-gradient(-180deg, #4b16ad 50%, #793de9 50%);
+  background-image: linear-gradient(-180deg, #f06a03 50%, #f1791c 50%);
   background-size: 100% 200%;
   background-position: bottom center; 
   transition: all 0.2s ease;
@@ -2059,7 +2115,7 @@ $dwidth: 120px;
 // --------------------------------------------------------
 // VUE-DROPZONE
 // --------------------------------------------------------
-.vue-dropzone.dropzone {margin-top: 15px; margin-bottom: 18px; padding: 20px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; border: 2px dashed #ccc; border-radius: 3px; font-family: 'Open Sans', sans-serif; letter-spacing: 0; background: #f8f8f8;
+.vue-dropzone.dropzone {margin-top: 15px; margin-bottom: 18px; padding: 20px; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; border: 2px dashed #ccc; border-radius: 3px; font-family: 'Source Sans Pro', sans-serif; letter-spacing: 0; background: #f8f8f8;
 
   .login-block & {margin-top: 0;}
 
@@ -2408,18 +2464,17 @@ body .wrapper .logo{
   border: none;
   color: #fff;
   padding: 10px 40px;
-  box-shadow:  0px 4px 10px 0px rgba(#4c1da2, 0.5);
-  background-image: linear-gradient(-180deg,#bc5f9d  0%, #bc5f9d  50%, #4c1da2 96%);
+  box-shadow:  0px 25px 40px rgba(#ff8629, 0.25);
+  background-image: linear-gradient(to right bottom, #ff9f55 40%, #f1791c 100%);
   background-size: 100% 200%;
   background-position: bottom center;
   transition: all 0.2s ease;
   &:hover, &:focus{
-    background-image: linear-gradient(-180deg,#bc5f9d  0%, #bc5f9d  50%, #4c1da2 96%);
-    background-position: top center;
+    background-color: #ff913d;  
+    box-shadow:  0px 15px 20px rgba(#ff8629, 0.45);
     color: #fff;
     text-decoration: none;
     outline: none;
-    box-shadow:  0px 4px 10px 0px rgba(#4c1da2, 0.5);
   }
 }
 .btn-white{
@@ -2479,7 +2534,7 @@ body .wrapper .logo{
   height: 36px;
   font-size: 13px;
   line-height: 36px;
-  font-weight: 500;
+  font-weight: 600;
   color: #748494; 
   justify-content: center;
   outline: none; 
@@ -2776,7 +2831,7 @@ body .wrapper .logo{
 //   font-size: 18px;
 //   line-height: 26px;
 //   color: #555556;
-//   font-weight: 500;
+//   font-weight: 600;
 //   margin-bottom: 0;
 // }
 

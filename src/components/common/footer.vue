@@ -7,7 +7,7 @@
             <a target="_blank" href="https://www.mkcl.org/"
               >Maharashtra Knowldege Corporation Ltd</a
             >. (MKCL),
-            Copyright © 2020. All rights reserved.
+            Copyright © 2022. All rights reserved.
           </div>
           <div class="col-md-auto">
             <img src="../../../public/assets/images/logo_mkcl.svg" alt="MKCL" />

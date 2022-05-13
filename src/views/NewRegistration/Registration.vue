@@ -900,6 +900,7 @@ export default {
                 vm.sendEmailOtpFlag = false
               }, 30000)
             } else {
+              this.showEmailOtpField = false
               this.$toasted.error('email already exists', { duration: 3000 })
               rs.showErrorToast('SendEmailOTP')
             }
@@ -938,6 +939,7 @@ export default {
                 vm.sendOtpFlag = false
               }, 30000)
             } else {
+              this.showOtpField = false
               this.$toasted.error('mobile number already exists', { duration: 3000 })
               rs.showErrorToast('SendMobileOTP')
             }

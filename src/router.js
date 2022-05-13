@@ -29,7 +29,7 @@ const router = new Router({
       name: 'StudentRegistration',
       component: loadStudentView('StudentRegistration'),
       meta: {
-        title: 'Registration | MKCL Mock Exams',
+        title: 'Registration | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -38,7 +38,7 @@ const router = new Router({
       name: 'Registration',
       component: loadNewStudentView('Registration'),
       meta: {
-        title: 'Registration | MKCL Mock Exams',
+        title: 'Registration | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -47,7 +47,7 @@ const router = new Router({
       name: 'Login',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Login | MKCL Mock Exams',
+        title: 'Login | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
       beforeEnter(routeTo, routeFrom, next) {
@@ -61,7 +61,7 @@ const router = new Router({
       name: 'Login',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Login | MKCL Mock Exams',
+        title: 'Login | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -70,7 +70,7 @@ const router = new Router({
       name: 'logout',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Logout | MKCL Mock Exams',
+        title: 'Logout | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
       beforeEnter(routeTo, routeFrom, next) {
@@ -129,7 +129,7 @@ const router = new Router({
       name: 'ResetPassword',
       component: loadCommonView('ResetPassword'),
       meta: {
-        title: 'Reset Password | MKCL Mock Exams',
+        title: 'Reset Password | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     },
@@ -138,7 +138,7 @@ const router = new Router({
       name: 'ViewAllStudentDetails',
       component: loadAdminView('ViewAllStudentDetails'),
       meta: {
-        title: 'View All Student Details | MKCL Mock Exams',
+        title: 'View All Student Details | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     },
@@ -147,7 +147,7 @@ const router = new Router({
       name: 'ViewStudentDetailsByAdmin',
       component: loadAdminView('ViewStudentDetailsByAdmin'),
       meta: {
-        title: 'View Student Details By Admin | MKCL Mock Exams',
+        title: 'View Student Details By Admin | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     },
@@ -156,7 +156,7 @@ const router = new Router({
       name: 'ViewStudentMarksByAdmin',
       component: loadAdminView('ViewStudentMarksByAdmin'),
       meta: {
-        title: 'View Student Details Marks By Admin | MKCL Mock Exams',
+        title: 'View Student Details Marks By Admin | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     },
@@ -165,7 +165,7 @@ const router = new Router({
       name: 'AdminDashboard',
       component: loadAdminView('AdminDashboard'),
       meta: {
-        title: 'Admin Dashboard | MKCL Mock Exams',
+        title: 'Admin Dashboard | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     },
@@ -174,7 +174,7 @@ const router = new Router({
       name: 'MockExamPaperConfig',
       component: loadAdminView('MockExamPaperConfig'),
       meta: {
-        title: 'Admin Dashboard | MKCL Mock Exams',
+        title: 'Admin Dashboard | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
     }

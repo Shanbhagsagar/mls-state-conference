@@ -30,6 +30,8 @@
               <b-nav-item to="/about">
                 About
               </b-nav-item>
+              <!-- <b-nav-item to="/curfew-pass/application">Apply for Curfew Pass</b-nav-item>
+              <b-nav-item to="/curfew-pass/view-pass">Check Curfew Pass Status</b-nav-item> -->
               <b-nav-item
                 to="/termsandconditions"
               >
@@ -41,7 +43,11 @@
       </div>
     </header>
     <section class="section-content">
-      <div class="container" />
+      <div class="container">
+        <h2 class="text-center">
+          Thank you for registering with us!
+        </h2>
+      </div>
     </section>
     <footer class="footer-hm">
       <div class="container">
@@ -54,7 +60,7 @@
           </div>
           <div class="col-md-auto">
             <img
-              src="../../public/assets/images/logo_mkcl.svg"
+              src="../../../public/assets/images/logo_mkcl.svg"
               alt="MKCL"
             >
           </div>
@@ -66,7 +72,7 @@
 
 <script>
 export default {
-  name: 'About',
+  name: 'ThankYou',
   data: function () {
     return {
     }

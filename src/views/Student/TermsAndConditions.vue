@@ -7,7 +7,7 @@
             <div class="col-12 col-md order-2 order-md-2">
               <div class="welcome-content">
                 <h5>Welcome to</h5>
-                <h1>MKCL EXAM LIVE</h1>
+                <h1>MKCL DNExT</h1>
               </div>
             </div>
           </div>

@@ -42,6 +42,7 @@
                     <span class="text-danger">*</span>
                   </label>
                   <input
+                   oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                     class="form-control"
                     v-model="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"

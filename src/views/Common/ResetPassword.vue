@@ -16,8 +16,8 @@
             <!-- <h1>MKCL EXAM LIVE</h1> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/DNEXT_logo final-01.png"
-              alt="MKCL Mock Exams"
+              src="../../../public/assets/images/logo_dnext.png"
+              alt="MKCL MKCL DNExT"
             >
           </div>
           <div class="card-header">
@@ -44,7 +44,7 @@
                 >
                 <div class="input-group-append">
                   <button
-                    class="btn btn-primary"
+                    class="btn btn-purple"
                     @click="getUserUsername()"
                     :disabled="sendOtpFlag"
                   >

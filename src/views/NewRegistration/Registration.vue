@@ -17,7 +17,7 @@
             <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/DNEXT_logo final-01.png"
+              src="../../../public/assets/images/logo_dnext.png"
               alt="MKCL Mock Exams"
             >
           </div>
@@ -632,7 +632,7 @@
           </h3>
         </div>
         <div class="modal-content-alt">
-          <ol>
+          <ol class="mb-2">
             <li>
               {{ $t('registration.term1') }}
             </li>
@@ -665,12 +665,14 @@
               {{ $t('registration.term10') }}
             </li>
           </ol>
+          <strong>
+            I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
+          </strong>
         </div>
-        <strong>I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
-        </strong>
         <div class="modal-button">
           <!-- <b-button  class="btn btn-rounded btn-white" type="submit" @click="onAccept()">Accept</b-button> -->
           <b-button
+            variant="modal-close"
             class="btn-page"
             type="submit"
             @click="$bvModal.hide('tc-modal')"
@@ -679,7 +681,6 @@
           </b-button>
         </div>
       </b-modal>
-    </div>
     </div>
   </section>
 </template>

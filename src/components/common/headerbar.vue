@@ -4,7 +4,7 @@
     class="headerbar"
   >
     <div class="applogo">
-      <div class="logo-title"><span> MKCL </span> Mock Exams </div>
+      <div class="logo-title"><span> MKCL </span> DNExt </div>
       <!-- <span class="logo">
         <img class="img-fluid" src="../../../public/assets/images/logo_mockexams.png" alt="MKCL Mock Exams">
       </span> -->

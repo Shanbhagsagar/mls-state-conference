@@ -308,7 +308,7 @@
                       v-model="student.emailID"
                       :placeholder="$t('registration.emailIdPlaceholder')"
                       id="emailID"
-                      :disabled="flag == 1"
+                      :disabled="emailFlag == 1"
                       :class="{
                         'is-invalid':
                           submitted && $v.student.emailID.$invalid
@@ -355,10 +355,10 @@
                       v-model="student.votp"
                       :placeholder="$t('registration.enterOtpPlaceholder')"
                       id="votp"
-                      :disabled="flag == 1"
+                      :disabled="emailFlag == 1"
                       :class="{
                         'is-invalid':
-                          otp_submitted && $v.otp_d.votp.$invalid
+                          emailotp_submitted && $v.student.votp.$invalid
                       }"
                     >
                     <div class="input-group-append">
@@ -366,7 +366,7 @@
                         type="button"
                         class="btn btn-green"
                         @click="verifyEmailOtp()"
-                        :disabled="flag == 1 || student.votp == ''"
+                        :disabled="emailFlag == 1 || student.votp == ''"
                       >
                         {{ button }}
                       </button>
@@ -374,7 +374,7 @@
                   </div>
                   <div
                     class="text-danger"
-                    v-if="otp_submitted && !$v.student.votp.required"
+                    v-if="emailotp_submitted && !$v.student.votp.required"
                   >
                     {{ $t('registration.venterOtp') }}
                   </div>
@@ -390,31 +390,15 @@
                     class="control-label form-label"
                   >State</label>
                   <span class="text-danger">*</span>
-                  <select
-                    class="form-control"
-                   
-                    v-model="student.selectedStates"
-                    @change="getDistrictsByStateId()"
-                  >
-                    <option value>
-                      Select States
-                    </option>
-                    <option
-                      v-for="state in states"
-                      :value="state.stateId"
-                      :key="state.stateId"
-                    >
-                      {{ state.displayName }}
-                    </option>
-                  </select>
-                  <!-- <v-select
+
+                  <v-select
                     v-model="student.selectedState"
-                    label="STATE_NAME"
+                    label="displayName"
                     :placeholder="$t('registration.statePlaceholder')"
                     :options="states"
-                    :value="student.state"
+                    :value="student.selectedState"
                     @input="getDistrictsByStateId()"
-                  /> -->
+                  />
                   <div
                     class="text-danger"
                     v-if="
@@ -439,11 +423,10 @@
                   <v-select
 
                     v-model="student.selectedDistrict"
-                    label="DISTRICT_NAME"
+                    label="displayName"
                     :placeholder="$t('registration.districtPlaceholder')"
                     :options="districts"
                     :value="student.selectedDistrict"
-                    @input="getTalukaByDistrictId()"
                   />
                   <div
                     class="text-danger"
@@ -465,27 +448,38 @@
                   </label>
                   <input
                     class="form-control"
-                    v-model="student.villageOrTown"
+                    v-model="student.pincode"
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                     placeholder="Enter Your Pincode"
-                    id="villageOrTown"
+                    maxlength="6"
+                    minlength="6"
+                    id="pincode"
                     :class="{
                       'is-invalid':
-                        submitted && $v.student.villageOrTown.$invalid
+                        submitted && $v.student.pincode.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.villageOrTown.required"
+                    v-if="submitted && !$v.student.pincode.required"
                   >
-                    {{ $t('registration.vvillage1') }}
+                    {{ $t('registration.pincode') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.student.pincode.numeric"
+                  >
+                    {{ $t('registration.pincode2') }}
                   </div>
                   <div
                     class="text-danger"
                     v-if="
-                      submitted && !$v.student.villageOrTown.isVillageNameValid
+                      submitted &&
+                        (!$v.student.pincode.minLength ||
+                        !$v.student.pincode.maxLength)
                     "
                   >
-                    {{ $t('registration.vvillage2') }}
+                    {{ $t('registration.pincode3') }}
                   </div>
                 </div>
               </div>
@@ -515,7 +509,7 @@
                           v-model="student.educationLevel"
                           label="displayName"
                           placeholder="Select Qualification"
-                          :options="EducationLevels"
+                          :options="Class"
                           @input="getClassDetails()"
                         />
                         <div
@@ -527,239 +521,6 @@
                         >
                           {{ $t('registration.veducationLevel') }}
                         </div>
-                      </div>
-                    </div>
-
-                    <div
-                      class="col-md-12 col-lg-6"
-                      v-if="
-                        student.educationLevel &&
-                          student.educationLevel.levelName === 'Schooling'
-                      "
-                    >
-                      <div class="form-group">
-                        <label class="control-label form-label">
-                          शाळेचे नाव/School Name
-                          <span class="text-danger">*</span>
-                        </label>
-                        <input
-                          class="form-control"
-                          v-model="student.schoolName"
-                          :placeholder="
-                            $t('registration.schoolNamePlaceholder')
-                          "
-                          id="schoolName"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.student.schoolName.$invalid
-                          }"
-                        >
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.student.schoolName.required"
-                        >
-                          {{ $t('registration.vschoolName') }}
-                        </div>
-                        <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.schoolName.isNameValid"
-                  >
-                    Name only contain letters. Numbers not allowed !
-                  </div> -->
-                        <div class="text-info">
-                          <!-- महत्वाचे: शाळेचे नाव इ-गुणपत्रिकेवर दिसणार आहे.
-                          त्यामुळे संपूर्ण नाव अचूक भरावे. उदा. महात्मा गांधी
-                          माध्यमिक विद्यालय, सातारा.<br> -->
-                          Important: School Name shall appear on eMarksheet.
-                          Please enter full name correctly. E.g. Mahatma Gandhi
-                          Secondary School, Satara.
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      class="col-md-12 col-lg-6"
-                      v-if="
-                        student.educationLevel &&
-                          student.educationLevel.levelName !== 'Schooling'
-                      "
-                    >
-                      <div class="form-group">
-                        <label class="control-label form-label">
-                          महाविद्यालयाचे नाव/College Name
-                          <span class="text-danger">*</span>
-                        </label>
-                        <input
-                          class="form-control"
-                          v-model="student.collegeName"
-                          :placeholder="
-                            $t('registration.collageNamePlaceholder')
-                          "
-                          id="collegeName"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.student.collegeName.$invalid
-                          }"
-                        >
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.student.collegeName.required"
-                        >
-                          {{ $t('registration.vcollageName') }}
-                        </div>
-                        <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.collegeName.isNameValid"
-                  >
-                    Name only contain letters. Numbers not allowed !
-                  </div> -->
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div
-                        class="form-group"
-                        v-if="
-                          student.educationLevel &&
-                            student.educationLevel.levelName === 'Schooling'
-                        "
-                      >
-                        <label
-                          for="exam"
-                          class="control-label form-label"
-                        >
-                          माध्यम/Medium
-                          <span class="text-danger">*</span></label>
-                        <v-select
-                          v-model="student.medium"
-                          label="displayName"
-                          :options="Medium"
-                          value="Medium"
-                        />
-                        <div
-                          class="text-danger"
-                          v-if="
-                            !$v.student.medium.required &&
-                              $v.student.medium.$error
-                          "
-                        >
-                          {{ $t('registration.vmedium') }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div
-                        class="form-group"
-                        v-if="
-                          student.educationLevel &&
-                            student.educationLevel.levelName === 'Schooling'
-                        "
-                      >
-                        <label
-                          for="exam"
-                          class="control-label form-label"
-                        >
-                          Standard <span class="text-danger">*</span>
-                        </label>
-                        <v-select
-                          v-model="student.class"
-                          label="displayName"
-                          :options="Class"
-                          :value="Class"
-                        />
-                        <div
-                          class="text-danger"
-                          v-if="
-                            !$v.student.class.required &&
-                              $v.student.class.$error
-                          "
-                        >
-                          {{ $t('registration.vstandard') }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 mt-2">
-                      <div
-                        class="form-group"
-                        v-if="
-                          student.educationLevel &&
-                            student.educationLevel.levelName === 'Schooling'
-                        "
-                      >
-                        <label
-                          for="TiliMili"
-                          class="control-label form-label"
-                        >तुम्ही टिलीमिली ही दूरदर्शन मालिका पहिली आहे का? Have
-                          you watched Tilimili Doordarshan serial? </label><span class="text-danger">*</span>
-                        <div class="cc-holder">
-                          <b-form-radio-group
-                            class="mb-3"
-                            v-model="student.istiliMiliSeen"
-                            :options="Options"
-                            value-field="value"
-                            text-field="text"
-                          />
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="
-                            submitted && !$v.student.istiliMiliSeen.required
-                          "
-                        >
-                          कृपया पर्याय निवडा/Please Select Option?
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-6 mt-1">
-                      <div
-                        class="form-group"
-                        v-if="
-                          student.educationLevel &&
-                            student.educationLevel.levelName === 'Schooling'
-                        "
-                      >
-                        <label
-                          for="TiliMili"
-                          class="control-label form-label"
-                        >तुम्ही टिलीमिली मोबाईल अँप गुगल प्ले स्टोअर वरून
-                          डाऊनलोड केले आहे का ? /</label>
-                        <label
-                          for="TiliMili"
-                          class="control-label form-label"
-                        >
-                          Have you downloaded TiliMili Mobile app from google
-                          play store?
-                        </label>
-                        <span class="text-danger">*</span>
-                        <div class="cc-holder">
-                          <b-form-radio-group
-                            class="mb-3"
-                            v-model="student.istiliMiliAppDownloaded"
-                            :options="Options"
-                            value-field="value"
-                            text-field="text"
-                          />
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="
-                            submitted &&
-                              !$v.student.istiliMiliAppDownloaded.required
-                          "
-                        >
-                          कृपया पर्याय निवडा/Please Select Option?
-                        </div>
-
-                        <span v-if="student.istiliMiliAppDownloaded === false">
-                          <a
-                            target="_blank"
-                            href="https://www.mkcl.org/tilimiliapp"
-                          >डाउनलोड करण्यासाठी येथे क्लिक करा/Click here to
-                            Download</a>
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -875,16 +636,7 @@
             <li>
               {{ $t('registration.term1') }}
             </li>
-            <!-- <li>
-              Practice tests made available on the portal
-              <a
-                href="mockexams.mkcl.org"
-                target="_blank"
-              >
-                <u>mockexams.mkcl.org</u>
-              </a>
-              {{ $t('registration.term21') }}
-            </li> -->
+
             <li>
               {{ $t('registration.term2') }}
             </li>
@@ -970,6 +722,7 @@ export default {
         collegeName: '',
         parentOrGuardianName: '',
         votp: '',
+        emailID: '',
         dateOfBirth: ''
       },
       student_cred: {},
@@ -1005,6 +758,7 @@ export default {
       districtId: null,
       isEnabled: true,
       otp_submitted: false,
+      emailotp_submitted: false,
       sendOtpFlag: false,
       sendEmailOtpFlag: false,
       showOtpField: false,
@@ -1012,6 +766,7 @@ export default {
       PasswordInputType: 'password',
       PasswordInput: 'password',
       flag: 0,
+      emailFlag: 0,
       otp_d: {
         mobileNumber: '',
         votp: ''
@@ -1048,20 +803,7 @@ export default {
       ],
       EducationLevels: [],
       Class: [],
-      mockExamCategories: [
-        { categoryId: 1, categoryName: 'Academic' },
-        { categoryId: 2, categoryName: 'Competitive' }
-      ],
-      Medium: [
-        { mediumId: 3, mediumName: 'Marathi', displayName: 'मराठी/Marathi' },
-        { mediumId: 1, mediumName: 'English', displayName: 'इंग्रजी/English' },
-        {
-          mediumId: 2,
-          mediumName: 'Semi-English',
-          displayName: 'सेमी इंग्रजी/Semi-English'
-        }
-        // { mediumId: 2, mediumName: 'Hindi' },
-      ],
+
       Options: [
         { text: 'हो/Yes', value: true },
         { text: 'नाही/No', value: false }
@@ -1096,15 +838,7 @@ export default {
       dateOfBirth: {
         required
       },
-      // selectedUniversity: {
-      //   required
-      // },
-      // selectedFaculty: {
-      //   required
-      // },
-      // selectedCourse: {
-      //   required
-      // },
+
       selectedTaluka: {
         required
       },
@@ -1114,78 +848,31 @@ export default {
       selectedState: {
         required
       },
-      villageOrTown: {
+      pincode: {
         required,
-        isVillageNameValid: helpers.regex('isVillageNameValid', /^[a-zA-Z ]*$/)
+        numeric,
+        minLength: minLength(6),
+        maxLength: maxLength(6)
       },
       fullName: {
         required,
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
       },
 
-      parentOrGuardianName: {
-        required: requiredIf(function () {
-          return this.showGuardianFlag == true
-        }),
-        isParentNameValid: helpers.regex('isParentNameValid', /^[a-zA-Z ]*$/)
-      },
-      // middleName: {
-      //   required,
-      //   isNameValid: helpers.regex("isNameValid", /^[a-zA-Z ]*$/),
-      // },
-      // lastName: {
-      //   required,
-      //   isNameValid: helpers.regex("isNameValid", /^[a-zA-Z ]*$/),
-      // },
-
       gender: {
         required
       },
-      // mockExamCategory: {
-      //   required,
-      // },
+
       educationLevel: {
         required
       },
-      medium: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName == 'Schooling'
-        })
-      },
+
       class: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName == 'Schooling'
-        })
-      },
-      schoolName: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName == 'Schooling'
-        })
-      },
-      collegeName: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName != 'Schooling'
-        })
-      },
-
-      istiliMiliSeen: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName == 'Schooling'
-        })
-      },
-
-      istiliMiliAppDownloaded: {
         required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       }
 
-      // exam: {
-      //   required,
-      // },
-      // modeOfExam: {
-      //   required,
-      // },
     },
     otp_d: {
       mobileNumber: {
@@ -1219,7 +906,10 @@ export default {
     // })
     // vm.getAllDistricts();
   },
-
+  mounted () {
+    this.getDistrictsByStateId()
+    this.getClassDetails()
+  },
   methods: {
     changeLanguage (lang) {
       console.log('lang change :', lang)
@@ -1229,12 +919,7 @@ export default {
         console.log('Updated')
       })
     },
-    // selectTypeOfExam() {
-    //   const vm = this;
-    //   vm.student.exam = vm.exams[0].value;
-    //   vm.changeExamFlag();
-    //   console.log("student exam", vm.student.exam);
-    // },
+  
 
     validateAge (date) {
       this.$store.dispatch('getServerTime').then((res) => {
@@ -1267,37 +952,17 @@ export default {
       // )[0].countryId
       vm.countryId = '001'
       await vm.getStatesByCountryId()
-      vm.stateId = vm.states.filter(
-        (state) => state.STATE_NAME == 'Maharashtra'
-      )[0].STATE_CODE
+      // vm.stateId = vm.states.filter(
+      //   (state) => state.STATE_NAME == 'Maharashtra'
+      // )[0].STATE_CODE
+      // console.log(vm.stateId)
+      vm.stateId = '21'
       await vm.getDistrictsByStateId()
 
       // await vm.getTalukaByDistrictId();
     },
-    passwordVisibility () {
-      this.PasswordInputType =
-        this.PasswordInputType === 'password' ? 'text' : 'password'
-      this.iconChange =
-        this.iconChange === 'mdi mdi-eye-off'
-          ? 'mdi mdi-eye-off'
-          : 'mdi mdi-eye'
-    },
-    passwordVisibilityCnf () {
-      this.PasswordInput =
-        this.PasswordInput === 'password' ? 'text' : 'password'
-      this.iconChangeCnf =
-        this.iconChangeCnf === 'mdi mdi-eye-off'
-          ? 'mdi mdi-eye'
-          : 'mdi mdi-eye-off'
-    },
-    // changeExamFlag() {
-    //   const vm = this;
-    //   if (vm.student.exam === "University Exam - Practice Test") {
-    //     vm.isUniversityExam = true;
-    //   } else {
-    //     vm.isUniversityExam = false;
-    //   }
-    // },
+  
+  
     getEmailOtp () {
       const vm = this
 
@@ -1377,7 +1042,7 @@ export default {
           if (rs.isValid('VerifyEmailOTP')) {
             if (res.result.verifyOTP === 'OTPFOUND') {
               this.sendEmailOtpFlag = true
-              this.flag = 1
+              this.emailflag = 1
 
               this.button = 'Verified'
               if (vm.timer) {
@@ -1391,7 +1056,7 @@ export default {
               })
             }
             if (res.result.verifyOTP === 'OTPNOTFOUND') {
-              this.flag = 0
+              this.emailflag = 0
 
               this.$toasted.error('Invalid OTP ', {
                 theme: 'bubble',
@@ -1466,113 +1131,8 @@ export default {
           }
         })
     },
-    getAllUniversities () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[query_1hYHKHUKdSeCkvVQ6OOrCX108ux]')
-        // .setData(data)
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_1hYHKHUKdSeCkvVQ6OOrCX108ux', true)
-          if (rs.isValid('query_1hYHKHUKdSeCkvVQ6OOrCX108ux')) {
-            vm.universities = res
-          } else {
-            rs.showErrorToast('query_1hYHKHUKdSeCkvVQ6OOrCX108ux')
-          }
-        })
-    },
-    // getFacultiesByUniversityId () {
-    //   const vm = this
-    //   vm.universityId = vm.student.selectedUniversity.universityId
-    //   new MQL()
-    //     .setActivity('o.[query_1hYKlg8YbiIPKk2moCQyki6SybH]')
-    //     .setData({ universityId: vm.universityId })
-    //     .fetch()
-    //     .then((rs) => {
-    //       let res = rs.getActivity('query_1hYKlg8YbiIPKk2moCQyki6SybH', true)
-    //       if (rs.isValid('query_1hYKlg8YbiIPKk2moCQyki6SybH')) {
-    //         if (res !== null) {
-    //           vm.student.selectedFaculty = null
-    //           // console.log("res",res)
-    //           vm.student.selectedCourse = null
-    //           vm.courses = []
-    //           vm.faculties = []
-    //           vm.faculties = res
-    //         }
-    //       } else {
-    //         rs.showErrorToast('query_1hYKlg8YbiIPKk2moCQyki6SybH')
-    //       }
-    //     })
-    // },
-    // getCoursesByFacultyId () {
-    //   const vm = this
-    //   vm.facultyId = vm.student.selectedFaculty.facultyId
-    //   new MQL()
-    //     .setActivity('o.[query_1hYMMO9ccVyucRMQoQGaofS4oP3]')
-    //     .setData({ facultyId: vm.facultyId })
-    //     .fetch()
-    //     .then((rs) => {
-    //       let res = rs.getActivity('query_1hYMMO9ccVyucRMQoQGaofS4oP3', true)
-    //       if (rs.isValid('query_1hYMMO9ccVyucRMQoQGaofS4oP3')) {
-    //         if (res !== null) {
-    //           vm.courses = []
-    //           vm.student.selectedCourse = null
-
-    //           for (var i = 0; i < res.length; i++) {
-    //             // vm.faculties[i].facultyName=res[i].facultyName+'('+res[i].facultyId+')'
-    //             // vm.courses.push(res[i].courseId)
-    //             // console.log(vm.courses)
-
-    //             vm.courses.push({
-    //               courseId: res[i].courseId,
-    //               courseName:
-    //                 res[i].courseFullName
-    //             })
-    //             // console.log(vm.courses);
-    //           }
-    //           // vm.courses = res;
-    //         }
-    //       } else {
-    //         rs.showErrorToast('query_1hYMMO9ccVyucRMQoQGaofS4oP3')
-    //       }
-    //     })
-    // },
-    // getYearsByCourseId () {
-    //   const vm = this
-    //   vm.courseId = vm.student.selectedCourse.courseId
-    //   new MQL()
-    //     .setActivity('o.[query_1hoKphwNGTUdbgIWnqYqvLmYDc5]')
-    //     .setData({ courseId: vm.courseId })
-    //     .fetch()
-    //     .then((rs) => {
-    //       let res = rs.getActivity('query_1hoKphwNGTUdbgIWnqYqvLmYDc5', true)
-    //       if (rs.isValid('query_1hoKphwNGTUdbgIWnqYqvLmYDc5')) {
-    //         // console.log(res);
-    //         if (res !== null) {
-    //           vm.years = []
-    //           vm.student.selectedYear = null
-    //           for (var i = 0; i < res.length; i++) {
-    //             // vm.faculties[i].facultyName=res[i].facultyName+'('+res[i].facultyId+')'
-    //             // vm.courses.push(res[i].courseId)
-    //             // console.log(vm.courses)
-
-    //             vm.years.push({
-    //               courseId: res[i].courseId,
-    //               coursePart:
-    //                 res[i].coursePart + '(' + res[i].coursePattern + ')',
-    //               facultyId: res[i].facultyId,
-    //               universityId: res[i].universityId,
-    //               universityName: res[i].universityName
-    //             })
-    //             // console.log(vm.years);
-    //           }
-    //           // vm.years = res;
-    //         }
-    //       } else {
-    //         rs.showErrorToast('query_1hoKphwNGTUdbgIWnqYqvLmYDc5')
-    //       }
-    //     })
-    // },
+   
+    
     getAllCountries () {
       return new Promise((resolve) => {
         const vm = this
@@ -1608,10 +1168,10 @@ export default {
         const vm = this
 
         // vm.countryId = vm.student.selectedCountry.countryId
-        vm.countryId = '001'
+        vm.countryName = 'India'
         new MQL()
           .setActivity('o.[query_293ccRYOvTADqM5DVvZGDX6ceNb]')
-          .setData({ countryId: vm.countryId })
+          .setData({ countryName: vm.countryName })
           .fetch()
           .then((rs) => {
             let res = rs.getActivity('query_293ccRYOvTADqM5DVvZGDX6ceNb', true)
@@ -1639,49 +1199,32 @@ export default {
       return new Promise((resolve) => {
         const vm = this
         // console.log("state code", vm.student.selectedState.STATE_CODE);
-        vm.stateId = vm.student.selectedState.STATE_CODE
+        // vm.stateId = vm.student.selectedState.STATE_CODE
+        vm.stateName = 'Maharashtra'
         // console.log("state id",vm.stateId)
         new MQL()
-          .setActivity('o.[query_1hXXvqirnGRWsWCEWt69tl6uqob]')
-          .setData({ STATE_ID: vm.stateId })
+          .setActivity('o.[query_293k2pcHKiS7GMwuDb9e1veS2g4]')
+          .setData({ stateName: vm.stateName })
           .fetch()
           .then((rs) => {
-            let res = rs.getActivity('query_1hXXvqirnGRWsWCEWt69tl6uqob', true)
-            if (rs.isValid('query_1hXXvqirnGRWsWCEWt69tl6uqob')) {
+            let res = rs.getActivity('query_293k2pcHKiS7GMwuDb9e1veS2g4', true)
+            if (rs.isValid('query_293k2pcHKiS7GMwuDb9e1veS2g4')) {
               if (res == null) {
                 res = []
               }
               // console.log("res", res);
               vm.student.selectedDistrict = null
+              vm.districts = []
               vm.districts = res
+              console.log(vm.districts)
               resolve()
             } else {
-              rs.showErrorToast('query_1hXXvqirnGRWsWCEWt69tl6uqob')
+              rs.showErrorToast('query_293k2pcHKiS7GMwuDb9e1veS2g4')
             }
           })
       })
     },
-    getTalukaByDistrictId () {
-      return new Promise((resolve) => {
-        const vm = this
-
-        vm.districtId = vm.student.selectedDistrict.DISTRICT_CODE
-        // console.log("districtid", vm.districtId);
-        new MQL()
-          .setActivity('o.[query_1hXrld8qkVavKnU1H1ORYLBLIH2]')
-          .setData({ DISTRICTID: vm.districtId })
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('query_1hXrld8qkVavKnU1H1ORYLBLIH2', true)
-            if (rs.isValid('query_1hXrld8qkVavKnU1H1ORYLBLIH2')) {
-              // console.log("taluka", res);
-              vm.talukas = res
-            } else {
-              rs.showErrorToast('query_1hXrld8qkVavKnU1H1ORYLBLIH2')
-            }
-          })
-      })
-    },
+  
     saveUserCredentials () {
       const vm = this
       // vm.student_cred.username = vm.otp_d.mobileNumber;
@@ -1700,40 +1243,17 @@ export default {
         })
     },
 
-    getEducationLevelDetails () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[query_1izkwK41LiLPDBuLCsMKiRAX8ww]')
-        // .setData(data)
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_1izkwK41LiLPDBuLCsMKiRAX8ww', true)
-          if (rs.isValid('query_1izkwK41LiLPDBuLCsMKiRAX8ww')) {
-            // console.log(res);
-            if (res !== null) {
-              vm.EducationLevels = []
-              vm.EducationLevels = res
-              // console.log("education level:",vm.EducationLevels)
-              // if (vm.userDetails[0].selectedEducationLevel == null) {
-              //   vm.userDetails[0].selectedEducationLevel =
-              //     vm.educationLevel[0];
-              // }
-            }
-          } else {
-            rs.showErrorToast('query_1izkwK41LiLPDBuLCsMKiRAX8ww')
-          }
-        })
-    },
+  
 
     getClassDetails () {
       const vm = this
       new MQL()
-        .setActivity('o.[query_1izmpnxHPOcMZ21byDZ31RISR5a]')
+        .setActivity('o.[query_2942pqjL5MapX6N3RrGZeVmgHql]')
         // .setData(data)
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('query_1izmpnxHPOcMZ21byDZ31RISR5a', true)
-          if (rs.isValid('query_1izmpnxHPOcMZ21byDZ31RISR5a')) {
+          let res = rs.getActivity('query_2942pqjL5MapX6N3RrGZeVmgHql', true)
+          if (rs.isValid('query_2942pqjL5MapX6N3RrGZeVmgHql')) {
             // console.log(res);
 
             if (res !== null) {
@@ -1745,7 +1265,7 @@ export default {
               // console.log("userdetails", vm.userDetails[0]);
             }
           } else {
-            rs.showErrorToast('query_1izmpnxHPOcMZ21byDZ31RISR5a')
+            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
           }
         })
     },

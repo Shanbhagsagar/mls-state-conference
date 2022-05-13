@@ -179,8 +179,9 @@
 
   "village":"Village/Town Name",
   "villagePlaceholder":"Enter Your  Village/Town Name",
-  "vvillage1":" Please Provide Your Village/Town Name !",
-  "vvillage2":" Name only contain letters. Numbers not allowed !",
+  "pincode":" Please Provide Your Pincode !",
+  "pincode2":" Pincode Contain Only numbers !",
+  "pincode3":"Pincode must be of 6 digit !",
 
   "password":"Password",
   "passwordPlaceholder":"Set The Password",

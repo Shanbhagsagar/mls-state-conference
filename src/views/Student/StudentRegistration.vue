@@ -3,10 +3,14 @@
     <div class="card-login card-register">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <a href="https://mockexams.mkcl.org/" class="btn btn-back"
-            >Back to Home</a
+          <a
+            href="https://mockexams.mkcl.org/"
+            class="btn btn-back"
+          >Back to Home</a>
+          <router-link
+            to="/login"
+            class="btn btn-back btn-back-alt"
           >
-          <router-link to="/login" class="btn btn-back btn-back-alt">
             Already a member? Login
           </router-link>
           <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
@@ -15,10 +19,12 @@
               class="img-fluid"
               src="../../../public/assets/images/logo_mockexams.png"
               alt="MKCL Mock Exams"
-            />
+            >
           </div>
           <div class="d-block text-center">
-            <h1 class="modal-title">Registration</h1>
+            <h1 class="modal-title">
+              Registration
+            </h1>
           </div>
           <!-- <div class="card-header">Test Readiness For You</div> -->
           <div class="card-header card-header-alt mt-0">
@@ -44,7 +50,7 @@
                     :class="{
                       'is-invalid': submitted && $v.student.fullName.$invalid
                     }"
-                  />
+                  >
                   <div
                     class="text-danger"
                     v-if="submitted && !$v.student.fullName.required"
@@ -118,7 +124,10 @@
               </div>-->
               <div class="col-md-6 col-lg-3">
                 <div class="form-group">
-                  <label for="gender" class="control-label form-label">
+                  <label
+                    for="gender"
+                    class="control-label form-label"
+                  >
                     लिंग/Gender
                     <span class="text-danger">*</span>
                   </label>
@@ -181,7 +190,10 @@
                 </div>
               </div> -->
 
-              <div class="col-md-12 col-lg-6" v-if="showGuardianFlag">
+              <div
+                class="col-md-12 col-lg-6"
+                v-if="showGuardianFlag"
+              >
                 <div class="form-group">
                   <label class="control-label form-label">
                     {{ $t('registration.parentName') }}
@@ -196,7 +208,7 @@
                       'is-invalid':
                         submitted && $v.student.parentOrGuardianName.$invalid
                     }"
-                  />
+                  >
                   <div
                     class="text-danger"
                     v-if="
@@ -246,7 +258,7 @@
                             'is-invalid':
                               submitted && $v.otp_d.mobileNumber.$invalid
                           }"
-                        />
+                        >
                         <div class="input-group-append">
                           <button
                             class="btn btn-purple"
@@ -276,18 +288,21 @@
                         v-if="
                           submitted &&
                             (!$v.otp_d.mobileNumber.minLength ||
-                              !$v.otp_d.mobileNumber.maxLength)
+                            !$v.otp_d.mobileNumber.maxLength)
                         "
                       >
                         {{ $t('registration.vmobile3') }}
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6" v-if="showOtpField == true">
+                  <div
+                    class="col-md-6"
+                    v-if="showOtpField == true"
+                  >
                     <div class="form-group">
-                      <label class="control-label form-label"
-                        >ओटीपी प्रविष्ट करा/Enter OTP</label
-                      >
+                      <label
+                        class="control-label form-label"
+                      >ओटीपी प्रविष्ट करा/Enter OTP</label>
                       <div class="input-group">
                         <input
                           class="form-control"
@@ -299,7 +314,7 @@
                             'is-invalid':
                               otp_submitted && $v.otp_d.votp.$invalid
                           }"
-                        />
+                        >
                         <div class="input-group-append">
                           <button
                             type="button"
@@ -321,7 +336,7 @@
                   </div>
                   <div class="text-info col-md-12">
                     सूचना: मोबाईल क्रमांक हाच लॉगीन आय-डी असणार आहे. त्यामुळे
-                    अचूक क्रमांक भरावा.<br />
+                    अचूक क्रमांक भरावा.<br>
                     <!-- पालकांसाठी सूचना: एकच मोबाईल नंबर वापरून तुम्हाला एकापेक्षा
                     अधिक पाल्यांना रजिस्टर करता येईल. त्यासाठी पहिल्या पाल्याची
                     नोंदणी केल्यानंतर लॉगीन करावे व दुसऱ्या पाल्याची माहिती
@@ -331,16 +346,16 @@
               </div>
               <div class="col-md-12 col-lg-6">
                 <div class="form-group">
-                  <label class="control-label form-label"
-                    >ई-मेल आयडी/Email ID</label
-                  >
+                  <label
+                    class="control-label form-label"
+                  >ई-मेल आयडी/Email ID</label>
                   <input
                     type="email"
                     class="form-control"
                     v-model="student.emailID"
                     :placeholder="$t('registration.emailIdPlaceholder')"
                     id="emailID"
-                  />
+                  >
                   <div
                     class="text-danger"
                     v-if="submitted && !$v.student.emailID.email"
@@ -357,9 +372,10 @@
               </div>
               <div class="col-md-6 col-lg-3">
                 <div class="form-group">
-                  <label for="states" class="control-label form-label"
-                    >राज्य/State</label
-                  >
+                  <label
+                    for="states"
+                    class="control-label form-label"
+                  >राज्य/State</label>
                   <span class="text-danger">*</span>
                   <!-- <select
                     class="form-control"
@@ -398,7 +414,10 @@
               </div>
               <div class="col-md-6 col-lg-3">
                 <div class="form-group">
-                  <label for="districts" class="control-label form-label">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
                     जिल्हा/District
                     <span class="text-danger">*</span>
                   </label>
@@ -440,9 +459,10 @@
 
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="districts" class="control-label form-label"
-                    >तालुका/Taluka <span class="text-danger">*</span></label
-                  >
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >तालुका/Taluka <span class="text-danger">*</span></label>
                   <!-- <select
                     class="form-control"
                     :disabled="talukas.length == 0"
@@ -494,7 +514,7 @@
                       'is-invalid':
                         submitted && $v.student.villageOrTown.$invalid
                     }"
-                  />
+                  >
                   <div
                     class="text-danger"
                     v-if="submitted && !$v.student.villageOrTown.required"
@@ -1017,7 +1037,10 @@
 
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="exam" class="control-label form-label">
+                        <label
+                          for="exam"
+                          class="control-label form-label"
+                        >
                           परीक्षा निवडा/Select Exam
                           <span class="text-danger">*</span>
                         </label>
@@ -1063,7 +1086,7 @@
                             'is-invalid':
                               submitted && $v.student.schoolName.$invalid
                           }"
-                        />
+                        >
                         <div
                           class="text-danger"
                           v-if="submitted && !$v.student.schoolName.required"
@@ -1079,7 +1102,7 @@
                         <div class="text-info">
                           महत्वाचे: शाळेचे नाव इ-गुणपत्रिकेवर दिसणार आहे.
                           त्यामुळे संपूर्ण नाव अचूक भरावे. उदा. महात्मा गांधी
-                          माध्यमिक विद्यालय, सातारा.<br />
+                          माध्यमिक विद्यालय, सातारा.<br>
                           Important: School Name shall appear on eMarksheet.
                           Please enter full name correctly. E.g. Mahatma Gandhi
                           Secondary School, Satara.
@@ -1110,7 +1133,7 @@
                             'is-invalid':
                               submitted && $v.student.collegeName.$invalid
                           }"
-                        />
+                        >
                         <div
                           class="text-danger"
                           v-if="submitted && !$v.student.collegeName.required"
@@ -1134,10 +1157,12 @@
                             student.educationLevel.levelName === 'Schooling'
                         "
                       >
-                        <label for="exam" class="control-label form-label">
-                          माध्यम/Medium
-                          <span class="text-danger">*</span></label
+                        <label
+                          for="exam"
+                          class="control-label form-label"
                         >
+                          माध्यम/Medium
+                          <span class="text-danger">*</span></label>
                         <v-select
                           v-model="student.medium"
                           label="displayName"
@@ -1164,7 +1189,10 @@
                             student.educationLevel.levelName === 'Schooling'
                         "
                       >
-                        <label for="exam" class="control-label form-label">
+                        <label
+                          for="exam"
+                          class="control-label form-label"
+                        >
                           इयत्ता/Standard <span class="text-danger">*</span>
                         </label>
                         <v-select
@@ -1193,10 +1221,11 @@
                             student.educationLevel.levelName === 'Schooling'
                         "
                       >
-                        <label for="TiliMili" class="control-label form-label"
-                          >तुम्ही टिलीमिली ही दूरदर्शन मालिका पहिली आहे का? Have
-                          you watched Tilimili Doordarshan serial? </label
-                        ><span class="text-danger">*</span>
+                        <label
+                          for="TiliMili"
+                          class="control-label form-label"
+                        >तुम्ही टिलीमिली ही दूरदर्शन मालिका पहिली आहे का? Have
+                          you watched Tilimili Doordarshan serial? </label><span class="text-danger">*</span>
                         <div class="cc-holder">
                           <b-form-radio-group
                             class="mb-3"
@@ -1225,11 +1254,15 @@
                             student.educationLevel.levelName === 'Schooling'
                         "
                       >
-                        <label for="TiliMili" class="control-label form-label"
-                          >तुम्ही टिलीमिली मोबाईल अँप गुगल प्ले स्टोअर वरून
-                          डाऊनलोड केले आहे का ? /</label
+                        <label
+                          for="TiliMili"
+                          class="control-label form-label"
+                        >तुम्ही टिलीमिली मोबाईल अँप गुगल प्ले स्टोअर वरून
+                          डाऊनलोड केले आहे का ? /</label>
+                        <label
+                          for="TiliMili"
+                          class="control-label form-label"
                         >
-                        <label for="TiliMili" class="control-label form-label">
                           Have you downloaded TiliMili Mobile app from google
                           play store?
                         </label>
@@ -1257,9 +1290,8 @@
                           <a
                             target="_blank"
                             href="https://www.mkcl.org/tilimiliapp"
-                            >डाउनलोड करण्यासाठी येथे क्लिक करा/Click here to
-                            Download</a
-                          >
+                          >डाउनलोड करण्यासाठी येथे क्लिक करा/Click here to
+                            Download</a>
                         </span>
                       </div>
                     </div>
@@ -1278,16 +1310,18 @@
                       id="customCheck3"
                       value="checkbox3text"
                       v-model="checked"
-                    />
-                    <label class="custom-control-label" for="customCheck3">
+                    >
+                    <label
+                      class="custom-control-label"
+                      for="customCheck3"
+                    >
                       मला सर्व अटी व शर्ती मान्य आहेत./I agree to
                       <a
                         href="javascript:void(0)"
                         id="show-btn"
                         v-b-modal.modal-lg
                         @click="$bvModal.show('tc-modal')"
-                        >Terms and Conditions.</a
-                      >
+                      >Terms and Conditions.</a>
                     </label>
                   </div>
                 </div>
@@ -1317,14 +1351,14 @@
                   <img
                     src="../../../public/assets/images/logo_mkclkf.png"
                     alt="MKCL Knowledge Foundation"
-                  />
+                  >
                 </div>
                 <div class="item">
                   <img
                     src="../../../public/assets/images/logo_mkcl.svg"
                     class="img-adj"
                     alt="MKCL"
-                  />
+                  >
                 </div>
                 <div
                   class="item"
@@ -1336,7 +1370,7 @@
                   <img
                     src="../../../public/assets/images/logo_ebalbharati.png"
                     alt="eBalbharati"
-                  />
+                  >
                 </div>
               </div>
               <div class="copyright">
@@ -1346,21 +1380,28 @@
                       student.educationLevel.levelName === 'Schooling'
                   "
                 >
-                  The copyright of eBalbharati duly acknowledged.</span
-                >
-                <br />
+                  The copyright of eBalbharati duly acknowledged.</span>
+                <br>
                 Powered by
-                <a href="https://www.mkcl.org" target="_blank"
-                  >Maharashtra Knowledge Corporation Ltd</a
-                >. (MKCL), Copyright © 2020. All rights reserved.<br />
+                <a
+                  href="https://www.mkcl.org"
+                  target="_blank"
+                >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2020. All rights reserved.<br>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <b-modal size="lg" id="tc-modal" hide-footer hide-header>
+      <b-modal
+        size="lg"
+        id="tc-modal"
+        hide-footer
+        hide-header
+      >
         <div class="d-block text-center">
-          <h3 class="modal-title">Terms & Conditions</h3>
+          <h3 class="modal-title">
+            Terms & Conditions
+          </h3>
         </div>
         <div class="modal-content-alt">
           <ol>
@@ -1369,7 +1410,10 @@
             </li>
             <li>
               Practice tests made available on the portal
-              <a href="mockexams.mkcl.org" target="_blank">
+              <a
+                href="mockexams.mkcl.org"
+                target="_blank"
+              >
                 <u>mockexams.mkcl.org</u>
               </a>
               {{ $t('registration.term21') }}
@@ -1402,11 +1446,9 @@
             <li>{{ $t('registration.term12') }}</li>
           </ol>
         </div>
-        <strong
-          >I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE
+        <strong>I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE
           ABOVE TERMS & CONDITIONS RELATING TO USAGE OF “MKCL Mock Exams”
-          PORTAL.</strong
-        >
+          PORTAL.</strong>
         <div class="modal-button">
           <!-- <b-button  class="btn btn-rounded btn-white" type="submit" @click="onAccept()">Accept</b-button> -->
           <b-button
@@ -1443,7 +1485,7 @@ import {
 // import flatPickr from 'vue-flatpickr-component'
 var moment = require('moment')
 export default {
-  data() {
+  data () {
     return {
       student: {
         selectedUniversity: null,
@@ -1547,7 +1589,7 @@ export default {
           mediumName: 'Semi-English',
           displayName: 'सेमी इंग्रजी/Semi-English'
         }
-        //{ mediumId: 2, mediumName: 'Hindi' },
+        // { mediumId: 2, mediumName: 'Hindi' },
       ],
       Options: [
         { text: 'हो/Yes', value: true },
@@ -1608,7 +1650,7 @@ export default {
       },
 
       parentOrGuardianName: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.showGuardianFlag == true
         }),
         isParentNameValid: helpers.regex('isParentNameValid', /^[a-zA-Z ]*$/)
@@ -1634,34 +1676,34 @@ export default {
         required
       },
       medium: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       },
       class: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       },
       schoolName: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       },
       collegeName: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName != 'Schooling'
         })
       },
 
       istiliMiliSeen: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       },
 
       istiliMiliAppDownloaded: {
-        required: requiredIf(function() {
+        required: requiredIf(function () {
           return this.student.educationLevel.levelName == 'Schooling'
         })
       }
@@ -1683,7 +1725,7 @@ export default {
       votp: { required }
     }
   },
-  created() {
+  created () {
     const vm = this
     this.$store.dispatch('getServerTime').then((res) => {
       this.currentDate = res.result.dateTime
@@ -1707,7 +1749,7 @@ export default {
   },
 
   methods: {
-    changeLanguage(lang) {
+    changeLanguage (lang) {
       console.log('lang change :', lang)
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
@@ -1722,7 +1764,7 @@ export default {
     //   console.log("student exam", vm.student.exam);
     // },
 
-    validateAge(date) {
+    validateAge (date) {
       this.$store.dispatch('getServerTime').then((res) => {
         let age = moment(res.result.date).diff(date, 'years', false)
         // let age = 20
@@ -1734,16 +1776,16 @@ export default {
         }
       })
     },
-    onAccept() {
+    onAccept () {
       const vm = this
       vm.checked = true
       vm.$bvModal.hide('tc-modal')
     },
-    genderSelected() {
+    genderSelected () {
       const vm = this
       vm.isGenderSelected = true
     },
-    async starter() {
+    async starter () {
       const vm = this
 
       await vm.getAllCountries()
@@ -1759,7 +1801,7 @@ export default {
 
       // await vm.getTalukaByDistrictId();
     },
-    passwordVisibility() {
+    passwordVisibility () {
       this.PasswordInputType =
         this.PasswordInputType === 'password' ? 'text' : 'password'
       this.iconChange =
@@ -1767,7 +1809,7 @@ export default {
           ? 'mdi mdi-eye-off'
           : 'mdi mdi-eye'
     },
-    passwordVisibilityCnf() {
+    passwordVisibilityCnf () {
       this.PasswordInput =
         this.PasswordInput === 'password' ? 'text' : 'password'
       this.iconChangeCnf =
@@ -1783,7 +1825,7 @@ export default {
     //     vm.isUniversityExam = false;
     //   }
     // },
-    getOtp() {
+    getOtp () {
       const vm = this
 
       this.showOtpField = true
@@ -1809,7 +1851,7 @@ export default {
             )
             this.sendOtpFlag = true
 
-            vm.timer = setTimeout(function() {
+            vm.timer = setTimeout(function () {
               vm.sendOtpFlag = false
             }, 30000)
           } else {
@@ -1817,7 +1859,7 @@ export default {
           }
         })
     },
-    verifyOtp() {
+    verifyOtp () {
       const vm = this
       new MQL()
         .setActivity('o.[VerifyOtp]')
@@ -1855,7 +1897,7 @@ export default {
           }
         })
     },
-    getStudentByMobileNumber() {
+    getStudentByMobileNumber () {
       const vm = this
 
       new MQL()
@@ -1879,7 +1921,7 @@ export default {
           }
         })
     },
-    getAllUniversities() {
+    getAllUniversities () {
       const vm = this
       new MQL()
         .setActivity('o.[query_1hYHKHUKdSeCkvVQ6OOrCX108ux]')
@@ -1986,7 +2028,7 @@ export default {
     //       }
     //     })
     // },
-    getAllCountries() {
+    getAllCountries () {
       return new Promise((resolve) => {
         const vm = this
         new MQL()
@@ -2016,7 +2058,7 @@ export default {
           })
       })
     },
-    getStatesByCountryId() {
+    getStatesByCountryId () {
       return new Promise((resolve) => {
         const vm = this
 
@@ -2047,7 +2089,7 @@ export default {
       })
     },
 
-    getDistrictsByStateId() {
+    getDistrictsByStateId () {
       return new Promise((resolve) => {
         const vm = this
         // console.log("state code", vm.student.selectedState.STATE_CODE);
@@ -2073,7 +2115,7 @@ export default {
           })
       })
     },
-    getTalukaByDistrictId() {
+    getTalukaByDistrictId () {
       return new Promise((resolve) => {
         const vm = this
 
@@ -2094,7 +2136,7 @@ export default {
           })
       })
     },
-    saveUserCredentials() {
+    saveUserCredentials () {
       const vm = this
       // vm.student_cred.username = vm.otp_d.mobileNumber;
       // vm.student_cred.password = password;
@@ -2112,7 +2154,7 @@ export default {
         })
     },
 
-    getEducationLevelDetails() {
+    getEducationLevelDetails () {
       const vm = this
       new MQL()
         .setActivity('o.[query_1izkwK41LiLPDBuLCsMKiRAX8ww]')
@@ -2137,7 +2179,7 @@ export default {
         })
     },
 
-    getClassDetails() {
+    getClassDetails () {
       const vm = this
       new MQL()
         .setActivity('o.[query_1izmpnxHPOcMZ21byDZ31RISR5a]')
@@ -2162,7 +2204,7 @@ export default {
         })
     },
 
-    sendEmail() {
+    sendEmail () {
       const vm = this
       if (vm.student.emailID && vm.student.emailID !== '') {
         vm.student.emailID = vm.student.emailID
@@ -2185,7 +2227,7 @@ export default {
       }
     },
 
-    studentRegister() {
+    studentRegister () {
       const vm = this
       vm.submitted = true
       vm.$v.$touch()

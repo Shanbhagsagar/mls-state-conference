@@ -65,63 +65,7 @@
                 </div>
               </div>
 
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    Middle Name
-                    <span class="text-danger">*</span>
-                  </label>
-                  <input
-                    class="form-control"
-                    v-model="student.middleName"
-                    id="middleName"
-                    :class="{
-                      'is-invalid': submitted && $v.student.middleName.$invalid,
-                    }"
-                  >
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.middleName.required"
-                  >
-                    Please Provide Your Middle Name !
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.middleName.isNameValid"
-                  >
-                    Name only contain letters. Numbers not allowed !
-                  </div>
-                </div>
-              </div>-->
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    Last Name
-                    <span class="text-danger">*</span>
-                  </label>
-                  <input
-                    class="form-control"
-                    v-model="student.lastName"
-                    id="lastName"
-                    :class="{
-                      'is-invalid': submitted && $v.student.lastName.$invalid,
-                    }"
-                  >
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.lastName.required"
-                  >
-                 Please Provide Your Last Name !
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.lastName.isNameValid"
-                  >
-                    Name only contain letters. Numbers not allowed !
-                  </div>
-                </div>
-              </div>-->
-              <div class="col-md-6 col-lg-3">
+              <div class="col-md-8 col-lg-4">
                 <div class="form-group">
                   <label
                     for="gender"
@@ -154,7 +98,7 @@
                 </div>
               </div>
               <!-- <div class="col-md-2"></div> -->
-              <div class="col-md-6 col-lg-3">
+              <div class="col-md-8 col-lg-4">
                 <div class="form-group">
                   <label
                     for="dob"
@@ -259,9 +203,18 @@
                           }"
                         >
                         <div class="input-group-append">
-                          <button
+                          <!-- <button
                             class="btn btn-purple"
                             @click="getStudentByMobileNumber()"
+                            :disabled="
+                              sendOtpFlag || $v.otp_d.mobileNumber.$invalid
+                            "
+                          >
+                            {{ $t('registration.sendOtp') }}
+                          </button> -->
+                          <button
+                            class="btn btn-purple"
+                            @click="getOtp()"
                             :disabled="
                               sendOtpFlag || $v.otp_d.mobileNumber.$invalid
                             "
@@ -355,13 +308,18 @@
                       v-model="student.emailID"
                       :placeholder="$t('registration.emailIdPlaceholder')"
                       id="emailID"
+                      :disabled="flag == 1"
+                      :class="{
+                        'is-invalid':
+                          submitted && $v.student.emailID.$invalid
+                      }"
                     >
                     <div class="input-group-append">
                       <button
                         class="btn btn-purple"
-                        @click="getStudentByMobileNumber()"
+                        @click="getEmailOtp()"
                         :disabled="
-                          sendOtpFlag || $v.otp_d.mobileNumber.$invalid
+                          sendEmailOtpFlag || $v.student.emailID.$invalid
                         "
                       >
                         {{ $t('registration.sendOtp') }}
@@ -371,7 +329,7 @@
 
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.emailID.email"
+                    v-if="submitted && !$v.student.emailID.required"
                   >
                     Please provide valid email
                   </div>
@@ -383,9 +341,48 @@
                   </div> -->
                 </div>
               </div>
+              <div
+                class="col-md-6"
+                v-if="showEmailOtpField == true"
+              >
+                <div class="form-group">
+                  <label
+                    class="control-label form-label"
+                  >Enter OTP</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      v-model="student.votp"
+                      :placeholder="$t('registration.enterOtpPlaceholder')"
+                      id="votp"
+                      :disabled="flag == 1"
+                      :class="{
+                        'is-invalid':
+                          otp_submitted && $v.otp_d.votp.$invalid
+                      }"
+                    >
+                    <div class="input-group-append">
+                      <button
+                        type="button"
+                        class="btn btn-green"
+                        @click="verifyEmailOtp()"
+                        :disabled="flag == 1 || student.votp == ''"
+                      >
+                        {{ button }}
+                      </button>
+                    </div>
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="otp_submitted && !$v.student.votp.required"
+                  >
+                    {{ $t('registration.venterOtp') }}
+                  </div>
+                </div>
               </div>
-              
-              <div class="row">
+            </div>
+
+            <div class="row">
               <div class="col-md-8 col-lg-4">
                 <div class="form-group">
                   <label
@@ -393,9 +390,9 @@
                     class="control-label form-label"
                   >State</label>
                   <span class="text-danger">*</span>
-                  <!-- <select
+                  <select
                     class="form-control"
-                    :disabled="true"
+                   
                     v-model="student.selectedStates"
                     @change="getDistrictsByStateId()"
                   >
@@ -404,19 +401,20 @@
                     </option>
                     <option
                       v-for="state in states"
-                      :value="state"
+                      :value="state.stateId"
+                      :key="state.stateId"
                     >
-                      {{ state.STATE_NAME }}
+                      {{ state.displayName }}
                     </option>
-                  </select>-->
-                  <v-select
+                  </select>
+                  <!-- <v-select
                     v-model="student.selectedState"
                     label="STATE_NAME"
                     :placeholder="$t('registration.statePlaceholder')"
                     :options="states"
                     :value="student.state"
                     @input="getDistrictsByStateId()"
-                  />
+                  /> -->
                   <div
                     class="text-danger"
                     v-if="
@@ -437,21 +435,7 @@
                     District
                     <span class="text-danger">*</span>
                   </label>
-                  <!-- <select
-                    class="form-control"
-                    :disabled="districts.length == 0"
-                    v-model="student.selectedDistrict"
-                  >
-                    <option value>
-                      Select Districts
-                    </option>
-                    <option
-                      v-for="district in districts"
-                      :value="district"
-                    >
-                      {{ district.DISTRICT_NAME }}
-                    </option>
-                  </select>-->
+
                   <v-select
 
                     v-model="student.selectedDistrict"
@@ -472,48 +456,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label
-                    for="districts"
-                    class="control-label form-label"
-                  >तालुका/Taluka <span class="text-danger">*</span></label> -->
-              <!-- <select
-                    class="form-control"
-                    :disabled="talukas.length == 0"
-                    v-model="student.selectedTaluka"
-                  >
-                    <option value>
-                      Select Districts
-                    </option>
-                    <option
-                      v-for="(taluka,k) in talukas"
-                      :key="k"
-                      :value="taluka"
-                    >
-                      {{ taluka.TEHSILNAME }}
-                    </option>
-                  </select> -->
-              <!-- <v-select
-                    :disabled="talukas.length == 0"
-                    v-model="student.selectedTaluka"
-                    label="TEHSILNAME"
-                    :placeholder="$t('registration.vtaluka')"
-                    :options="talukas"
-                    :value="student.selectedTaluka"
-                  />
-                  <div
-                    class="text-danger"
-                    v-if="
-                      !$v.student.selectedTaluka.required &&
-                        $v.student.selectedTaluka.$error
-                    "
-                  >
-                    {{ $t('registration.vtaluka') }}
-                  </div>
-                </div>
-              </div> -->
 
               <div class="col-md-8 col-lg-4">
                 <div class="form-group">
@@ -546,480 +488,12 @@
                     {{ $t('registration.vvillage2') }}
                   </div>
                 </div>
-              
               </div>
-
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    पासवर्ड/Password
-                    <span class="text-danger">*</span>
-                  </label>
-                  <div class="ic-holder">
-                    <b-form-input
-                      class="form-control"
-                      v-model="password"
-                      :placeholder="$t('registration.passwordPlaceholder')"
-                      id="password"
-                      :type="PasswordInputType"
-                      :class="{
-                        'is-invalid': submitted && $v.password.$invalid,
-                        'is-valid': $v.password.goodPassword
-                      }"
-                    />
-                    <i
-                      class="mdi mdi-eye"
-                      :class="iconChangeCnf"
-                      @click="passwordVisibility"
-                    />
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.password.required"
-                  >
-                    {{ $t('registration.vpassword1') }}
-                  </div>
-                  <div
-                    class="text-info"
-                    v-if="!submitted && !$v.password.goodPassword"
-                  >
-                    {{ $t('registration.vpassword2') }}
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.password.goodPassword"
-                  >
-                    {{ $t('registration.vpassword2') }}
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    पासवर्ड पुन्हा टाकून निश्चित करा/Confirm Password
-                    <span class="text-danger">*</span>
-                  </label>
-                  <div class="ic-holder">
-                    <b-form-input
-                      class="form-control"
-                      v-model="cnfpassword"
-                      :placeholder="
-                        $t('registration.confirmPasswordPlaceholder')
-                      "
-                      id="cnfpassword"
-                      :type="PasswordInput"
-                      :class="{
-                        'is-invalid': submitted && $v.cnfpassword.$invalid
-                      }"
-                    />
-                    <i
-                      class="mdi mdi-eye"
-                      :class="iconChangeCnf"
-                      @click="passwordVisibilityCnf"
-                    />
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.cnfpassword.required"
-                  >
-                    {{ $t('registration.vconfirmPassword') }}
-                  </div>
-                </div>
-              </div> -->
-
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label
-                    for="country"
-                    class="control-label form-label"
-                  >Country</label>
-                  <select
-                    class="form-control"
-                    :disabled="true"
-                    v-model="student.selectedCountry"
-                    @change="getStatesByCountryId()"
-                  >
-                    <option value>
-                      Select Country
-                    </option>
-                    <option
-                      v-for="country in countries"
-                      :value="country"
-                    >
-                      {{ country.countryName }}
-                    </option>
-                  </select>
-                </div>
-              </div>-->
-
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label
-                    for="districts"
-                    class="control-label form-label"
-                  >Taluka</label>
-                  <select
-                    class="form-control"
-                    :disabled="talukas.length == 0"
-                    v-model="student.selectedTaluka"
-                  >
-                    <option value>
-                      Select Districts
-                    </option>
-                    <option
-                      v-for="taluka in talukas"
-                      :value="taluka"
-                    >
-                      {{ taluka.TEHSILNAME }}
-                    </option>
-                  </select>
-                  <div
-                    class="text-danger"
-                    v-if="
-                      !$v.student.selectedTaluka.required &&
-                      $v.student.selectedTaluka.$error
-                    "
-                  >
-                    Please Select Taluka
-                  </div>
-                </div>
-              </div>-->
-
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    Which Type of Exam you want to attempt
-                    <span class="text-danger">*</span>
-                  </label>
-                  <b-form-select
-                    @change="changeExamFlag"
-                    v-model="student.exam"
-                    id="exam"
-                    :options="exams"
-                    :class="{
-                      'is-invalid': submitted && $v.student.exam.$invalid,
-                    }"
-                  />
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.exam.required"
-                  >
-                    Please select exam !
-                  </div>
-                </div>
-              </div>-->
             </div>
           </div>
 
-          <!-- <div class="card-header card-header-alt">
-            Educational Details
-          </div> -->
           <div class="card-form">
-            <div class="row">
-              <!-- <div class="col-md-6"> -->
-              <!-- <div class="form-group"> -->
-              <!-- <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    University
-                    <span class="text-danger">*</span>
-                  </label> -->
-              <!-- <select
-                    class="form-control"
-                    :disabled="universities.length == 0"
-                    v-model="student.selectedUniversity"
-                    @change="getFacultiesByUniversityId()"
-                  >
-                    <option value>
-                      Select universities
-                    </option>
-                    <option
-                      v-for="university in universities"
-                      :value="university"
-                    >
-                      {{ university.universityName }}
-                    </option>
-                  </select>-->
-              <!-- <v-select
-                    v-model="student.selectedUniversity"
-                    label="universityName"
-                    placeholder="Enter/Select The University"
-                    :options="universities"
-                    :value="student.selectedUniversity"
-                    @input="getFacultiesByUniversityId()"
-                  /> -->
-              <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.selectedUniversity.required"
-                  >
-                    Please select University Name !
-                  </div> -->
-              <!-- </div> -->
-              <!-- </div> -->
-              <!-- <div class="col-md-6"> -->
-              <!-- <div class="form-group"> -->
-              <!-- <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    Faculty
-                    <span class="text-danger">*</span>
-                  </label> -->
-              <!-- <select
-                    class="form-control"
-                    :disabled="faculties.length == 0"
-                    v-model="student.selectedFaculty"
-                    @change="getCoursesByFacultyId()"
-                  >
-                    <option value>
-                      Select Faculty
-                    </option>
-                    <option
-                      v-for="faculty in faculties"
-                      :value="faculty"
-                    >
-                      {{ faculty.facultyName }}
-                    </option>
-                  </select>-->
-              <!-- <v-select
-                    :disabled="faculties.length == 0"
-                    v-model="student.selectedFaculty"
-                    label="facultyName"
-                    placeholder="Enter/Select The Faculty"
-                    :options="faculties"
-                    :value="student.selectedFaculty"
-                    @input="getCoursesByFacultyId()"
-                  >
-                  </v-select> -->
-              <!-- <template v-slot:option="option"> -->
-              <!-- <span :class="option.icon"></span> -->
-              <!-- {{ option.facultyName }} (Faculty Id:{{
-                        option.facultyId
-                      }})
-                    </template> -->
-
-              <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.selectedFaculty.required"
-                  >
-                    Please select Faculty Name !
-                  </div> -->
-              <!-- </div> -->
-              <!-- </div> -->
-              <!-- <div class="col-md-12">
-                <div class="form-group">
-                  <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    Course Name
-                    <span class="text-danger">*</span>
-                  </label> -->
-              <!-- <select
-                    class="form-control"
-                    :disabled="courses.length == 0"
-                    v-model="student.selectedCourse"
-                  >
-                    <option value>
-                      Select Course
-                    </option>
-                    <option
-                      v-for="course in courses"
-                      :value="course"
-                    >
-                      {{ course.courseName }}
-                    </option>
-                  </select>-->
-              <!-- <v-select
-                    :disabled="courses.length == 0"
-                    v-model="student.selectedCourse"
-                    placeholder="Enter/Select The Course"
-                    label="courseName"
-                    :options="courses"
-                    :value="student.selectedCourse"
-                  ></v-select> -->
-              <!-- <template v-slot:option="option"> -->
-              <!-- <span :class="option.icon"></span> -->
-              <!-- {{ option.courseName }} (Course Pattern:{{
-                        option.coursePattern
-                      }})
-                    </template> -->
-
-              <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.selectedCourse.required"
-                  >
-                    Please select Course Name !
-                  </div> -->
-              <!-- </div> -->
-              <!-- </div> -->
-              <!-- <div class="col-md-6" v-if="isUniversityExam">
-                <div class="form-group">
-                  <label for="exam" class="control-label form-label">
-                    Year
-                    <span class="text-danger">*</span>
-                  </label> -->
-              <!-- <select
-                    class="form-control"
-                    :disabled="courses.length == 0"
-                    v-model="student.selectedCourse"
-                  >
-                    <option value>
-                      Select Course
-                    </option>
-                    <option
-                      v-for="course in courses"
-                      :value="course"
-                    >
-                      {{ course.courseName }}
-                    </option>
-                  </select>-->
-              <!-- <v-select
-                    :disabled="years.length == 0"
-                    v-model="student.selectedYear"
-                    placeholder="Enter/Select The Year"
-                    label="coursePart"
-                    :options="years"
-                    :value="student.selectedYear"
-                  > -->
-              <!-- <template v-slot:option="option"> -->
-              <!-- <span :class="option.icon"></span> -->
-              <!-- {{ option.coursePart }} (Course Part Term:{{
-                        option.coursePartTerm
-                      }})
-                    </template> -->
-              <!-- </v-select>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.selectedYear.required"
-                  >
-                    Please select Year !
-                  </div>
-                </div>
-              </div> -->
-              <!-- <div class="col-md-6" v-show="isUniversityExam">
-                <div class="form-group">
-                  <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    Select Year
-                    <span class="text-danger">*</span>
-                  </label>
-                  <div class="holder">
-                    <div
-                      class="custom-control custom-radio custom-control-inline"
-                    >
-                      <input
-                        type="radio"
-                        id="customRadioInline1"
-                        class="custom-control-input"
-                        name="year"
-                        value="First Year"
-                        v-model="student.selectedYear"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customRadioInline1"
-                      >First Year</label>
-                    </div>
-                    <div
-                      class="custom-control custom-radio custom-control-inline"
-                    >
-                      <input
-                        type="radio"
-                        id="customRadioInline2"
-                        class="custom-control-input"
-                        name="year"
-                        value="Second Year"
-                        v-model="student.selectedYear"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customRadioInline2"
-                      >Second Year</label>
-                    </div>
-                    <div
-                      class="custom-control custom-radio custom-control-inline"
-                    >
-                      <input
-                        type="radio"
-                        id="customRadioInline3"
-                        class="custom-control-input"
-                        name="year"
-                        value="Third Year"
-                        v-model="student.selectedYear"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customRadioInline3"
-                      >Third Year</label>
-                    </div>
-                    <div
-                      class="custom-control custom-radio custom-control-inline"
-                    >
-                      <input
-                        type="radio"
-                        id="customRadioInline4"
-                        class="custom-control-input"
-                        name="year"
-                        value="Fourth Year"
-                        v-model="student.selectedYear"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customRadioInline4"
-                      >Fourth Year</label>
-                    </div>
-                    <div
-                      class="custom-control custom-radio custom-control-inline"
-                    >
-                      <input
-                        type="radio"
-                        id="customRadioInline5"
-                        class="custom-control-input"
-                        name="year"
-                        value="Fifth Year"
-                        v-model="student.selectedYear"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customRadioInline5"
-                      >Fifth Year</label>
-                    </div>
-                  </div>
-                </div>
-              </div>-->
-              <!-- <div class="col-md-6">
-                <div class="form-group">
-                  <label
-                    for="exam"
-                    class="control-label form-label"
-                  >
-                    How to attempt the exam
-                    <span class="text-danger">*</span>
-                  </label>
-                  <b-form-select
-                    v-model="student.modeOfExam"
-                    id="mode"
-                    :options="mode"
-                    :class="{
-                      'is-invalid': submitted && $v.student.modeOfExam.$invalid,
-                    }"
-                  />
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.modeOfExam.required"
-                  >
-                    Please select Mode Of Exam !
-                  </div>
-                </div>
-              </div>-->
-            </div>
+            <div class="row" />
 
             <div class="card-header card-header-alt">
               Educational Details
@@ -1028,30 +502,6 @@
               <div class="row">
                 <div class="col-md-12">
                   <div class="row">
-                    <!-- <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="exam" class="control-label form-label">
-                          Mock Exam Category <span class="text-danger">*</span>
-                        </label>
-                        <v-select
-                          v-model="student.mockExamCategory"
-                          label="categoryName"
-                          :options="mockExamCategories"
-                          item-value="text"
-                          @input="getEducationLevelDetails()"
-                        />
-                        <div
-                          class="text-danger"
-                          v-if="
-                            !$v.student.mockExamCategory.required &&
-                              $v.student.mockExamCategory.$error
-                          "
-                        >
-                          Please Select Mock Exam Category
-                        </div>
-                      </div>
-                    </div> -->
-
                     <div class="col-md-6">
                       <div class="form-group">
                         <label
@@ -1210,7 +660,7 @@
                           for="exam"
                           class="control-label form-label"
                         >
-                        Standard <span class="text-danger">*</span>
+                          Standard <span class="text-danger">*</span>
                         </label>
                         <v-select
                           v-model="student.class"
@@ -1435,7 +885,7 @@
               </a>
               {{ $t('registration.term21') }}
             </li> -->
-              <li>
+            <li>
               {{ $t('registration.term2') }}
             </li>
             <li>
@@ -1518,7 +968,9 @@ export default {
         medium: '',
         schoolName: '',
         collegeName: '',
-        parentOrGuardianName: ''
+        parentOrGuardianName: '',
+        votp: '',
+        dateOfBirth: ''
       },
       student_cred: {},
       isGenderSelected: false,
@@ -1554,6 +1006,7 @@ export default {
       isEnabled: true,
       otp_submitted: false,
       sendOtpFlag: false,
+      sendEmailOtpFlag: false,
       showOtpField: false,
 
       PasswordInputType: 'password',
@@ -1637,8 +1090,11 @@ export default {
     },
     student: {
       emailID: {
-        email
-        // required,
+        email,
+        required
+      },
+      dateOfBirth: {
+        required
       },
       // selectedUniversity: {
       //   required
@@ -1681,9 +1137,7 @@ export default {
       //   required,
       //   isNameValid: helpers.regex("isNameValid", /^[a-zA-Z ]*$/),
       // },
-      dateOfBirth: {
-        required
-      },
+
       gender: {
         required
       },
@@ -1806,11 +1260,12 @@ export default {
     async starter () {
       const vm = this
 
-      await vm.getAllCountries()
+      // await vm.getAllCountries()
 
-      vm.countryId = vm.countries.filter(
-        (country) => country.countryName == 'India'
-      )[0].countryId
+      // vm.countryId = vm.countries.filter(
+      //   (country) => country.countryName == 'India'
+      // )[0].countryId
+      vm.countryId = '001'
       await vm.getStatesByCountryId()
       vm.stateId = vm.states.filter(
         (state) => state.STATE_NAME == 'Maharashtra'
@@ -1843,17 +1298,51 @@ export default {
     //     vm.isUniversityExam = false;
     //   }
     // },
+    getEmailOtp () {
+      const vm = this
+
+      this.showEmailOtpField = true
+      new MQL()
+        .setActivity('o.[SendEmailOTP]')
+        .setData({ email: this.student.emailID })
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('SendEmailOTP', true)
+          if (rs.isValid('SendEmailOTP')) {
+            this.$toasted.success('OTP sent to your phone number', {
+              theme: 'bubble',
+              position: 'top-center',
+              duration: 3000
+            })
+            this.$toasted.info(
+              'Please wait for 30 seconds before resending OTP',
+              {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              }
+            )
+            this.sendEmailOtpFlag = true
+
+            vm.timer = setTimeout(function () {
+              vm.sendEmailOtpFlag = false
+            }, 30000)
+          } else {
+            rs.showErrorToast('SendEmailOTP')
+          }
+        })
+    },
     getOtp () {
       const vm = this
 
       this.showOtpField = true
       new MQL()
-        .setActivity('o.[SendOtp]')
+        .setActivity('o.[SendMobileOTP]')
         .setData(this.otp_d)
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('SendOtP', true)
-          if (rs.isValid('SendOtp')) {
+          let res = rs.getActivity('SendMobileOTP', true)
+          if (rs.isValid('SendMobileOTP')) {
             this.$toasted.success('OTP sent to your phone number', {
               theme: 'bubble',
               position: 'top-center',
@@ -1873,20 +1362,58 @@ export default {
               vm.sendOtpFlag = false
             }, 30000)
           } else {
-            rs.showErrorToast('SendOtp')
+            rs.showErrorToast('SendMobileOTP')
+          }
+        })
+    },
+    verifyEmailOtp () {
+      const vm = this
+      new MQL()
+        .setActivity('o.[VerifyEmailOTP]')
+        .setData({ email: this.student.emailID, verifyOTP: this.student.votp })
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('VerifyEmailOTP', true)
+          if (rs.isValid('VerifyEmailOTP')) {
+            if (res.result.verifyOTP === 'OTPFOUND') {
+              this.sendEmailOtpFlag = true
+              this.flag = 1
+
+              this.button = 'Verified'
+              if (vm.timer) {
+                clearTimeout(vm.timer)
+                vm.timer = 0
+              }
+              this.$toasted.success('OTP Verified', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            }
+            if (res.result.verifyOTP === 'OTPNOTFOUND') {
+              this.flag = 0
+
+              this.$toasted.error('Invalid OTP ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            }
+          } else {
+            rs.showErrorToast('VerifyEmailOTP')
           }
         })
     },
     verifyOtp () {
       const vm = this
       new MQL()
-        .setActivity('o.[VerifyOtp]')
-        .setData(this.otp_d)
+        .setActivity('o.[VerifyMobileOTP]')
+        .setData({ mobileNumber: this.otp_d.mobileNumber, verifyOTP: this.otp_d.votp })
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('VerifyOtp', true)
-          if (rs.isValid('VerifyOtp')) {
-            if (res.result.votp == 'OTPFOUND') {
+          let res = rs.getActivity('VerifyMobileOTP', true)
+          if (rs.isValid('VerifyMobileOTP')) {
+            if (res.result.verifyOTP === 'OTPFOUND') {
               this.sendOtpFlag = true
               this.flag = 1
 
@@ -1901,7 +1428,7 @@ export default {
                 duration: 3000
               })
             }
-            if (res.result.votp == 'OTPNOTFOUND') {
+            if (res.result.verifyOTP === 'OTPNOTFOUND') {
               this.flag = 0
 
               this.$toasted.error('Invalid OTP ', {
@@ -1911,7 +1438,7 @@ export default {
               })
             }
           } else {
-            rs.showErrorToast('VerifyOtp')
+            rs.showErrorToast('VerifyMobileOTP')
           }
         })
     },
@@ -2050,12 +1577,12 @@ export default {
       return new Promise((resolve) => {
         const vm = this
         new MQL()
-          .setActivity('o.[query_1hXN8iXaXhjrTIlptbNbROS9QX4]')
+          .setActivity('o.[query_293ccRYOvTADqM5DVvZGDX6ceNb]')
           // .setData(data)
           .fetch()
           .then((rs) => {
-            let res = rs.getActivity('query_1hXN8iXaXhjrTIlptbNbROS9QX4', true)
-            if (rs.isValid('query_1hXN8iXaXhjrTIlptbNbROS9QX4')) {
+            let res = rs.getActivity('query_293ccRYOvTADqM5DVvZGDX6ceNb', true)
+            if (rs.isValid('query_293ccRYOvTADqM5DVvZGDX6ceNb')) {
               vm.countries = res
               // console.log(vm.countries)
               //  vm.countries
@@ -2071,7 +1598,7 @@ export default {
               // }
               resolve()
             } else {
-              // rs.showErrorToast("query_1hXN8iXaXhjrTIlptbNbROS9QX4")
+              rs.showErrorToast('query_1hXN8iXaXhjrTIlptbNbROS9QX4')
             }
           })
       })
@@ -2080,28 +1607,29 @@ export default {
       return new Promise((resolve) => {
         const vm = this
 
-        vm.countryId = vm.student.selectedCountry.countryId
-
+        // vm.countryId = vm.student.selectedCountry.countryId
+        vm.countryId = '001'
         new MQL()
-          .setActivity('o.[query_1hXPpl5LCKo5ugXaK2IiK672u7T]')
-          .setData({ COUNTRY_ID: vm.countryId })
+          .setActivity('o.[query_293ccRYOvTADqM5DVvZGDX6ceNb]')
+          .setData({ countryId: vm.countryId })
           .fetch()
           .then((rs) => {
-            let res = rs.getActivity('query_1hXPpl5LCKo5ugXaK2IiK672u7T', true)
-            if (rs.isValid('query_1hXPpl5LCKo5ugXaK2IiK672u7T')) {
+            let res = rs.getActivity('query_293ccRYOvTADqM5DVvZGDX6ceNb', true)
+            if (rs.isValid('query_293ccRYOvTADqM5DVvZGDX6ceNb')) {
               if (res == null) {
                 res = []
               }
+
               vm.districts = []
               vm.states = res
 
               //  if (vm.initflag){
-              vm.student.selectedState = vm.states.filter(
-                (state) => state.STATE_NAME === 'Maharashtra'
-              )[0]
+              vm.student.selectedState = vm.states.find(
+                (state) => state.stateName === 'Maharashtra'
+              ).stateId
               resolve()
             } else {
-              rs.showErrorToast('query_1hXPpl5LCKo5ugXaK2IiK672u7T')
+              rs.showErrorToast('query_293ccRYOvTADqM5DVvZGDX6ceNb')
             }
           })
       })
@@ -2249,7 +1777,8 @@ export default {
       const vm = this
       vm.submitted = true
       vm.$v.$touch()
-      vm.student.dateOfBirth = '2000-01-01 00:00:00'
+      // vm.student.dateOfBirth = '2000-01-01 00:00:00'
+
       // console.log('$V:', this.$v)
       if (vm.flag === 1) {
         if (!vm.$v.$invalid) {

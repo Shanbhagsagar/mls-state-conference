@@ -7,7 +7,7 @@ const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
-  publicPath : "/application",
+  publicPath: '/application',
   chainWebpack: (config) => {
     config.plugins.delete('prefetch')
   },
@@ -210,7 +210,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/server': {
-        target: 'https://cs.mkcl.org/1hXG5XOK7XnykUcTYptFMrwauGx/', // provide proxy  for your project
+        target: 'https://cs.mkcl.org/290nuuzo7gn5wlah7nwOc7ZO9L4/', // provide proxy  for your project
         ws: true,
         changeOrigin: true,
         pathRewrite: {

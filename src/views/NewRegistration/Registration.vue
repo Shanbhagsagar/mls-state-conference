@@ -43,22 +43,22 @@
                   </label>
                   <input
                     class="form-control"
-                    v-model="student.fullName"
+                    v-model="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"
                     id="fullName"
                     :class="{
-                      'is-invalid': submitted && $v.student.fullName.$invalid
+                      'is-invalid': submitted && $v.basic.fullName.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.fullName.required"
+                    v-if="submitted && !$v.basic.fullName.required"
                   >
                     {{ $t('registration.vstudnetName1') }}
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.fullName.isNameValid"
+                    v-if="submitted && !$v.basic.fullName.isNameValid"
                   >
                     {{ $t('registration.vstudnetName2') }}
                   </div>
@@ -83,7 +83,7 @@
                     }"
                   />-->
                   <v-select
-                    v-model="student.gender"
+                    v-model="basic.gender"
                     :placeholder="$t('registration.genderPlaceholder')"
                     label="value"
                     :options="gender"
@@ -91,7 +91,7 @@
                   />
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.gender.required"
+                    v-if="submitted && !$v.basic.gender.required"
                   >
                     {{ $t('registration.vgender') }}
                   </div>
@@ -112,7 +112,7 @@
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
                       :disabled-dates="disabledDateOfBirthDates"
-                      v-model="student.dateOfBirth"
+                      v-model="basic.dateOfBirth"
                       :max="this.maxDate"
                       :min="this.minDate"
                       @input="validateAge()"
@@ -121,14 +121,14 @@
                       }"
                       :class="{
                         'is-invalid':
-                          submitted && $v.student.dateOfBirth.$invalid,
+                          submitted && $v.basic.dateOfBirth.$invalid,
                       }"
                     />
                     <!-- <i class="mdi mdi-calendar" /> -->
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.student.dateOfBirth.required"
+                    v-if="submitted && !$v.basic.dateOfBirth.required"
                   >
                     {{ $t('registration.vdob') }}
                   </div>
@@ -139,45 +139,6 @@
                     <small>
                       Your age should be between 18 to 58 Years .
                     </small>
-                  </div>
-                </div>
-
-                <div
-                  class="col-md-12 col-lg-6"
-                  v-if="showGuardianFlag"
-                >
-                  <div class="form-group">
-                    <label class="control-label form-label">
-                      {{ $t('registration.parentName') }}
-                      <span class="text-danger">*</span>
-                    </label>
-                    <input
-                      class="form-control"
-                      v-model="student.parentOrGuardianName"
-                      :placeholder="$t('registration.parentNamePlaceholder')"
-                      id="parentOrGuardianName"
-                      :class="{
-                        'is-invalid':
-                          submitted && $v.student.parentOrGuardianName.$invalid
-                      }"
-                    >
-                    <div
-                      class="text-danger"
-                      v-if="
-                        submitted && !$v.student.parentOrGuardianName.required
-                      "
-                    >
-                      {{ $t('registration.vparentName1') }}
-                    </div>
-                    <div
-                      class="text-danger"
-                      v-if="
-                        submitted &&
-                          !$v.student.parentOrGuardianName.isParentNameValid
-                      "
-                    >
-                      {{ $t('registration.vparentName2') }}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -202,13 +163,13 @@
                             oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                             maxlength="10"
                             minlength="10"
-                            v-model="otp_d.mobileNumber"
+                            v-model="contact.mobileNumber"
                             id="mobileNumber"
                             :placeholder="$t('registration.mobilePlaceholder')"
                             :disabled="flag == 1"
                             :class="{
                               'is-invalid':
-                                submitted && $v.otp_d.mobileNumber.$invalid
+                                submitted && $v.contact.mobileNumber.$invalid
                             }"
                           >
                           <div class="input-group-append">
@@ -225,7 +186,7 @@
                               class="btn btn-purple"
                               @click="getOtp()"
                               :disabled="
-                                sendOtpFlag || $v.otp_d.mobileNumber.$invalid
+                                sendOtpFlag || $v.contact.mobileNumber.$invalid
                               "
                             >
                               {{ $t('registration.sendOtp') }}
@@ -234,13 +195,13 @@
                         </div>
                         <div
                           class="text-danger"
-                          v-if="submitted && !$v.otp_d.mobileNumber.required"
+                          v-if="submitted && !$v.contact.mobileNumber.required"
                         >
                           {{ $t('registration.vmobile1') }}
                         </div>
                         <div
                           class="text-danger"
-                          v-if="submitted && !$v.otp_d.mobileNumber.numeric"
+                          v-if="submitted && !$v.contact.mobileNumber.numeric"
                         >
                           {{ $t('registration.vmobile2') }}
                         </div>
@@ -248,8 +209,8 @@
                           class="text-danger"
                           v-if="
                             submitted &&
-                              (!$v.otp_d.mobileNumber.minLength ||
-                              !$v.otp_d.mobileNumber.maxLength)
+                              (!$v.contact.mobileNumber.minLength ||
+                              !$v.contact.mobileNumber.maxLength)
                           "
                         >
                           {{ $t('registration.vmobile3') }}
@@ -267,13 +228,13 @@
                         <div class="input-group">
                           <input
                             class="form-control"
-                            v-model="otp_d.votp"
+                            v-model="contact.votp"
                             :placeholder="$t('registration.enterOtpPlaceholder')"
                             id="votp"
                             :disabled="flag == 1"
                             :class="{
                               'is-invalid':
-                                otp_submitted && $v.otp_d.votp.$invalid
+                                otp_submitted && $v.contact.votp.$invalid
                             }"
                           >
                           <div class="input-group-append">
@@ -281,7 +242,7 @@
                               type="button"
                               class="btn btn-green"
                               @click="verifyOtp()"
-                              :disabled="flag == 1 || otp_d.votp == ''"
+                              :disabled="flag == 1 || contact.votp == ''"
                             >
                               {{ button }}
                             </button>
@@ -289,7 +250,7 @@
                         </div>
                         <div
                           class="text-danger"
-                          v-if="otp_submitted && !$v.otp_d.votp.required"
+                          v-if="otp_submitted && !$v.contact.votp.required"
                         >
                           {{ $t('registration.venterOtp') }}
                         </div>
@@ -314,13 +275,13 @@
                       <input
                         type="email"
                         class="form-control"
-                        v-model="student.emailID"
+                        v-model="contact.emailID"
                         :placeholder="$t('registration.emailIdPlaceholder')"
                         id="emailID"
                         :disabled="emailflag == 1"
                         :class="{
                           'is-invalid':
-                            submitted && $v.student.emailID.$invalid
+                            submitted && $v.contact.emailID.$invalid
                         }"
                       >
                       <div class="input-group-append">
@@ -328,7 +289,7 @@
                           class="btn btn-purple"
                           @click="getEmailOtp()"
                           :disabled="
-                            sendEmailOtpFlag || $v.student.emailID.$invalid
+                            sendEmailOtpFlag || $v.contact.emailID.$invalid
                           "
                         >
                           {{ $t('registration.sendOtp') }}
@@ -338,7 +299,7 @@
 
                     <div
                       class="text-danger"
-                      v-if="submitted && !$v.student.emailID.required"
+                      v-if="submitted && !$v.contact.emailID.required"
                     >
                       Please provide valid email
                     </div>
@@ -361,13 +322,13 @@
                     <div class="input-group">
                       <input
                         class="form-control"
-                        v-model="student.votp"
+                        v-model="contact.eotp"
                         :placeholder="$t('registration.enterOtpPlaceholder')"
                         id="votp"
                         :disabled="emailflag == 1"
                         :class="{
                           'is-invalid':
-                            emailotp_submitted && $v.student.votp.$invalid
+                            emailotp_submitted && $v.contact.eotp.$invalid
                         }"
                       >
                       <div class="input-group-append">
@@ -375,7 +336,7 @@
                           type="button"
                           class="btn btn-green"
                           @click="verifyEmailOtp()"
-                          :disabled="emailflag == 1 || student.votp == ''"
+                          :disabled="emailflag == 1 || contact.eotp == ''"
                         >
                           {{ emailButton }}
                         </button>
@@ -383,7 +344,7 @@
                     </div>
                     <div
                       class="text-danger"
-                      v-if="emailotp_submitted && !$v.student.votp.required"
+                      v-if="emailotp_submitted && !$v.contact.eotp.required"
                     >
                       {{ $t('registration.venterOtp') }}
                     </div>
@@ -401,18 +362,18 @@
                     <span class="text-danger">*</span>
 
                     <v-select
-                      v-model="student.selectedState"
+                      v-model="address.state"
                       label="displayName"
                       :placeholder="$t('registration.statePlaceholder')"
                       :options="states"
-                      :value="student.selectedState"
+                      :value="address.state"
                       @input="getDistrictsByStateId()"
                     />
                     <div
                       class="text-danger"
                       v-if="
-                        !$v.student.selectedState.required &&
-                          $v.student.selectedState.$error
+                        !$v.address.state.required &&
+                          $v.address.state.$error
                       "
                     >
                       {{ $t('registration.vstate') }}
@@ -431,17 +392,17 @@
 
                     <v-select
 
-                      v-model="student.selectedDistrict"
+                      v-model="address.district"
                       label="displayName"
                       :placeholder="$t('registration.districtPlaceholder')"
                       :options="districts"
-                      :value="student.selectedDistrict"
+                      :value="address.district"
                     />
                     <div
                       class="text-danger"
                       v-if="
-                        !$v.student.selectedDistrict.required &&
-                          $v.student.selectedDistrict.$error
+                        !$v.address.district.required &&
+                          $v.address.district.$error
                       "
                     >
                       {{ $t('registration.vdistrict') }}
@@ -457,7 +418,7 @@
                     </label>
                     <input
                       class="form-control"
-                      v-model="student.pincode"
+                      v-model="address.pincode"
                       oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                       placeholder="Enter Your Pincode"
                       maxlength="6"
@@ -465,18 +426,18 @@
                       id="pincode"
                       :class="{
                         'is-invalid':
-                          submitted && $v.student.pincode.$invalid
+                          submitted && $v.address.pincode.$invalid
                       }"
                     >
                     <div
                       class="text-danger"
-                      v-if="submitted && !$v.student.pincode.required"
+                      v-if="submitted && !$v.address.pincode.required"
                     >
                       {{ $t('registration.pincode') }}
                     </div>
                     <div
                       class="text-danger"
-                      v-if="submitted && !$v.student.pincode.numeric"
+                      v-if="submitted && !$v.address.pincode.numeric"
                     >
                       {{ $t('registration.pincode2') }}
                     </div>
@@ -484,8 +445,8 @@
                       class="text-danger"
                       v-if="
                         submitted &&
-                          (!$v.student.pincode.minLength ||
-                          !$v.student.pincode.maxLength)
+                          (!$v.address.pincode.minLength ||
+                          !$v.address.pincode.maxLength)
                       "
                     >
                       {{ $t('registration.pincode3') }}
@@ -515,7 +476,7 @@
                             <span class="text-danger">*</span>
                           </label>
                           <v-select
-                            v-model="student.educationLevel"
+                            v-model="qualification.qualificationName"
                             label="displayName"
                             placeholder="Select Qualification"
                             :options="Class"
@@ -524,8 +485,8 @@
                           <div
                             class="text-danger"
                             v-if="
-                              !$v.student.educationLevel.required &&
-                                $v.student.educationLevel.$error
+                              !$v.qualification.qualificationName.required &&
+                                $v.qualification.qualificationName.$error
                             "
                           >
                             {{ $t('registration.veducationLevel') }}
@@ -569,7 +530,7 @@
                   :disabled="checked === false"
                   type="button"
                   class="btn btn-page"
-                  @click="studentRegister()"
+                  @click="applicantRegister()"
                 >
                   Register
                 </button>
@@ -577,47 +538,7 @@
             </div>
             <div class="help-wrapper">
               <div class="copyright-holder">
-                <div class="logo-holder">
-                  <div
-                    class="item"
-                    v-if="
-                      student.educationLevel &&
-                        student.educationLevel.levelName === 'Schooling'
-                    "
-                  >
-                    <img
-                      src="../../../public/assets/images/logo_mkclkf.png"
-                      alt="MKCL Knowledge Foundation"
-                    >
-                  </div>
-                  <div class="item">
-                    <img
-                      src="../../../public/assets/images/logo_mkcl.svg"
-                      class="img-adj"
-                      alt="MKCL"
-                    >
-                  </div>
-                  <div
-                    class="item"
-                    v-if="
-                      student.educationLevel &&
-                        student.educationLevel.levelName === 'Schooling'
-                    "
-                  >
-                    <img
-                      src="../../../public/assets/images/logo_ebalbharati.png"
-                      alt="eBalbharati"
-                    >
-                  </div>
-                </div>
                 <div class="copyright">
-                  <span
-                    v-if="
-                      student.educationLevel &&
-                        student.educationLevel.levelName === 'Schooling'
-                    "
-                  >
-                    The copyright of eBalbharati duly acknowledged.</span>
                   <br>
                   Powered by
                   <a
@@ -716,6 +637,27 @@ var moment = require('moment')
 export default {
   data () {
     return {
+      address: {
+        district: null,
+        pincode: null,
+        state: null
+      },
+      basic: {
+        dateOfBirth: '',
+        fullName: '',
+        gender: '',
+        userName: ''
+      },
+      contact: {
+        emailID: '',
+        mobileNumber: '',
+        votp: '',
+        eotp: ''
+      },
+      qualification: {
+        qualificationId: '',
+        qualificationName: ''
+      },
       student: {
         selectedUniversity: null,
         selectedFaculty: null,
@@ -752,13 +694,7 @@ export default {
       courses: [],
       password: '',
       cnfpassword: '',
-      disabledDateOfBirthDates: {
-        from: new Date(
-          new Date().getFullYear(),
-          new Date().getMonth(),
-          new Date().getDate()
-        )
-      },
+
       countryId: null,
       universityId: null,
       facultyId: null,
@@ -827,44 +763,23 @@ export default {
   //   Datepicker
   // },
   validations: {
-    password: {
-      required,
-      goodPassword: (Password) => {
-        // a custom validator!
-        return (
-          Password.length >= 8 &&
-          /[a-z]/.test(Password) &&
-          /[A-Z]/.test(Password) &&
-          /[0-9]/.test(Password)
-        )
-      }
-    },
-    cnfpassword: {
-      required
-    },
-    student: {
-      emailID: {
-        email,
-        required
-      },
-      dateOfBirth: {
-        required
-      },
-
-      selectedTaluka: {
-        required
-      },
-      selectedDistrict: {
-        required
-      },
-      selectedState: {
-        required
-      },
+    address: {
       pincode: {
         required,
         numeric,
         minLength: minLength(6),
         maxLength: maxLength(6)
+      },
+      state: {
+        required
+      },
+      district: {
+        required
+      }
+    },
+    basic: {
+      dateOfBirth: {
+        required
       },
       fullName: {
         required,
@@ -873,37 +788,32 @@ export default {
 
       gender: {
         required
-      },
-
-      educationLevel: {
+      }
+    },
+    contact: {
+      emailID: {
+        email,
         required
       },
-
-      class: {
-        required: requiredIf(function () {
-          return this.student.educationLevel.levelName == 'Schooling'
-        })
-      }
-
-    },
-    otp_d: {
       mobileNumber: {
         required,
         numeric,
         minLength: minLength(10),
         maxLength: maxLength(10)
       },
-      votp: { required }
+      votp: { required },
+      eotp: { required }
+    },
+    qualification: {
+      qualificationName: {
+        required
+      }
     }
   },
   created () {
     const vm = this
-    this.$store.dispatch('getServerTime').then((res) => {
-      this.currentDate = res.result.dateTime
-    })
     vm.starter()
-    vm.getAllUniversities()
-    vm.getEducationLevelDetails()
+
     // vm.getEducationLevelDetails()
 
     // vm.selectTypeOfExam();
@@ -982,7 +892,7 @@ export default {
       this.showEmailOtpField = true
       new MQL()
         .setActivity('o.[SendEmailOTP]')
-        .setData({ email: this.student.emailID })
+        .setData({ email: this.contact.emailID })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendEmailOTP', true)
@@ -1016,7 +926,7 @@ export default {
       this.showOtpField = true
       new MQL()
         .setActivity('o.[SendMobileOTP]')
-        .setData(this.otp_d)
+        .setData({ mobileNumber: this.contact.mobileNumber })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendMobileOTP', true)
@@ -1049,7 +959,7 @@ export default {
       const vm = this
       new MQL()
         .setActivity('o.[VerifyEmailOTP]')
-        .setData({ email: this.student.emailID, verifyOTP: this.student.votp })
+        .setData({ email: this.contact.emailID, verifyOTP: this.contact.eotp })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('VerifyEmailOTP', true)
@@ -1087,7 +997,7 @@ export default {
       const vm = this
       new MQL()
         .setActivity('o.[VerifyMobileOTP]')
-        .setData({ mobileNumber: this.otp_d.mobileNumber, verifyOTP: this.otp_d.votp })
+        .setData({ mobileNumber: this.contact.mobileNumber, verifyOTP: this.contact.votp })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('VerifyMobileOTP', true)
@@ -1211,13 +1121,10 @@ export default {
     getDistrictsByStateId () {
       return new Promise((resolve) => {
         const vm = this
-        // console.log("state code", vm.student.selectedState.STATE_CODE);
-        // vm.stateId = vm.student.selectedState.STATE_CODE
-        vm.stateName = 'Maharashtra'
-        // console.log("state id",vm.stateId)
+
         new MQL()
           .setActivity('o.[query_293k2pcHKiS7GMwuDb9e1veS2g4]')
-          .setData({ stateName: vm.stateName })
+          .setData({ stateName: this.address.state.displayName })
           .fetch()
           .then((rs) => {
             let res = rs.getActivity('query_293k2pcHKiS7GMwuDb9e1veS2g4', true)
@@ -1226,7 +1133,7 @@ export default {
                 res = []
               }
               // console.log("res", res);
-              vm.student.selectedDistrict = null
+              vm.address.district = null
               vm.districts = []
               vm.districts = res
               console.log(vm.districts)
@@ -1300,30 +1207,45 @@ export default {
           }
         })
     },
-
-    sendEmail () {
+    applicantRegister () {
+      console.log('here')
       const vm = this
-      if (vm.student.emailID && vm.student.emailID !== '') {
-        vm.student.emailID = vm.student.emailID
-        new MQL()
-          .setActivity('o.[SendEmailToCandidateAfterRegistration]')
-          .setData(vm.student)
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity(
-              'SendEmailToCandidateAfterRegistration',
-              true
-            )
-            if (rs.isValid('SendEmailToCandidateAfterRegistration')) {
-            } else {
-              rs.showErrorToast('SendEmailToCandidateAfterRegistration')
-            }
-          })
-      } else {
-        vm.student.emailID = ''
-      }
-    },
+      vm.submitted = true
+      // vm.$v.$touch()
+      // if (vm.flag === 1) {
+      // if (!vm.$v.$invalid) {
+      this.basic.fullName = this.basic.fullName
+      this.basic.gender = this.basic.gender
+      this.basic.dateOfBirth = this.basic.dateOfBirth
+      this.basic.userName = this.basic.userName
 
+      this.address.state = this.address.state
+      this.address.district = this.address.district
+      this.address.pincode = this.address.pincode
+
+      this.contact.emailID = this.contact.emailID
+      this.contact.mobileNumber = this.contact.mobileNumber
+
+      this.qualification.qualificationId = this.qualification.qualificationId
+      this.qualification.qualificationName = this.qualification.qualificationName
+
+      new MQL()
+        .setActivity('o.[RegisterUser]')
+        .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('RegisterUser', true)
+          if (rs.isValid('RegisterUser')) {
+            if (res.result) {
+              console.log(res.result)
+            }
+          } else {
+            rs.showErrorToast('RegisterUser')
+          }
+        })
+      // }
+      // }
+    },
     studentRegister () {
       const vm = this
       vm.submitted = true

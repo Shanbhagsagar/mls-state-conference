@@ -658,24 +658,7 @@ export default {
         qualificationId: '',
         qualificationName: ''
       },
-      student: {
-        selectedUniversity: null,
-        selectedFaculty: null,
-        selectedCourse: null,
-        selectedYear: null,
-        selectedDistrict: null,
-        selectedState: null,
-        mockExamCategory: '',
-        educationLevel: '',
-        class: '',
-        medium: '',
-        schoolName: '',
-        collegeName: '',
-        parentOrGuardianName: '',
-        votp: '',
-        emailID: '',
-        dateOfBirth: ''
-      },
+
       student_cred: {},
       isGenderSelected: false,
       iconChange: 'mdi mdi-eye',
@@ -1031,61 +1014,6 @@ export default {
           }
         })
     },
-    getStudentByMobileNumber () {
-      const vm = this
-
-      new MQL()
-        .setActivity('o.[query_1hXeD5LAD87jShqFLFLkXaXzBYk]')
-        .setData({ mobileNumber: vm.otp_d.mobileNumber })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_1hXeD5LAD87jShqFLFLkXaXzBYk', true)
-          if (rs.isValid('query_1hXeD5LAD87jShqFLFLkXaXzBYk')) {
-            if (res === null) {
-              this.getOtp()
-            } else {
-              this.$toasted.error('Mobile Number already exists', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            }
-          } else {
-            rs.showErrorToast('query_1hXeD5LAD87jShqFLFLkXaXzBYk')
-          }
-        })
-    },
-
-    getAllCountries () {
-      return new Promise((resolve) => {
-        const vm = this
-        new MQL()
-          .setActivity('o.[query_293ccRYOvTADqM5DVvZGDX6ceNb]')
-          // .setData(data)
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('query_293ccRYOvTADqM5DVvZGDX6ceNb', true)
-            if (rs.isValid('query_293ccRYOvTADqM5DVvZGDX6ceNb')) {
-              vm.countries = res
-              // console.log(vm.countries)
-              //  vm.countries
-              // if (vm.initflag){
-              // vm.patient.address.selectedCountry = vm.countries[110];
-              vm.countries = vm.countries.filter(
-                (country) => country.countryName === 'India'
-              )
-              vm.student.selectedCountry = vm.countries[0]
-
-              // vm.countries.sort(vm.compareCountry);
-              // vm.states = []
-              // }
-              resolve()
-            } else {
-              rs.showErrorToast('query_1hXN8iXaXhjrTIlptbNbROS9QX4')
-            }
-          })
-      })
-    },
     getStatesByCountryId () {
       return new Promise((resolve) => {
         const vm = this
@@ -1145,24 +1073,6 @@ export default {
       })
     },
 
-    saveUserCredentials () {
-      const vm = this
-      // vm.student_cred.username = vm.otp_d.mobileNumber;
-      // vm.student_cred.password = password;
-      // vm.student_cred.roleName = "student";
-      new MQL()
-        .setActivity('o.[SaveCredentials]')
-        .setData(vm.student_cred)
-        .fetch()
-        .then((rs) => {
-          // let res = rs.getActivity('SaveCredentials', true)
-          if (rs.isValid('SaveCredentials')) {
-          } else {
-            rs.showErrorToast('SaveCredentials')
-          }
-        })
-    },
-
     getMaxMinDate () {
       new MQL()
         .setActivity('o.[BirthDateRange]')
@@ -1211,132 +1121,45 @@ export default {
       console.log('here')
       const vm = this
       vm.submitted = true
-      // vm.$v.$touch()
-      // if (vm.flag === 1) {
-      // if (!vm.$v.$invalid) {
-      this.basic.fullName = this.basic.fullName
-      this.basic.gender = this.basic.gender
-      this.basic.dateOfBirth = this.basic.dateOfBirth
-      this.basic.userName = this.basic.userName
-
-      this.address.state = this.address.state
-      this.address.district = this.address.district
-      this.address.pincode = this.address.pincode
-
-      this.contact.emailID = this.contact.emailID
-      this.contact.mobileNumber = this.contact.mobileNumber
-
-      this.qualification.qualificationId = this.qualification.qualificationId
-      this.qualification.qualificationName = this.qualification.qualificationName
-
-      new MQL()
-        .setActivity('o.[RegisterUser]')
-        .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('RegisterUser', true)
-          if (rs.isValid('RegisterUser')) {
-            if (res.result) {
-              console.log(res.result)
-            }
-          } else {
-            rs.showErrorToast('RegisterUser')
-          }
-        })
-      // }
-      // }
-    },
-    studentRegister () {
-      const vm = this
-      vm.submitted = true
       vm.$v.$touch()
-      // vm.student.dateOfBirth = '2000-01-01 00:00:00'
-
-      // console.log('$V:', this.$v)
       if (vm.flag === 1) {
         if (!vm.$v.$invalid) {
-          if (vm.password === vm.cnfpassword) {
-            if (vm.isGenderSelected) {
-              vm.student.gender = vm.student.gender.value
-            }
+          this.basic.fullName = this.basic.fullName
+          this.basic.gender = this.basic.gender
+          this.basic.dateOfBirth = this.basic.dateOfBirth
+          this.basic.userName = this.basic.userName
 
-            vm.student.username = vm.otp_d.mobileNumber
-            vm.student.mobileNumber = vm.otp_d.mobileNumber
-            vm.student.password = vm.password
-            vm.student.isEnabled = vm.isEnabled
-            vm.student_cred.username = vm.otp_d.mobileNumber
-            vm.student_cred.password = vm.password
-            vm.student_cred.roleName = 'student'
-            vm.customDate = vm.student.dateOfBirth
-            vm.student.mockExamCategory = vm.mockExamCategories[0]
-            vm.student.dateOfBirth = vm.customDate
+          this.address.state = this.address.state
+          this.address.district = this.address.district
+          this.address.pincode = this.address.pincode
 
-            new MQL()
-              .setActivity('o.[CandidateRegistration]')
-              .setData(vm.student)
-              .fetch()
-              .then((rs) => {
-                if (rs.isValid('CandidateRegistration')) {
-                  // vm.$toasted.success(
-                  //   'You have been successfully registered on MKCL Mock Exams portal and your login credentials have been sent to registered email id and mobile number.',
-                  //   {
-                  //     theme: 'bubble',
-                  //     position: 'top-center',
-                  //     duration: 5000
-                  //   }
-                  // )
+          this.contact.emailID = this.contact.emailID
+          this.contact.mobileNumber = this.contact.mobileNumber
 
-                  vm.sendEmail()
+          this.qualification.qualificationId = this.qualification.qualificationId
+          this.qualification.qualificationName = this.qualification.qualificationName
 
-                  if (vm.student.emailID && vm.student.emailID !== '') {
-                    vm.$toasted.success(
-                      'You have been successfully registered on MKCL Mock Exams portal and your login credentials have been sent to registered email id and mobile number.',
-                      {
-                        theme: 'bubble',
-                        position: 'top-center',
-                        duration: 5000
-                      }
-                    )
-                  } else {
-                    vm.$toasted.success(
-                      'You have been successfully registered on MKCL Mock Exams portal and your login credentials have been sent to registered  mobile number.',
-                      {
-                        theme: 'bubble',
-                        position: 'top-center',
-                        duration: 5000
-                      }
-                    )
-                  }
-                  vm.saveUserCredentials()
+          new MQL()
+            .setActivity('o.[RegisterUser]')
+            .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
+            .fetch()
+            .then((rs) => {
+              let res = rs.getActivity('RegisterUser', true)
+              if (rs.isValid('RegisterUser')) {
+                if (res.result) {
+                  console.log(res.result)
                   this.$router.push({
                     name: 'Login'
                   })
-                } else {
-                  rs.showErrorToast('Registration Failed')
                 }
-              })
-          } else {
-            vm.$toasted.error('Password doesnt match!', {
-              theme: 'bubble',
-              position: 'top-center',
-              duration: 3000
+              } else {
+                rs.showErrorToast('RegisterUser')
+              }
             })
-          }
-        } else {
-          vm.$toasted.error('Please enter all the required data!', {
-            theme: 'bubble',
-            position: 'top-center',
-            duration: 3000
-          })
         }
-      } else {
-        this.$toasted.error('Please verify your Mobile number !', {
-          theme: 'bubble',
-          position: 'top-center',
-          duration: 3000
-        })
       }
     }
+
   }
 }
 </script>

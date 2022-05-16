@@ -45,7 +45,7 @@
                 <div class="input-group-append">
                   <button
                     class="btn btn-purple"
-                    @click="getUserUsername()"
+                    @click="getUsername()"
                     :disabled="sendOtpFlag"
                   >
                     Send OTP
@@ -225,7 +225,9 @@ import {
 export default {
   data () {
     return {
-      otp_d: {},
+      otp_d: {
+        mobileNumber: ''
+      },
       password: '',
       ConfirmPassword: '',
       button: 'Verify OTP',
@@ -275,7 +277,7 @@ export default {
       vm.$route.query.for === 'taluka-health-officer'
     ) {
       vm.otp_verified = true
-      vm.mobileNumberCopy = vm.$route.query.username
+      vm.mobileNumberCopy = vm.$route.query.userName
       vm.submitted = true
     }
   },
@@ -283,7 +285,7 @@ export default {
     resetPassword () {
       new MQL()
         .setActivity('o.[ResetPassword]')
-        .setData({ username: this.mobileNumberCopy, password: this.password })
+        .setData({ userName: this.mobileNumberCopy, password: this.password })
         .fetch()
         .then((rs) => {
           const res = rs.getActivity('ResetPassword', true)
@@ -315,21 +317,21 @@ export default {
           ? 'mdi mdi-eye'
           : 'mdi mdi-eye-off'
     },
-    getUserUsername () {
+    getUsername () {
       this.$v.$touch()
       if (!this.$v.otp_d.mobileNumber.$invalid) {
         const vm = this
 
         new MQL()
-          .setActivity('o.[query_1haFv3r28MreI18VSKSZTRh3wBL]')
-          .setData({ username: this.otp_d.mobileNumber })
+          .setActivity('o.[query_29EhK4BrNROVVe0JbSXDtt1vf2u]')
+          .setData({ userName: this.otp_d.mobileNumber })
           .fetch()
           .then((rs) => {
             const res = rs.getActivity(
-              'query_1haFv3r28MreI18VSKSZTRh3wBL',
+              'query_29EhK4BrNROVVe0JbSXDtt1vf2u',
               true
             )
-            if (rs.isValid('query_1haFv3r28MreI18VSKSZTRh3wBL')) {
+            if (rs.isValid('query_29EhK4BrNROVVe0JbSXDtt1vf2u')) {
               if (res != null) {
                 vm.getOtp()
               } else {
@@ -340,7 +342,7 @@ export default {
                 })
               }
             } else {
-              rs.showErrorToast('query_1haFv3r28MreI18VSKSZTRh3wBL')
+              rs.showErrorToast('query_29EhK4BrNROVVe0JbSXDtt1vf2u')
             }
           })
       }
@@ -349,12 +351,12 @@ export default {
       const vm = this
 
       new MQL()
-        .setActivity('o.[SendOtp]')
+        .setActivity('o.[ResetPasswordSendOTP]')
         .setData(this.otp_d)
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('SendOtp', true)
-          if (rs.isValid('SendOtp')) {
+          let res = rs.getActivity('ResetPasswordSendOTP', true)
+          if (rs.isValid('ResetPasswordSendOTP')) {
             vm.showOtpField = true
             this.$toasted.success('OTP sent to your phone number', {
               theme: 'bubble',
@@ -374,19 +376,19 @@ export default {
               vm.sendOtpFlag = false
             }, 30000)
           } else {
-            rs.showErrorToast('SendOtp')
+            rs.showErrorToast('ResetPasswordSendOTP')
           }
         })
     },
     verifyOtp () {
       new MQL()
-        .setActivity('o.[VerifyOtp]')
-        .setData(this.otp_d)
+        .setActivity('o.[ResetPasswordVerifyOTP]')
+        .setData({ mobileNumber: this.otp_d.mobileNumber, verifyOTP: this.otp_d.votp })
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('VerifyOtp', true)
-          if (rs.isValid('VerifyOtp')) {
-            if (res.result.votp === 'OTPFOUND') {
+          let res = rs.getActivity('ResetPasswordVerifyOTP', true)
+          if (rs.isValid('ResetPasswordVerifyOTP')) {
+            if (res.result.verifyOTP === 'OTPFOUND') {
               this.sendOtpFlag = true
               this.submitted = true
               this.flag = 1
@@ -402,7 +404,7 @@ export default {
                 duration: 3000
               })
             }
-            if (res.result.votp === 'OTPNOTFOUND') {
+            if (res.result.verifyOTP === 'OTPNOTFOUND') {
               this.flag = 0
 
               this.$toasted.error('Invalid OTP ', {
@@ -412,7 +414,7 @@ export default {
               })
             }
           } else {
-            rs.showErrorToast('VerifyOtp')
+            rs.showErrorToast('ResetPasswordVerifyOTP')
           }
         })
     }

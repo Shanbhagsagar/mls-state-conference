@@ -89,7 +89,7 @@ const router = new Router({
       },
     },
     {
-      path: '/thankyou',
+      path: '/thankYou',
       name: 'ThankyouPageAfterRegistration',
       component: loadStudentView('ThankyouPageAfterRegistration'),
       meta: {

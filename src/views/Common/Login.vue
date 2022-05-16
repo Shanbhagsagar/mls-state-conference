@@ -26,15 +26,22 @@
           </b-dropdown>
           </div> -->
           <!-- i18n -->
-          <a href="https://mockexams.mkcl.org/" class="btn btn-back">
-            {{$t('login.backToHome')}}
+          <a
+            href="https://mockexams.mkcl.org/"
+            class="btn btn-back"
+          >
+            {{ $t('login.backToHome') }}
           </a>
           <div class="logo-wrapper">
             <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <!-- <img class="img-fluid" src="../../public/assets/images/emblem.png" alt="GOI">
             <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP">-->
             <!--<h1>MKCL EXAM LIVE</h1>-->
-            <img class="img-fluid" src="../../../public/assets/images/logo_dnext.png" alt="MKCL DNExT">
+            <img
+              class="img-fluid"
+              src="../../../public/assets/images/logo_dnext.png"
+              alt="MKCL DNExT"
+            >
           </div>
           <!-- <div class="alert-warning">We are updating the portal, the Mock exams will start from Thursday 22nd October 2020 at 10.00 AM</div>
           <br> -->
@@ -47,21 +54,21 @@
                 <label
                   for="email"
                   class="sr-only"
-                >{{$t('login.loginId')}}</label>
+                >{{ $t('login.loginId') }}</label>
                 <input
                   type="text"
-                  v-model="cr.username"
+                  v-model="cr.userName"
                   class="form-control"
                   :placeholder="$t('login.loginIdPlaceholder')"
                   :class="{
-                    'is-invalid': submitted && $v.cr.username.$invalid,
+                    'is-invalid': submitted && $v.cr.userName.$invalid,
                   }"
-                  ref="username"
+                  ref="userName"
                 >
                 <label
                   class="text-danger"
-                  v-if="submitted && !$v.cr.username.required"
-                >{{$t('login.vLoginId')}}</label>
+                  v-if="submitted && !$v.cr.userName.required"
+                >{{ $t('login.vLoginId') }}</label>
               </div>
               <div class="form-group">
                 <label
@@ -85,7 +92,7 @@
                 <label
                   class="text-danger"
                   v-if="submitted && !$v.cr.password.required"
-                >{{$t('login.vPassword')}}</label>
+                >{{ $t('login.vPassword') }}</label>
               </div>
               <div class="form-action-alt">
                 <input
@@ -100,12 +107,12 @@
                 <div class="row">
                   <div class="col-sm">
                     <router-link to="/resetPassword">
-                      {{$t('login.forgotPassword')}}
+                      {{ $t('login.forgotPassword') }}
                     </router-link>
                   </div>
                   <div class="col-sm-auto">
                     <router-link to="/studentregistration">
-                       {{$t('login.notRegister')}}
+                      {{ $t('login.notRegister') }}
                     </router-link>
                   </div>
                 </div>
@@ -113,15 +120,19 @@
             </form>
             <div class="help-wrapper">
               <div class="copyright-holder">
-                <img src="../../../public/assets/images/logo_mkcl.svg" class="img-adj" alt="MKCL" />
+                <img
+                  src="../../../public/assets/images/logo_mkcl.svg"
+                  class="img-adj"
+                  alt="MKCL"
+                >
                 <div class="copyright">
-                  {{$t('login.poweredBy')}}
+                  {{ $t('login.poweredBy') }}
                   <a
                     href="https://www.mkcl.org"
                     target="_blank"
-                  >{{$t('login.mkcl')}}</a>. (MKCL),
-                  {{$t('login.copyright')}}<br>
-                  </div>
+                  >{{ $t('login.mkcl') }}</a>. (MKCL),
+                  {{ $t('login.copyright') }}<br>
+                </div>
                 <!-- <div><br>Version 6.10.1, Updated On 10-June-2020 08:30 AM</div> -->
               </div>
             </div>
@@ -141,7 +152,7 @@ export default {
   data () {
     return {
       cr: {
-        username: null,
+        userName: null,
         password: null
       },
       submitted: false
@@ -149,7 +160,7 @@ export default {
   },
   validations: {
     cr: {
-      username: { required },
+      userName: { required },
       password: { required }
     }
   },
@@ -160,29 +171,33 @@ export default {
       vm.$v.$touch()
       if (!vm.$v.$invalid) {
         new MQL()
-          .setActivity('o.[Login]')
-          .setData(vm.cr)
+          .setActivity('o.[ApplicantLogin]')
+          .setData({ userName: this.cr.userName, password: this.cr.password })
           .fetch()
           .then((rs) => {
-            let res = rs.getActivity('Login', true)
-            if (rs.isValid('Login')) {
-              let token = rs.getHeaders().authorization
-              // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])
-              let role = JSON.parse(atob(token.split('.')[1])).groups[0]
-              // console.log("role",role)
-              this.$store.commit('SET_ROLE', role)
-              if (role === 'student') {
-                this.$router.push({ name: 'StudentDetails' })
-              }else if(role==='admin'){
-                this.$router.push({name:"AdminDashboard"})
-              }
+            let res = rs.getActivity('ApplicantLogin', true)
+            if (rs.isValid('ApplicantLogin')) {
+              // this.$router.push({ name: 'StudentDetails' })
+
+              this.$router.push('/about')
+
+              // let token = rs.getHeaders().authorization
+              // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])
+              // let role = JSON.parse(atob(token.split('.')[1])).groups[0]
+              // // console.log("role",role)
+              // this.$store.commit('SET_ROLE', role)
+              // if (role === 'applicant') {
+              //   this.$router.push({ name: 'StudentDetails' })
+              // } else if (role === 'admin') {
+              //   this.$router.push({ name: 'AdminDashboard' })
+              // }
               vm.$toasted.success(this.$t('login.loginSuccess'), {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
               })
             } else {
-              rs.showErrorToast('Login')
+              rs.showErrorToast('ApplicantLogin')
             }
           })
       } else {
@@ -193,14 +208,14 @@ export default {
         })
       }
     },
-     changeLanguage (lang) {
+    changeLanguage (lang) {
       console.log('lang change :', lang)
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
         console.log('Updated')
       })
-    },
+    }
 
   },
   mounted () {

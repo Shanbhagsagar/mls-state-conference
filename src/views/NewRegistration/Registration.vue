@@ -209,6 +209,12 @@
                         </div>
                         <div
                           class="text-danger"
+                          v-if="submitted && !$v.contact.mobileNumber.isMobileValid"
+                        >
+                          Invalid Mobile Number
+                        </div>
+                        <div
+                          class="text-danger"
                           v-if="
                             submitted &&
                               (!$v.contact.mobileNumber.minLength ||
@@ -785,7 +791,7 @@ export default {
         numeric,
         minLength: minLength(10),
         maxLength: maxLength(10),
-        regex: /^((?![0-5])[0-9]{10})$/
+        isMobileValid: helpers.regex('isMobileValid', /^((?![0-5])[0-9]{10})$/)
       },
       votp: { required },
       eotp: { required }

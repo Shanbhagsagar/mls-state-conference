@@ -166,7 +166,6 @@
                             minlength="10"
                             v-model="contact.mobileNumber"
                             id="mobileNumber"
-                           
                             :placeholder="$t('registration.mobilePlaceholder')"
                             :disabled="flag == 1"
                             :class="{
@@ -627,18 +626,13 @@ import { loadLanguageAsync } from '@/setup/i18n-setup.js'
 // import Response from '@/plugins/response.js'
 import MQL from '@/plugins/mql.js'
 // import 'flatpickr/dist/flatpickr.css'
-import Datepicker from 'vuejs-datepicker'
-// import VueTimepicker from 'vue2-timepicker'
-// import 'vue2-timepicker/dist/VueTimepicker.css'
-// import Toasted from "vue-toasted";
 import {
   required,
   numeric,
   minLength,
   maxLength,
   helpers,
-  email,
-  requiredIf
+  email
 } from 'vuelidate/lib/validators'
 // import flatPickr from 'vue-flatpickr-component'
 var moment = require('moment')

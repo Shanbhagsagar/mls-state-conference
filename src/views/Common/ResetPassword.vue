@@ -200,8 +200,8 @@
                   <a
                     href="https://www.mkcl.org"
                     target="_blank"
-                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2020. All rights reserved.<br>
-                  The copyright of eBalbharati duly acknowledged.
+                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
+                  <!-- The copyright of eBalbharati duly acknowledged. -->
                 </div>
               </div>
             </div>

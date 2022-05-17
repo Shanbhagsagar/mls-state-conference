@@ -3,7 +3,7 @@
     <div class="title-holder">
       <div class="title-block">
         <h1 class="page-title">
-          वैयक्तिक माहिती/Personal Details
+          Applicant Details
         </h1>
       </div>
     </div>
@@ -13,42 +13,81 @@
         <div class="row no-gutters">
           <div class="col-md-4 card-items">
             <div class="label">
-              विद्यार्थ्याचे नाव/Student Name:
+              Applicant Name:
             </div>
             <div class="value">
-              {{ userDetails[0].fullName }}
+              Name
             </div>
           </div>
-          <!-- <div class="col-md-4 card-items">
-            <div class="label">Date of Birth:</div>
-            <div class="value">
-              {{ userDetails[0].dateOfBirth }}
-            </div>
-          </div> -->
           <div class="col-md-4 card-items">
             <div class="label">
-              लिंग/Gender:
+              Gender:
             </div>
             <div class="value">
-              {{ userDetails[0].gender }}
+              Gender
+            </div>
+          </div>
+          <div class="col-md-4 card-items">
+            <div class="label">
+              Date of Birth:
+            </div>
+            <div class="value">
+              00-00-0000
             </div>
           </div>
         </div>
         <div class="row no-gutters">
-          <div class="col-md-4 card-items">
+          <div class="col-md-6 card-items">
             <div class="label">
-              मोबाईल क्रमांक/Mobile Number:
+              Mobile Number:
             </div>
             <div class="value">
-              {{ userDetails[0].mobileNumber }}
+              99999 99999
+            </div>
+          </div>
+          <div class="col-md-6 card-items">
+            <div class="label">
+              Email ID:
+            </div>
+            <div class="value">
+              dnext@mkcl.org
+            </div>
+          </div>
+        </div>
+        
+        <div class="row no-gutters">
+          <div class="col-md-4 card-items">
+            <div class="label">
+              State:
+            </div>
+            <div class="value">
+              Maharashtra
             </div>
           </div>
           <div class="col-md-4 card-items">
             <div class="label">
-              ई-मेल आयडी/Email ID:
+              District:
             </div>
             <div class="value">
-              {{ userDetails[0].emailID }}
+              Thane
+            </div>
+          </div>
+          <div class="col-md-4 card-items">
+            <div class="label">
+              Pincode:
+            </div>
+            <div class="value">
+              400 000
+            </div>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div class="col-md-12 card-items">
+            <div class="label">
+              Education Details:
+            </div>
+            <div class="value">
+              B.E/ B.Tech 1st Year
             </div>
           </div>
         </div>
@@ -71,7 +110,7 @@
             </h5>
           </div>
         </div>
-
+        
         <div
           class="table-responsive"
           v-else
@@ -81,8 +120,6 @@
             :items="Papers"
             :fields="fields1"
           >
-            <!-- :filter="filter"
-                  @filtered="onFiltered" -->
             <template
               s
               v-slot:cell(paper.displayName)="data"

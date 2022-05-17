@@ -4,7 +4,7 @@
       <div class="row card-wrapper">
         <div class="col login-block">
           <a
-            href="https://mockexams.mkcl.org/"
+            href="https://dnext.mkcl.org/"
             class="btn btn-back"
           >Back to Home</a>
           <router-link

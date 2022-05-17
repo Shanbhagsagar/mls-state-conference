@@ -25,12 +25,13 @@
               Registration
             </h1>
           </div>
-          <div class="card-header card-header-alt mt-0">
-            Personal Details
-          </div>
+          
           <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+              Personal Details
+            </div>
             <div class="row">
-              <div class="col-md-12 col-lg-6">
+              <div class="col-md-12 col-lg-4">
                 <div class="form-group">
                   <label class="control-label form-label">
                     Applicant Name
@@ -61,7 +62,7 @@
                 </div>
               </div>
 
-              <div class="col-md-8 col-lg-4">
+              <div class="col-md-12 col-lg-4">
                 <div class="form-group">
                   <label
                     for="gender"
@@ -85,7 +86,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-8 col-lg-4">
+              <div class="col-md-12 col-lg-4">
                 <div class="form-group">
                   <label
                     for="dob"
@@ -129,15 +130,17 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="card-header card-header-alt">
-              Contacts Details
-            </div>
             <div class="card-form">
+              <div class="card-header card-header-alt">
+                Contacts Details
+              </div>
+              
               <div class="row">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-6">
+                <div class="col-md-12 col-lg-6">
+                  <div class="form-row">
+                    <div class="col-md-6 col-lg-7">
                       <div class="form-group">
                         <label class="control-label form-label">
                           Mobile Number
@@ -200,8 +203,9 @@
                         </div>
                       </div>
                     </div>
+
                     <div
-                      class="col-md-6"
+                      class="col-md-6 col-lg-5"
                       v-if="showOtpField == true"
                     >
                       <div class="form-group">
@@ -242,88 +246,92 @@
                   </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
-                  <div class="form-group">
-                    <label
-                      class="control-label form-label"
-                    >Email ID</label>
-                    <span class="text-danger"> *</span>
-                    <div class="input-group">
-                      <input
-                        type="email"
-                        class="form-control"
-                        v-model="contact.emailID"
-                        :placeholder="$t('registration.emailIdPlaceholder')"
-                        id="emailID"
-                        :disabled="emailflag == 1"
-                        :class="{
-                          'is-invalid':
-                            submitted && $v.contact.emailID.$invalid
-                        }"
-                      >
-                      <div class="input-group-append">
-                        <button
-                          class="btn btn-purple"
-                          @click="getEmailOtp()"
-                          :disabled="
-                            sendEmailOtpFlag || $v.contact.emailID.$invalid
-                          "
-                        >
-                          {{ $t('registration.sendOtp') }}
-                        </button>
-                      </div>
-                    </div>
+                  <div class="form-row">
+                    <div class="col-md-6 col-lg-7">
+                      <div class="form-group">
+                        <label
+                          class="control-label form-label"
+                        >Email ID</label>
+                        <span class="text-danger"> *</span>
+                        <div class="input-group">
+                          <input
+                            type="email"
+                            class="form-control"
+                            v-model="contact.emailID"
+                            :placeholder="$t('registration.emailIdPlaceholder')"
+                            id="emailID"
+                            :disabled="emailflag == 1"
+                            :class="{
+                              'is-invalid':
+                                submitted && $v.contact.emailID.$invalid
+                            }"
+                          >
+                          <div class="input-group-append">
+                            <button
+                              class="btn btn-purple"
+                              @click="getEmailOtp()"
+                              :disabled="
+                                sendEmailOtpFlag || $v.contact.emailID.$invalid
+                              "
+                            >
+                              {{ $t('registration.sendOtp') }}
+                            </button>
+                          </div>
+                        </div>
 
-                    <div
-                      class="text-danger"
-                      v-if="submitted && !$v.contact.emailID.required"
-                    >
-                      Please provide valid email
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="col-md-6"
-                  v-if="showEmailOtpField == true"
-                >
-                  <div class="form-group">
-                    <label
-                      class="control-label form-label"
-                    >Enter OTP</label>
-                    <div class="input-group">
-                      <input
-                        class="form-control"
-                        v-model="contact.eotp"
-                        :placeholder="$t('registration.enterOtpPlaceholder')"
-                        id="votp"
-                        :disabled="emailflag == 1"
-                        :class="{
-                          'is-invalid':
-                            emailotp_submitted && $v.contact.eotp.$invalid
-                        }"
-                      >
-                      <div class="input-group-append">
-                        <button
-                          type="button"
-                          class="btn btn-green"
-                          @click="verifyEmailOtp()"
-                          :disabled="emailflag == 1 || contact.eotp == ''"
+                        <div
+                          class="text-danger"
+                          v-if="submitted && !$v.contact.emailID.required"
                         >
-                          {{ emailButton }}
-                        </button>
+                          Please provide valid email
+                        </div>
                       </div>
+
                     </div>
                     <div
-                      class="text-danger"
-                      v-if="emailotp_submitted && !$v.contact.eotp.required"
+                      class="col-md-6 col-lg-5"
+                      v-if="showEmailOtpField == true"
                     >
-                      {{ $t('registration.venterOtp') }}
+                      <div class="form-group">
+                        <label
+                          class="control-label form-label"
+                        >Enter OTP</label>
+                        <div class="input-group">
+                          <input
+                            class="form-control"
+                            v-model="contact.eotp"
+                            :placeholder="$t('registration.enterOtpPlaceholder')"
+                            id="votp"
+                            :disabled="emailflag == 1"
+                            :class="{
+                              'is-invalid':
+                                emailotp_submitted && $v.contact.eotp.$invalid
+                            }"
+                          >
+                          <div class="input-group-append">
+                            <button
+                              type="button"
+                              class="btn btn-green"
+                              @click="verifyEmailOtp()"
+                              :disabled="emailflag == 1 || contact.eotp == ''"
+                            >
+                              {{ emailButton }}
+                            </button>
+                          </div>
+                        </div>
+                        <div
+                          class="text-danger"
+                          v-if="emailotp_submitted && !$v.contact.eotp.required"
+                        >
+                          {{ $t('registration.venterOtp') }}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-
               <div class="row">
-                <div class="col-md-8 col-lg-4">
+                <div class="col-md-6 col-lg-4">
                   <div class="form-group">
                     <label
                       for="states"
@@ -350,7 +358,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-8 col-lg-4">
+                <div class="col-md-6 col-lg-4">
                   <div class="form-group">
                     <label
                       for="districts"
@@ -379,8 +387,7 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="col-md-8 col-lg-4">
+                <div class="col-md-6 col-lg-4">
                   <div class="form-group">
                     <label class="control-label form-label">
                       Pincode
@@ -427,40 +434,37 @@
             </div>
 
             <div class="card-form">
-              <div class="row" />
 
               <div class="card-header card-header-alt">
                 Educational Details
               </div>
-              <div class="card-form">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label
-                            for="exam"
-                            class="control-label form-label"
-                          >
-                            Select Qualification
-                            <span class="text-danger">*</span>
-                          </label>
-                          <v-select
-                            v-model="qualification.qualificationName"
-                            label="displayName"
-                            placeholder="Select Qualification"
-                            :options="Class"
-                            @input="getClassDetails()"
-                          />
-                          <div
-                            class="text-danger"
-                            v-if="
-                              !$v.qualification.qualificationName.required &&
-                                $v.qualification.qualificationName.$error
-                            "
-                          >
-                            {{ $t('registration.veducationLevel') }}
-                          </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label
+                          for="exam"
+                          class="control-label form-label"
+                        >
+                          Select Qualification
+                          <span class="text-danger">*</span>
+                        </label>
+                        <v-select
+                          v-model="qualification.qualificationName"
+                          label="displayName"
+                          placeholder="Select Qualification"
+                          :options="Class"
+                          @input="getClassDetails()"
+                        />
+                        <div
+                          class="text-danger"
+                          v-if="
+                            !$v.qualification.qualificationName.required &&
+                              $v.qualification.qualificationName.$error
+                          "
+                        >
+                          {{ $t('registration.veducationLevel') }}
                         </div>
                       </div>
                     </div>
@@ -506,6 +510,7 @@
                 </button>
               </div>
             </div>
+
             <div class="help-wrapper">
               <div class="copyright-holder">
                 <div class="copyright">
@@ -518,7 +523,6 @@
                 </div>
               </div>
             </div>
-          </div>
         </div>
         <b-modal
           size="lg"
@@ -532,7 +536,7 @@
             </h3>
           </div>
           <div class="modal-content-alt">
-            <ol>
+            <ol class="mb-2">
               <li>
                 {{ $t('registration.term1') }}
               </li>
@@ -565,9 +569,9 @@
                 {{ $t('registration.term10') }}
               </li>
             </ol>
+          <span class="terms-info">I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
+          </span>
           </div>
-          <strong>I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
-          </strong>
           <div class="modal-button">
             <b-button
               class="btn-page"

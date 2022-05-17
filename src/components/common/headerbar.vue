@@ -4,10 +4,10 @@
     class="headerbar"
   >
     <div class="applogo">
-      <div class="logo-title"><span> MKCL </span> DNExt </div>
-      <!-- <span class="logo">
-        <img class="img-fluid" src="../../../public/assets/images/logo_mockexams.png" alt="MKCL Mock Exams">
-      </span> -->
+      <!-- <div class="logo-title"><span> MKCL </span> DNExt </div> -->
+      <span class="logo">
+        <img class="img-fluid" src="../../../public/assets/images/logo_dnext.png" alt="MKCL DNExt">
+      </span>
     </div>
 
     <!-- <b class="text-dark">Plasma Donation Project</b> -->
@@ -135,13 +135,8 @@ export default {
 </script>
 
 <style lang="scss">
-.headerbar {
-  background-image: linear-gradient(
-    -225deg,
-    #8e37d7,
-    #6b8dd6 48%,
-    #bc5f9d 
-  ) !important;
+#top.headerbar {
+  background-image:linear-gradient(-225deg, #ff9544, #f50162 48%, #b3004a);
 }
 // .btn-noti i {
 //   font-size: 25px;

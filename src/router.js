@@ -8,7 +8,7 @@ function loadView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
 }
 
-function loadNewStudentView(view) {
+function loadApplicantView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/RegistrationManagement/${view}.vue`)
 }
 
@@ -37,7 +37,7 @@ const router = new Router({
     {
       path: '/registration',
       name: 'Registration',
-      component: loadNewStudentView('Registration'),
+      component: loadApplicantView('Registration'),
       meta: {
         title: 'Registration | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
@@ -56,7 +56,7 @@ const router = new Router({
     {
       path: '/registration',
       name: 'Registration',
-      component: loadNewStudentView('Registration'),
+      component: loadApplicantView('Registration'),
       meta: {
         title: 'Registration | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
@@ -99,7 +99,7 @@ const router = new Router({
         })
       },
     },
-  
+
     {
       path: '/about',
       name: 'About',
@@ -112,9 +112,18 @@ const router = new Router({
     {
       path: '/success',
       name: 'success',
-      component: loadNewStudentView('success'),
+      component: loadApplicantView('Success'),
       meta: {
         title: 'Success | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+      },
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: loadApplicantView('Profile'),
+      meta: {
+        title: 'Profile | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -230,7 +239,7 @@ router.beforeEach((to, from, next) => {
 //     to.name === "ViewStudentDetailsByAdmin" ||
 //     to.name === "ViewStudentMarksByAdmin" ||
 //     to.name === "MockExamPaperConfig"
-    
+
 //   )
 //   ){
 //     next();

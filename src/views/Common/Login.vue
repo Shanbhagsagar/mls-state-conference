@@ -178,7 +178,7 @@ export default {
             if (rs.isValid('ApplicantLogin')) {
               // this.$router.push({ name: 'StudentDetails' })
 
-              this.$router.push('/applicantDetails')
+              this.$router.push('/Profile')
               this.$store.state.userName = this.cr.userName
               // let token = rs.getHeaders().authorization
               // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])

@@ -16,7 +16,7 @@
               Applicant Name:
             </div>
             <div class="value">
-              Name
+              {{ userData.basic.fullName }}
             </div>
           </div>
           <div class="col-md-4 card-items">
@@ -24,7 +24,7 @@
               Gender:
             </div>
             <div class="value">
-              Gender
+              {{ userData.basic.gender }}
             </div>
           </div>
           <div class="col-md-4 card-items">
@@ -32,7 +32,7 @@
               Date of Birth:
             </div>
             <div class="value">
-              00-00-0000
+              {{ userData.basic.dateOfBirth }}
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@
               Mobile Number:
             </div>
             <div class="value">
-              99999 99999
+              {{ userData.contact.mobileNumber }}
             </div>
           </div>
           <div class="col-md-6 card-items">
@@ -50,18 +50,18 @@
               Email ID:
             </div>
             <div class="value">
-              dnext@mkcl.org
+              {{ userData.contact.emailID }}
             </div>
           </div>
         </div>
-        
+
         <div class="row no-gutters">
           <div class="col-md-4 card-items">
             <div class="label">
               State:
             </div>
             <div class="value">
-              Maharashtra
+              {{ userData.address.state }}
             </div>
           </div>
           <div class="col-md-4 card-items">
@@ -69,7 +69,7 @@
               District:
             </div>
             <div class="value">
-              Thane
+              {{ userData.address.district }}
             </div>
           </div>
           <div class="col-md-4 card-items">
@@ -77,7 +77,7 @@
               Pincode:
             </div>
             <div class="value">
-              400 000
+              {{ userData.address.pincode }}
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@
               Education Details:
             </div>
             <div class="value">
-              B.E/ B.Tech 1st Year
+              {{ userData.qualification.qualificationName }}
             </div>
           </div>
         </div>
@@ -110,7 +110,7 @@
             </h5>
           </div>
         </div>
-        
+
         <div
           class="table-responsive"
           v-else
@@ -359,7 +359,7 @@ export default {
       //     },
       //   },
       // },
-      mobileNumber: '',
+      mobileNumber: this.$store.state.userName,
       buttonFlag: false,
       courses: [],
       showTable: false,
@@ -417,6 +417,7 @@ export default {
           label: this.$t('studentDetail.certificationLink')
         }
       ],
+      userData: {},
       fields2: [
         'SrNo',
         {
@@ -460,7 +461,7 @@ export default {
     getUserDetails () {
       // return new Promise((resolve) => {
       // const vm = this
-      this.mobileNumber = '9993860140'
+      // this.mobileNumber = '9993860140'
       // new MQL()
       //   .setActivity('o.[query_29FEeTzI2PoubDvgSxG7KZY0T3X]')
       //   .fetch()
@@ -485,13 +486,12 @@ export default {
         .setData({ userName: this.mobileNumber })
         .fetch()
         .then((rs) => {
+          console.log('here')
           let res = rs.getActivity('query_29FEeTzI2PoubDvgSxG7KZY0T3X', true)
           if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
-            if (res.result) {
-              console.log(res.result)
-              this.$router.push({
-                name: 'success'
-              })
+            console.log('here2')
+            if (res !== null) {
+              this.userData = res[0]
             }
           } else {
             rs.showErrorToast('query_29FEeTzI2PoubDvgSxG7KZY0T3X')

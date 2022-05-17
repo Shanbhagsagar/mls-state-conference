@@ -16,7 +16,7 @@ export default new Vuex.Store({
     roles: [],
     username: '',
     approvingOfficer: {},
-    visitinOfficer:{areaId:""}
+    visitinOfficer: { areaId: '' }
   },
   getters,
   mutations,

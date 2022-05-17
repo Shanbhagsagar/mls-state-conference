@@ -4,7 +4,7 @@
       <div class="row card-wrapper">
         <div class="col login-block">
           <a
-            href="https://mockexams.mkcl.org/"
+            href="https://dnext.mkcl.org/"
             class="btn btn-back"
           >Back to Home</a>
           <router-link
@@ -14,7 +14,6 @@
             Already a member? Login
           </router-link>
           <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
-            <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <img
               class="img-fluid"
               src="../../../public/assets/images/logo_dnext.png"
@@ -26,14 +25,10 @@
               Registration
             </h1>
           </div>
-          <!-- <div class="card-header">Test Readiness For You</div> -->
           <div class="card-header card-header-alt mt-0">
             Personal Details
           </div>
-          <!-- <div class="text-info">
-            Important: This information will appear on the student's e-score sheet. So please fill in the correct information.
-          </div> -->
-          <div class="card-form">
+              <div class="card-form">
             <div class="row">
               <div class="col-md-12 col-lg-6">
                 <div class="form-group">
@@ -75,15 +70,7 @@
                     Gender
                     <span class="text-danger">*</span>
                   </label>
-                  <!-- <b-form-select
-                    v-model="student.gender"
-                    id="gender"
-                    :options="gender"
-                    :class="{
-                      'is-invalid': submitted && $v.student.gender.$invalid,
-                    }"
-                  />-->
-                  <v-select
+                          <v-select
                     v-model="basic.gender"
                     :placeholder="$t('registration.genderPlaceholder')"
                     label="value"
@@ -98,7 +85,6 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="col-md-2"></div> -->
               <div class="col-md-8 col-lg-4">
                 <div class="form-group">
                   <label
@@ -125,7 +111,6 @@
                           submitted && $v.basic.dateOfBirth.$invalid,
                       }"
                     />
-                    <!-- <i class="mdi mdi-calendar" /> -->
                   </div>
                   <div
                     class="text-danger"
@@ -174,16 +159,7 @@
                             }"
                           >
                           <div class="input-group-append">
-                            <!-- <button
-                            class="btn btn-purple"
-                            @click="getStudentByMobileNumber()"
-                            :disabled="
-                              sendOtpFlag || $v.otp_d.mobileNumber.$invalid
-                            "
-                          >
-                            {{ $t('registration.sendOtp') }}
-                          </button> -->
-                            <button
+                                        <button
                               class="btn btn-purple"
                               @click="getOtp()"
                               :disabled="
@@ -263,13 +239,7 @@
                         </div>
                       </div>
                     </div>
-                  <!-- <div class="text-info col-md-12">
-                    Note: The mobile number will be the login ID. So fill in the exact number.<br> -->
-                  <!-- पालकांसाठी सूचना: एकच मोबाईल नंबर वापरून तुम्हाला एकापेक्षा
-                    अधिक पाल्यांना रजिस्टर करता येईल. त्यासाठी पहिल्या पाल्याची
-                    नोंदणी केल्यानंतर लॉगीन करावे व दुसऱ्या पाल्याची माहिती
-                    भरावी. -->
-                  <!-- </div> -->
+  
                   </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
@@ -310,13 +280,7 @@
                     >
                       Please provide valid email
                     </div>
-                  <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.student.emailID.required"
-                  >
-                    Please Provide Email!
-                  </div> -->
-                  </div>
+                    </div>
                 </div>
                 <div
                   class="col-md-6"
@@ -606,7 +570,6 @@
           <strong>I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
           </strong>
           <div class="modal-button">
-            <!-- <b-button  class="btn btn-rounded btn-white" type="submit" @click="onAccept()">Accept</b-button> -->
             <b-button
               class="btn-page"
               type="submit"
@@ -623,9 +586,7 @@
 
 <script>
 import { loadLanguageAsync } from '@/setup/i18n-setup.js'
-// import Response from '@/plugins/response.js'
 import MQL from '@/plugins/mql.js'
-// import 'flatpickr/dist/flatpickr.css'
 import {
   required,
   numeric,
@@ -634,7 +595,6 @@ import {
   helpers,
   email
 } from 'vuelidate/lib/validators'
-// import flatPickr from 'vue-flatpickr-component'
 var moment = require('moment')
 export default {
   data () {
@@ -729,10 +689,9 @@ export default {
       years: [],
       customDate: null,
       gender: [
-        // { value: null, text: 'Please select gender' },
         { value: 'Male', text: 'Male' },
         { value: 'Female', text: 'Female' },
-        { value: 'Other', text: 'Other' }
+        { value: 'Transgender', text: 'Transgender' }
       ],
       EducationLevels: [],
       Class: [],

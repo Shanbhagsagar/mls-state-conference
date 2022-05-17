@@ -3,28 +3,29 @@ import Router from 'vue-router'
 import store from "@/store"
 
 Vue.use(Router)
+
 function loadView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
 }
+
 function loadNewStudentView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/NewRegistration/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/RegistrationManagement/${view}.vue`)
 }
 
 function loadStudentView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Student/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Student/${view}.vue`)
 }
 
 function loadAdminView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Admin/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Admin/${view}.vue`)
 }
 
 function loadCommonView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
 }
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: '/studentregistration',
       name: 'StudentRegistration',
       component: loadStudentView('StudentRegistration'),
@@ -89,11 +90,11 @@ const router = new Router({
       },
     },
     {
-      path: '/thankYou',
-      name: 'ThankyouPageAfterRegistration',
-      component: loadStudentView('ThankyouPageAfterRegistration'),
+      path: '/success',
+      name: 'success',
+      component: loadNewStudentView('success'),
       meta: {
-        title: 'ThankyouPageAfterRegistration',
+        title: 'Success | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -125,7 +126,7 @@ const router = new Router({
       },
     },
     {
-      path: '/resetPassword',
+      path: '/reset-password',
       name: 'ResetPassword',
       component: loadCommonView('ResetPassword'),
       meta: {
@@ -185,51 +186,50 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (
     store.state.roles.some((obj) => obj === "student") &&
-    (to.name === "StudentDetails"
-    )
+    (to.name === "StudentDetails")
   ) {
     next();
-  }else if(
+  } else if (
     store.state.roles.some((obj) => obj === "admin") &&
     (
-    to.name === "AdminDashboard" ||  
-    to.name === "ViewAllStudentDetails" ||
-    to.name === "ViewStudentDetailsByAdmin" ||
-    to.name === "ViewStudentMarksByAdmin" ||
-    to.name === "MockExamPaperConfig"
-    
-  )
-  ){
+      to.name === "AdminDashboard" ||
+      to.name === "ViewAllStudentDetails" ||
+      to.name === "ViewStudentDetailsByAdmin" ||
+      to.name === "ViewStudentMarksByAdmin" ||
+      to.name === "MockExamPaperConfig"
+
+    )
+  ) {
     next();
   }
   // else if(
   //   store.state.roles.some((obj) => obj === "NewRegistration") &&
   //   (
   //   to.name === "Registration" 
-    
+
   // )
   // ){
   //   next();
   // }
-   else if (
-          to.name === "Registration" ||
-           to.name === 'ThankyouPageAfterRegistration' ||
-           to.name === 'About' ||
-           to.name === 'MKCLTRYHomePage' ||
-           to.name === 'RecipentRegistration' ||
-           to.name === 'StudentRegistration' ||
-           to.name === 'Login' ||
-           to.name === 'logout' ||
-           to.name === 'CdnUpload' ||
-           to.name === 'TermsAndConditions' ||
-           to.name === 'ResetPassword'
-         ) {
-           next()
-         } else {
-           next({
-             name: 'Login',
-           })
-         }
+  else if (
+    to.name === "Registration" ||
+    to.name === 'success' ||
+    to.name === 'About' ||
+    to.name === 'MKCLTRYHomePage' ||
+    to.name === 'RecipentRegistration' ||
+    to.name === 'StudentRegistration' ||
+    to.name === 'Login' ||
+    to.name === 'logout' ||
+    to.name === 'CdnUpload' ||
+    to.name === 'TermsAndConditions' ||
+    to.name === 'ResetPassword'
+  ) {
+    next()
+  } else {
+    next({
+      name: 'Login',
+    })
+  }
 });
 
 export default router;

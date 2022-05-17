@@ -57,7 +57,7 @@
                 >{{ $t('login.loginId') }}</label>
                 <input
                   type="text"
-                  v-model="cr.userName"
+                  v-model.trim="cr.userName"
                   class="form-control"
                   :placeholder="$t('login.loginIdPlaceholder')"
                   :class="{
@@ -179,7 +179,7 @@ export default {
               // this.$router.push({ name: 'StudentDetails' })
 
               this.$router.push('/applicantDetails')
-
+              this.$store.state.userName = this.cr.userName
               // let token = rs.getHeaders().authorization
               // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])
               // let role = JSON.parse(atob(token.split('.')[1])).groups[0]

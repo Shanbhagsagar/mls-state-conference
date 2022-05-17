@@ -25,7 +25,7 @@
               Registration
             </h1>
           </div>
-          
+
           <div class="card-form">
             <div class="card-header card-header-alt mt-0">
               Personal Details
@@ -40,7 +40,7 @@
                   <input
                     oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                     class="form-control"
-                    v-model="basic.fullName"
+                    v-model.trim="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"
                     id="fullName"
                     :class="{
@@ -132,401 +132,399 @@
             </div>
           </div>
 
-            <div class="card-form">
-              <div class="card-header card-header-alt">
-                Contacts Details
-              </div>
-              
-              <div class="row">
-                <div class="col-md-12 col-lg-6">
-                  <div class="form-row">
-                    <div class="col-md-6 col-lg-7">
-                      <div class="form-group">
-                        <label class="control-label form-label">
-                          Mobile Number
-                          <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                          <input
-                            class="form-control"
-                            oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                            maxlength="10"
-                            minlength="10"
-                            v-model="contact.mobileNumber"
-                            id="mobileNumber"
-                            :placeholder="$t('registration.mobilePlaceholder')"
-                            :disabled="flag == 1"
-                            :class="{
-                              'is-invalid':
-                                submitted && $v.contact.mobileNumber.$invalid
-                            }"
-                          >
-                          <div class="input-group-append">
-                            <button
-                              class="btn btn-purple"
-                              @click="getOtp()"
-                              :disabled="
-                                sendOtpFlag || $v.contact.mobileNumber.$invalid
-                              "
-                            >
-                              {{ $t('registration.sendOtp') }}
-                            </button>
-                          </div>
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.contact.mobileNumber.required"
-                        >
-                          {{ $t('registration.vmobile1') }}
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.contact.mobileNumber.numeric"
-                        >
-                          {{ $t('registration.vmobile2') }}
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.contact.mobileNumber.isMobileValid"
-                        >
-                          Invalid Mobile Number
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="
-                            submitted &&
-                              (!$v.contact.mobileNumber.minLength ||
-                              !$v.contact.mobileNumber.maxLength)
-                          "
-                        >
-                          {{ $t('registration.vmobile3') }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      class="col-md-6 col-lg-5"
-                      v-if="showOtpField == true"
-                    >
-                      <div class="form-group">
-                        <label
-                          class="control-label form-label"
-                        >Enter OTP</label>
-                        <div class="input-group">
-                          <input
-                            class="form-control"
-                            v-model="contact.votp"
-                            :placeholder="$t('registration.enterOtpPlaceholder')"
-                            id="votp"
-                            :disabled="flag == 1"
-                            :class="{
-                              'is-invalid':
-                                otp_submitted && $v.contact.votp.$invalid
-                            }"
-                          >
-                          <div class="input-group-append">
-                            <button
-                              type="button"
-                              class="btn btn-green"
-                              @click="verifyOtp()"
-                              :disabled="flag == 1 || contact.votp == ''"
-                            >
-                              {{ button }}
-                            </button>
-                          </div>
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="otp_submitted && !$v.contact.votp.required"
-                        >
-                          {{ $t('registration.venterOtp') }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-12 col-lg-6">
-                  <div class="form-row">
-                    <div class="col-md-6 col-lg-7">
-                      <div class="form-group">
-                        <label
-                          class="control-label form-label"
-                        >Email ID</label>
-                        <span class="text-danger"> *</span>
-                        <div class="input-group">
-                          <input
-                            type="email"
-                            class="form-control"
-                            v-model="contact.emailID"
-                            :placeholder="$t('registration.emailIdPlaceholder')"
-                            id="emailID"
-                            :disabled="emailflag == 1"
-                            :class="{
-                              'is-invalid':
-                                submitted && $v.contact.emailID.$invalid
-                            }"
-                          >
-                          <div class="input-group-append">
-                            <button
-                              class="btn btn-purple"
-                              @click="getEmailOtp()"
-                              :disabled="
-                                sendEmailOtpFlag || $v.contact.emailID.$invalid
-                              "
-                            >
-                              {{ $t('registration.sendOtp') }}
-                            </button>
-                          </div>
-                        </div>
-
-                        <div
-                          class="text-danger"
-                          v-if="submitted && !$v.contact.emailID.required"
-                        >
-                          Please provide valid email
-                        </div>
-                      </div>
-
-                    </div>
-                    <div
-                      class="col-md-6 col-lg-5"
-                      v-if="showEmailOtpField == true"
-                    >
-                      <div class="form-group">
-                        <label
-                          class="control-label form-label"
-                        >Enter OTP</label>
-                        <div class="input-group">
-                          <input
-                            class="form-control"
-                            v-model="contact.eotp"
-                            :placeholder="$t('registration.enterOtpPlaceholder')"
-                            id="votp"
-                            :disabled="emailflag == 1"
-                            :class="{
-                              'is-invalid':
-                                emailotp_submitted && $v.contact.eotp.$invalid
-                            }"
-                          >
-                          <div class="input-group-append">
-                            <button
-                              type="button"
-                              class="btn btn-green"
-                              @click="verifyEmailOtp()"
-                              :disabled="emailflag == 1 || contact.eotp == ''"
-                            >
-                              {{ emailButton }}
-                            </button>
-                          </div>
-                        </div>
-                        <div
-                          class="text-danger"
-                          v-if="emailotp_submitted && !$v.contact.eotp.required"
-                        >
-                          {{ $t('registration.venterOtp') }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 col-lg-4">
-                  <div class="form-group">
-                    <label
-                      for="states"
-                      class="control-label form-label"
-                    >State</label>
-                    <span class="text-danger">*</span>
-
-                    <v-select
-                      v-model="address.state"
-                      label="displayName"
-                      :placeholder="$t('registration.statePlaceholder')"
-                      :options="states"
-                      :value="address.state"
-                      @input="getDistrictsByStateId()"
-                    />
-                    <div
-                      class="text-danger"
-                      v-if="
-                        !$v.address.state.required &&
-                          $v.address.state.$error
-                      "
-                    >
-                      {{ $t('registration.vstate') }}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                  <div class="form-group">
-                    <label
-                      for="districts"
-                      class="control-label form-label"
-                    >
-                      District
-                      <span class="text-danger">*</span>
-                    </label>
-
-                    <v-select
-
-                      v-model="address.district"
-                      label="displayName"
-                      :placeholder="$t('registration.districtPlaceholder')"
-                      :options="districts"
-                      :value="address.district"
-                    />
-                    <div
-                      class="text-danger"
-                      v-if="
-                        !$v.address.district.required &&
-                          $v.address.district.$error
-                      "
-                    >
-                      {{ $t('registration.vdistrict') }}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                  <div class="form-group">
-                    <label class="control-label form-label">
-                      Pincode
-                      <span class="text-danger">*</span>
-                    </label>
-                    <input
-                      class="form-control"
-                      v-model="address.pincode"
-                      oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                      placeholder="Enter Your Pincode"
-                      maxlength="6"
-                      minlength="6"
-                      id="pincode"
-                      :class="{
-                        'is-invalid':
-                          submitted && $v.address.pincode.$invalid
-                      }"
-                    >
-                    <div
-                      class="text-danger"
-                      v-if="submitted && !$v.address.pincode.required"
-                    >
-                      {{ $t('registration.pincode') }}
-                    </div>
-                    <div
-                      class="text-danger"
-                      v-if="submitted && !$v.address.pincode.numeric"
-                    >
-                      {{ $t('registration.pincode2') }}
-                    </div>
-                    <div
-                      class="text-danger"
-                      v-if="
-                        submitted &&
-                          (!$v.address.pincode.minLength ||
-                          !$v.address.pincode.maxLength)
-                      "
-                    >
-                      {{ $t('registration.pincode3') }}
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Contacts Details
             </div>
 
-            <div class="card-form">
-
-              <div class="card-header card-header-alt">
-                Educational Details
-              </div>
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label
-                          for="exam"
-                          class="control-label form-label"
-                        >
-                          Select Qualification
-                          <span class="text-danger">*</span>
-                        </label>
-                        <v-select
-                          v-model="qualification.qualificationName"
-                          label="displayName"
-                          placeholder="Select Qualification"
-                          :options="Class"
-                          @input="getClassDetails()"
-                        />
-                        <div
-                          class="text-danger"
-                          v-if="
-                            !$v.qualification.qualificationName.required &&
-                              $v.qualification.qualificationName.$error
-                          "
-                        >
-                          {{ $t('registration.veducationLevel') }}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 d-flex justify-content-center">
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input
-                        type="checkbox"
-                        class="custom-control-input"
-                        id="customCheck3"
-                        value="checkbox3text"
-                        v-model="checked"
-                      >
-                      <label
-                        class="custom-control-label"
-                        for="customCheck3"
-                      >
-                        I agree to
-                        <a
-                          href="javascript:void(0)"
-                          id="show-btn"
-                          v-b-modal.modal-lg
-                          @click="$bvModal.show('tc-modal')"
-                        >Terms and Conditions.</a>
+            <div class="row">
+              <div class="col-md-12 col-lg-6">
+                <div class="form-row">
+                  <div class="col-md-6 col-lg-7">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Mobile Number
+                        <span class="text-danger">*</span>
                       </label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                          maxlength="10"
+                          minlength="10"
+                          v-model.trim="contact.mobileNumber"
+                          id="mobileNumber"
+                          :placeholder="$t('registration.mobilePlaceholder')"
+                          :disabled="flag == 1"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.contact.mobileNumber.$invalid
+                          }"
+                        >
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-purple"
+                            @click="getOtp()"
+                            :disabled="
+                              sendOtpFlag || $v.contact.mobileNumber.$invalid
+                            "
+                          >
+                            {{ $t('registration.sendOtp') }}
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.contact.mobileNumber.required"
+                      >
+                        {{ $t('registration.vmobile1') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.contact.mobileNumber.numeric"
+                      >
+                        {{ $t('registration.vmobile2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.contact.mobileNumber.isMobileValid"
+                      >
+                        Invalid Mobile Number
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.contact.mobileNumber.minLength ||
+                            !$v.contact.mobileNumber.maxLength)
+                        "
+                      >
+                        {{ $t('registration.vmobile3') }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    class="col-md-6 col-lg-5"
+                    v-if="showOtpField == true"
+                  >
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Enter OTP</label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          v-model.trim="contact.votp"
+                          :placeholder="$t('registration.enterOtpPlaceholder')"
+                          id="votp"
+                          :disabled="flag == 1"
+                          :class="{
+                            'is-invalid':
+                              otp_submitted && $v.contact.votp.$invalid
+                          }"
+                        >
+                        <div class="input-group-append">
+                          <button
+                            type="button"
+                            class="btn btn-green"
+                            @click="verifyOtp()"
+                            :disabled="flag == 1 || contact.votp == ''"
+                          >
+                            {{ button }}
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="otp_submitted && !$v.contact.votp.required"
+                      >
+                        {{ $t('registration.venterOtp') }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="form-action-alt">
-                <button
-                  :disabled="checked === false"
-                  type="button"
-                  class="btn btn-page"
-                  @click="applicantRegister()"
-                >
-                  Register
-                </button>
-              </div>
-            </div>
+              <div class="col-md-12 col-lg-6">
+                <div class="form-row">
+                  <div class="col-md-6 col-lg-7">
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Email ID</label>
+                      <span class="text-danger"> *</span>
+                      <div class="input-group">
+                        <input
+                          type="email"
+                          class="form-control"
+                          v-model.trim="contact.emailID"
+                          :placeholder="$t('registration.emailIdPlaceholder')"
+                          id="emailID"
+                          :disabled="emailflag == 1"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.contact.emailID.$invalid
+                          }"
+                        >
+                        <div class="input-group-append">
+                          <button
+                            class="btn btn-purple"
+                            @click="getEmailOtp()"
+                            :disabled="
+                              sendEmailOtpFlag || $v.contact.emailID.$invalid
+                            "
+                          >
+                            {{ $t('registration.sendOtp') }}
+                          </button>
+                        </div>
+                      </div>
 
-            <div class="help-wrapper">
-              <div class="copyright-holder">
-                <img
-                  src="../../../public/assets/images/logo_mkcl.svg"
-                  class="img-adj"
-                  alt="MKCL"
-                >
-                <div class="copyright">
-                  Powered by
-                  <a
-                    href="https://www.mkcl.org"
-                    target="_blank"
-                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.contact.emailID.required"
+                      >
+                        Please provide valid email
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md-6 col-lg-5"
+                    v-if="showEmailOtpField == true"
+                  >
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Enter OTP</label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          v-model.trim="contact.eotp"
+                          :placeholder="$t('registration.enterOtpPlaceholder')"
+                          id="votp"
+                          :disabled="emailflag == 1"
+                          :class="{
+                            'is-invalid':
+                              emailotp_submitted && $v.contact.eotp.$invalid
+                          }"
+                        >
+                        <div class="input-group-append">
+                          <button
+                            type="button"
+                            class="btn btn-green"
+                            @click="verifyEmailOtp()"
+                            :disabled="emailflag == 1 || contact.eotp == ''"
+                          >
+                            {{ emailButton }}
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="emailotp_submitted && !$v.contact.eotp.required"
+                      >
+                        {{ $t('registration.venterOtp') }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="states"
+                    class="control-label form-label"
+                  >State</label>
+                  <span class="text-danger">*</span>
+
+                  <v-select
+                    v-model="address.state"
+                    label="displayName"
+                    :placeholder="$t('registration.statePlaceholder')"
+                    :options="states"
+                    :value="address.state"
+                    @input="getDistrictsByStateId()"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="
+                      !$v.address.state.required &&
+                        $v.address.state.$error
+                    "
+                  >
+                    {{ $t('registration.vstate') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                    District
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <v-select
+
+                    v-model="address.district"
+                    label="displayName"
+                    :placeholder="$t('registration.districtPlaceholder')"
+                    :options="districts"
+                    :value="address.district"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="
+                      !$v.address.district.required &&
+                        $v.address.district.$error
+                    "
+                  >
+                    {{ $t('registration.vdistrict') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Pincode
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    class="form-control"
+                    v-model.trim="address.pincode"
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                    placeholder="Enter Your Pincode"
+                    maxlength="6"
+                    minlength="6"
+                    id="pincode"
+                    :class="{
+                      'is-invalid':
+                        submitted && $v.address.pincode.$invalid
+                    }"
+                  >
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.pincode.required"
+                  >
+                    {{ $t('registration.pincode') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.pincode.numeric"
+                  >
+                    {{ $t('registration.pincode2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="
+                      submitted &&
+                        (!$v.address.pincode.minLength ||
+                        !$v.address.pincode.maxLength)
+                    "
+                  >
+                    {{ $t('registration.pincode3') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Educational Details
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Select Qualification
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="qualification.qualificationName"
+                        label="displayName"
+                        placeholder="Select Qualification"
+                        :options="Class"
+                        @input="getClassDetails()"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.qualification.qualificationName.required &&
+                            $v.qualification.qualificationName.$error
+                        "
+                      >
+                        {{ $t('registration.veducationLevel') }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12 d-flex justify-content-center">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customCheck3"
+                      value="checkbox3text"
+                      v-model="checked"
+                    >
+                    <label
+                      class="custom-control-label"
+                      for="customCheck3"
+                    >
+                      I agree to
+                      <a
+                        href="javascript:void(0)"
+                        id="show-btn"
+                        v-b-modal.modal-lg
+                        @click="$bvModal.show('tc-modal')"
+                      >Terms and Conditions.</a>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-action-alt">
+              <button
+                :disabled="checked === false"
+                type="button"
+                class="btn btn-page"
+                @click="applicantRegister()"
+              >
+                Register
+              </button>
+            </div>
+          </div>
+
+          <div class="help-wrapper">
+            <div class="copyright-holder">
+              <img
+                src="../../../public/assets/images/logo_mkcl.svg"
+                class="img-adj"
+                alt="MKCL"
+              >
+              <div class="copyright">
+                Powered by
+                <a
+                  href="https://www.mkcl.org"
+                  target="_blank"
+                >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
+              </div>
+            </div>
+          </div>
         </div>
         <b-modal
           size="lg"
@@ -573,8 +571,8 @@
                 {{ $t('registration.term10') }}
               </li>
             </ol>
-          <span class="terms-info">I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
-          </span>
+            <span class="terms-info">I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
+            </span>
           </div>
           <div class="modal-button">
             <b-button

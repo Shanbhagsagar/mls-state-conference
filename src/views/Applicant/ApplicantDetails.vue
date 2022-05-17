@@ -422,27 +422,44 @@ export default {
 
     getUserDetails () {
       // return new Promise((resolve) => {
-      const vm = this
-      this.mobileNumber = '7276197270'
+      // const vm = this
+      this.mobileNumber = '9993860140'
+      // new MQL()
+      //   .setActivity('o.[query_29FEeTzI2PoubDvgSxG7KZY0T3X]')
+      //   .fetch()
+      //   .setData({ userName: this.mobileNumber })
+      //   .then((rs) => {
+      //     let res = rs.getActivity('query_29FEeTzI2PoubDvgSxG7KZY0T3X', true)
+      //     if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
+      //       vm.userDetails = res
+
+      //       console.log('user details', vm.userDetails)
+
+      // vm.userDetails[0].dateOfBirth =
+      //   vm.userDetails[0].dateOfBirth + " " + "00:00:00";
+      // resolve()
+      //   } else {
+      //     rs.showErrorToast('query_29FEeTzI2PoubDvgSxG7KZY0T3X')
+      //   }
+      // })
+      // })
       new MQL()
         .setActivity('o.[query_29FEeTzI2PoubDvgSxG7KZY0T3X]')
-        .fetch()
         .setData({ userName: this.mobileNumber })
+        .fetch()
         .then((rs) => {
           let res = rs.getActivity('query_29FEeTzI2PoubDvgSxG7KZY0T3X', true)
           if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
-            vm.userDetails = res
-
-            console.log('user details', vm.userDetails)
-
-            // vm.userDetails[0].dateOfBirth =
-            //   vm.userDetails[0].dateOfBirth + " " + "00:00:00";
-            // resolve()
+            if (res.result) {
+              console.log(res.result)
+              this.$router.push({
+                name: 'success'
+              })
+            }
           } else {
             rs.showErrorToast('query_29FEeTzI2PoubDvgSxG7KZY0T3X')
           }
         })
-      // })
     }
 
   }

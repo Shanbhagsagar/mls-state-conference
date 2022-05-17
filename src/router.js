@@ -99,6 +99,7 @@ const router = new Router({
         })
       },
     },
+  
     {
       path: '/about',
       name: 'About',

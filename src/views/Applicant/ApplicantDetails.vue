@@ -110,7 +110,7 @@
             </h5>
           </div>
         </div>
-
+        
         <div
           class="table-responsive"
           v-else
@@ -120,8 +120,6 @@
             :items="Papers"
             :fields="fields1"
           >
-            <!-- :filter="filter"
-                  @filtered="onFiltered" -->
             <template
               s
               v-slot:cell(paper.displayName)="data"

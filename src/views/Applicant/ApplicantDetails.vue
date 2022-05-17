@@ -32,7 +32,7 @@
               Date of Birth:
             </div>
             <div class="value">
-              {{ userData.basic.dateOfBirth }}
+              {{ userData.basic.dateOfBirth.slice(0,11) }}
             </div>
           </div>
         </div>

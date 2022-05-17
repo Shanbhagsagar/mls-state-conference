@@ -57,7 +57,7 @@
                 >{{ $t('login.loginId') }}</label>
                 <input
                   type="text"
-                  v-model="cr.userName"
+                  v-model.trim="cr.userName"
                   class="form-control"
                   :placeholder="$t('login.loginIdPlaceholder')"
                   :class="{

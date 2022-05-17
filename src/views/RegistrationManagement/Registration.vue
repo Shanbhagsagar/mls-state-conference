@@ -513,13 +513,17 @@
 
             <div class="help-wrapper">
               <div class="copyright-holder">
+                <img
+                  src="../../../public/assets/images/logo_mkcl.svg"
+                  class="img-adj"
+                  alt="MKCL"
+                >
                 <div class="copyright">
-                  <br>
                   Powered by
                   <a
                     href="https://www.mkcl.org"
                     target="_blank"
-                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2020. All rights reserved.<br>
+                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
                 </div>
               </div>
             </div>

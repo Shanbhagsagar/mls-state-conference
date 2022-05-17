@@ -126,12 +126,11 @@
                   alt="MKCL"
                 >
                 <div class="copyright">
-                  {{ $t('login.poweredBy') }}
+                  Powered by
                   <a
                     href="https://www.mkcl.org"
                     target="_blank"
-                  >{{ $t('login.mkcl') }}</a>. (MKCL),
-                  {{ $t('login.copyright') }}<br>
+                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
                 </div>
                 <!-- <div><br>Version 6.10.1, Updated On 10-June-2020 08:30 AM</div> -->
               </div>

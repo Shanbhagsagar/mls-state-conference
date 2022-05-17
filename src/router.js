@@ -3,28 +3,29 @@ import Router from 'vue-router'
 import store from "@/store"
 
 Vue.use(Router)
+
 function loadView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/${view}.vue`)
 }
+
 function loadNewStudentView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/NewRegistration/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/RegistrationManagement/${view}.vue`)
 }
 
 function loadStudentView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Student/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Student/${view}.vue`)
 }
 
 function loadAdminView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Admin/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Admin/${view}.vue`)
 }
 
 function loadCommonView(view) {
-  return () => import(/* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
 }
 
 const router = new Router({
-  routes: [
-    {
+  routes: [{
       path: '/studentregistration',
       name: 'StudentRegistration',
       component: loadStudentView('StudentRegistration'),
@@ -108,11 +109,11 @@ const router = new Router({
       },
     },
     {
-      path: '/thankYou',
-      name: 'ThankyouPageAfterRegistration',
-      component: loadStudentView('ThankyouPageAfterRegistration'),
+      path: '/success',
+      name: 'success',
+      component: loadNewStudentView('success'),
       meta: {
-        title: 'ThankyouPageAfterRegistration',
+        title: 'Success | MKCL DNExT',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -144,7 +145,7 @@ const router = new Router({
       },
     },
     {
-      path: '/resetPassword',
+      path: '/reset-password',
       name: 'ResetPassword',
       component: loadCommonView('ResetPassword'),
       meta: {

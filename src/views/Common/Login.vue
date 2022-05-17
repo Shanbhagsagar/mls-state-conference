@@ -27,7 +27,7 @@
           </div> -->
           <!-- i18n -->
           <a
-            href="https://mockexams.mkcl.org/"
+            href="https://dnext.mkcl.org/"
             class="btn btn-back"
           >
             {{ $t('login.backToHome') }}
@@ -106,12 +106,12 @@
               <div class="form-action-alter mt-3">
                 <div class="row">
                   <div class="col-sm">
-                    <router-link to="/resetPassword">
+                    <router-link to="/reset-password">
                       {{ $t('login.forgotPassword') }}
                     </router-link>
                   </div>
                   <div class="col-sm-auto">
-                    <router-link to="/studentregistration">
+                    <router-link to="/registration">
                       {{ $t('login.notRegister') }}
                     </router-link>
                   </div>
@@ -179,7 +179,7 @@ export default {
             if (rs.isValid('ApplicantLogin')) {
               // this.$router.push({ name: 'StudentDetails' })
 
-              this.$router.push('/about')
+              this.$router.push('/StudentDetails')
 
               // let token = rs.getHeaders().authorization
               // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])

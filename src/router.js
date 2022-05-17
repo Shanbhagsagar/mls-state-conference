@@ -43,6 +43,25 @@ const router = new Router({
       },
     },
     {
+      path: '/applicantDetails',
+      name: 'ApplicantDetails',
+      component: loadView('Applicant/ApplicantDetails'),
+      meta: {
+        title: 'ApplicantDetails | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/registration',
+      name: 'Registration',
+      component: loadNewStudentView('Registration'),
+      meta: {
+        title: 'Registration | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+      },
+    },
+    {
       path: '/',
       name: 'Login',
       component: loadCommonView('Login'),
@@ -180,56 +199,60 @@ const router = new Router({
     }
   ],
 })
-
-
 router.beforeEach((to, from, next) => {
-  if (
-    store.state.roles.some((obj) => obj === "student") &&
-    (to.name === "StudentDetails"
-    )
-  ) {
-    next();
-  }else if(
-    store.state.roles.some((obj) => obj === "admin") &&
-    (
-    to.name === "AdminDashboard" ||  
-    to.name === "ViewAllStudentDetails" ||
-    to.name === "ViewStudentDetailsByAdmin" ||
-    to.name === "ViewStudentMarksByAdmin" ||
-    to.name === "MockExamPaperConfig"
-    
-  )
-  ){
-    next();
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (sessionStorage.getItem('user-token') == null) {
+      next({
+        path: '/login'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
   }
-  // else if(
-  //   store.state.roles.some((obj) => obj === "NewRegistration") &&
-  //   (
-  //   to.name === "Registration" 
+})
+
+// router.beforeEach((to, from, next) => {
+//   if (
+//     store.state.roles.some((obj) => obj === "student") &&
+//     (to.name === "StudentDetails"
+//     )
+//   ) {
+//     next();
+//   }else if(
+//     store.state.roles.some((obj) => obj === "admin") &&
+//     (
+//     to.name === "AdminDashboard" ||  
+//     to.name === "ViewAllStudentDetails" ||
+//     to.name === "ViewStudentDetailsByAdmin" ||
+//     to.name === "ViewStudentMarksByAdmin" ||
+//     to.name === "MockExamPaperConfig"
     
-  // )
-  // ){
-  //   next();
-  // }
-   else if (
-          to.name === "Registration" ||
-           to.name === 'ThankyouPageAfterRegistration' ||
-           to.name === 'About' ||
-           to.name === 'MKCLTRYHomePage' ||
-           to.name === 'RecipentRegistration' ||
-           to.name === 'StudentRegistration' ||
-           to.name === 'Login' ||
-           to.name === 'logout' ||
-           to.name === 'CdnUpload' ||
-           to.name === 'TermsAndConditions' ||
-           to.name === 'ResetPassword'
-         ) {
-           next()
-         } else {
-           next({
-             name: 'Login',
-           })
-         }
-});
+//   )
+//   ){
+//     next();
+//   }
+//    else if (
+//           to.name === "Registration" ||
+//            to.name === 'ThankyouPageAfterRegistration' ||
+//            to.name === 'About' ||
+//            to.name === 'MKCLTRYHomePage' ||
+//            to.name === 'RecipentRegistration' ||
+//            to.name === 'StudentRegistration' ||
+//            to.name === 'Login' ||
+//            to.name === 'logout' ||
+//            to.name === 'CdnUpload' ||
+//            to.name === 'TermsAndConditions' ||
+//            to.name === 'ResetPassword'||
+//            to.name === "StudentDetails"
+//          ) {
+//            next()
+//          } else {
+//            next({
+//              name: 'Login',
+//            })
+//          }
+// });
 
 export default router;

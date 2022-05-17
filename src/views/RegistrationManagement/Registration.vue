@@ -28,7 +28,7 @@
           <div class="card-header card-header-alt mt-0">
             Personal Details
           </div>
-              <div class="card-form">
+          <div class="card-form">
             <div class="row">
               <div class="col-md-12 col-lg-6">
                 <div class="form-group">
@@ -70,7 +70,7 @@
                     Gender
                     <span class="text-danger">*</span>
                   </label>
-                          <v-select
+                  <v-select
                     v-model="basic.gender"
                     :placeholder="$t('registration.genderPlaceholder')"
                     label="value"
@@ -159,7 +159,7 @@
                             }"
                           >
                           <div class="input-group-append">
-                                        <button
+                            <button
                               class="btn btn-purple"
                               @click="getOtp()"
                               :disabled="
@@ -239,7 +239,6 @@
                         </div>
                       </div>
                     </div>
-  
                   </div>
                 </div>
                 <div class="col-md-12 col-lg-6">
@@ -280,7 +279,7 @@
                     >
                       Please provide valid email
                     </div>
-                    </div>
+                  </div>
                 </div>
                 <div
                   class="col-md-6"
@@ -1133,7 +1132,7 @@ export default {
                 if (res.result) {
                   console.log(res.result)
                   this.$router.push({
-                    name: 'thankYou'
+                    name: 'success'
                   })
                 }
               } else {

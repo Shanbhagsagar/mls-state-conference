@@ -483,6 +483,69 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Other Details
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Select Preference
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="other.preference"
+                        label="displayName"
+                        placeholder="Select Preference"
+                        :options="Class"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.other.preference.required &&
+                            $v.other.preference.$error
+                        "
+                      >
+                        {{ $t('registration.veducationLevel') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Select Reference
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="other.reference"
+                        label="displayName"
+                        placeholder="Select Reference"
+                        :options="Class"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.other.reference.required &&
+                            $v.other.reference.$error
+                        "
+                      >
+                        {{ $t('registration.veducationLevel') }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="row">
               <div class="col-md-12 d-flex justify-content-center">
@@ -522,7 +585,6 @@
               </button>
             </div>
           </div>
-
           <div class="help-wrapper">
             <div class="copyright-holder">
               <img
@@ -614,6 +676,7 @@ import {
   helpers,
   email
 } from 'vuelidate/lib/validators'
+import Swal from 'sweetalert2'
 var moment = require('moment')
 export default {
   data () {
@@ -639,7 +702,10 @@ export default {
         qualificationId: '',
         qualificationName: ''
       },
-
+      other: {
+        preference: '',
+        reference: ''
+      },
       student_cred: {},
       isGenderSelected: false,
       iconChange: 'mdi mdi-eye',
@@ -774,6 +840,10 @@ export default {
       qualificationName: {
         required
       }
+    },
+    other: {
+      preference: { required },
+      reference: { required }
     }
   },
   created () {
@@ -1127,41 +1197,44 @@ export default {
       const vm = this
       vm.submitted = true
       vm.$v.$touch()
-      if (vm.flag === 1) {
-        if (!vm.$v.$invalid) {
-          this.basic.fullName = this.basic.fullName
-          this.basic.gender = this.basic.gender.value
-          this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-          this.basic.userName = this.basic.userName
+      if (vm.flag === 1 && vm.emailFlag === 1 && !vm.$v.$invalid) {
+        this.basic.fullName = this.basic.fullName
+        this.basic.gender = this.basic.gender.value
+        this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
+        this.basic.userName = this.basic.userName
 
-          this.address.state = this.address.state.displayName
-          this.address.district = this.address.district.displayName
-          this.address.pincode = this.address.pincode
+        this.address.state = this.address.state.displayName
+        this.address.district = this.address.district.displayName
+        this.address.pincode = this.address.pincode
 
-          this.contact.emailID = this.contact.emailID
-          this.contact.mobileNumber = this.contact.mobileNumber
+        this.contact.emailID = this.contact.emailID
+        this.contact.mobileNumber = this.contact.mobileNumber
 
-          this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-          this.qualification.qualificationName = this.qualification.qualificationName.displayName
+        this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+        this.qualification.qualificationName = this.qualification.qualificationName.displayName
 
-          new MQL()
-            .setActivity('o.[RegisterUser]')
-            .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
-            .fetch()
-            .then((rs) => {
-              let res = rs.getActivity('RegisterUser', true)
-              if (rs.isValid('RegisterUser')) {
-                if (res.result) {
-                  console.log(res.result)
-                  this.$router.push({
-                    name: 'success'
-                  })
-                }
-              } else {
-                rs.showErrorToast('RegisterUser')
+        new MQL()
+          .setActivity('o.[RegisterUser]')
+          .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
+          .fetch()
+          .then((rs) => {
+            let res = rs.getActivity('RegisterUser', true)
+            if (rs.isValid('RegisterUser')) {
+              if (res.result) {
+                console.log(res.result)
+                this.$router.push({
+                  name: 'success'
+                })
               }
-            })
-        }
+            } else {
+              rs.showErrorToast('RegisterUser')
+            }
+          })
+      } else {
+        Swal.fire({
+          title: 'Please fill all the fields properly',
+          icon: 'error'
+        })
       }
     }
 

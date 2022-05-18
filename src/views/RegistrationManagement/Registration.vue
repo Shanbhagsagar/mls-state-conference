@@ -40,6 +40,8 @@
                   <input
                     oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                     class="form-control"
+                    minLength="4"
+                    maxLength="100"
                     v-model.trim="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"
                     id="fullName"
@@ -58,6 +60,18 @@
                     v-if="submitted && !$v.basic.fullName.isNameValid"
                   >
                     {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
                   </div>
                 </div>
               </div>
@@ -99,6 +113,7 @@
                     <b-form-datepicker
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
+                      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                       :disabled-dates="disabledDateOfBirthDates"
                       v-model="basic.dateOfBirth"
                       :max="this.maxDate"
@@ -453,7 +468,6 @@
                         label="displayName"
                         placeholder="Select Qualification"
                         :options="Class"
-                        @input="getClassDetails()"
                       />
                       <div
                         class="text-danger"
@@ -732,6 +746,8 @@ export default {
       },
       fullName: {
         required,
+        minLength: minLength(4),
+        maxLength: maxLength(100),
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
       },
 
@@ -779,7 +795,7 @@ export default {
     // vm.getAllDistricts();
   },
   mounted () {
-    this.getDistrictsByStateId()
+    // this.getDistrictsByStateId()
     this.getClassDetails()
     this.getMaxMinDate()
   },
@@ -842,8 +858,8 @@ export default {
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
       // console.log(vm.stateId)
-      vm.stateId = '21'
-      await vm.getDistrictsByStateId()
+      // vm.stateId = '21'
+      // await vm.getDistrictsByStateId()
 
       // await vm.getTalukaByDistrictId();
     },
@@ -860,7 +876,7 @@ export default {
           let res = rs.getActivity('SendEmailOTP', true)
           if (rs.isValid('SendEmailOTP')) {
             if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your phone number', {
+              this.$toasted.success('OTP sent to your Email ID', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -880,7 +896,7 @@ export default {
               }, 30000)
             } else {
               this.showEmailOtpField = false
-              this.$toasted.error('email already exists', { duration: 3000 })
+              this.$toasted.error('Email ID already exists', { duration: 3000 })
               rs.showErrorToast('SendEmailOTP')
             }
           }
@@ -899,7 +915,7 @@ export default {
           console.log(res)
           if (rs.isValid('SendMobileOTP')) {
             if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your phone number', {
+              this.$toasted.success('OTP sent to your Mobile Number', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -919,7 +935,7 @@ export default {
               }, 30000)
             } else {
               this.showOtpField = false
-              this.$toasted.error('mobile number already exists', { duration: 3000 })
+              this.$toasted.error('Mobile Number already exists', { duration: 3000 })
               rs.showErrorToast('SendMobileOTP')
             }
           } else {

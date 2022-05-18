@@ -14,8 +14,8 @@
   "validation": {
     "nameRequired": "The Name field is required",
     "nameAlpha": "The Name field may only contain alphabetic characters.",
-    "emailValid": "The Email field must be a valid email.",
-    "emailRequired": "The Email field is required.",
+    "emailValid": "The Email ID field must be a valid email ID.",
+    "emailRequired": "The Email ID field is required.",
     "phoneNumeric": "The Phone number field format is invalid.",
     "phoneRequired": "Phone no field is required.",
     "fullnameRequired": "The fullname field is required.",
@@ -137,6 +137,8 @@
   "studentNamePlaceholder":"Enter Your Full Name",
   "vstudnetName1":"Please Provide Your Full Name !",
   "vstudnetName2":"Name only contain letters. Numbers not allowed !",
+  "vsMinLength":"Name should be of atleast ",
+  "vsMaxLength":"Name should not exccedd ",
   "gender":"Gender",
   "genderPlaceholder":"Enter/Select The Gender",
   "vgender":" Please select Gender !",
@@ -162,8 +164,8 @@
 
   "emailId":"Email ID",
   "emailIdPlaceholder":"Enter Your Email ID",
-  "vemailId1":"Please provide valid email",
-  "vemailId2":"Please Provide Email!",
+  "vemailId1":"Please provide valid email ID",
+  "vemailId2":"Please Provide Email ID!",
 
   "state":"State",
   "statePlaceholder":"Enter/Select State",
@@ -222,7 +224,7 @@
 
   "term1":"MKCL may use my contact number for marketing & communication purpose.",
   "term2":"A mock test will be available before the main online test, so that the candidates can have a good feel of our actual online examination system.",
-  "term3":"Students are expected to furnish correct email-id and mobile-number in order to receive the various communications/updates from MKCL from time to time.",
+  "term3":"Students are expected to furnish correct email ID and mobile-number in order to receive the various communications/updates from MKCL from time to time.",
   "term4":"During the process various system generated communication are sent to the registered email id / mobile number furnished by the Student. Student is required to ensure necessary settings with email service provider / mobile operator in order to receive these communications from time to time. In the event of non-receipt of any communication on the registered email id / mobile number of the student, due to failure on the part of service provider cannot be attributed to the fault on the part of MKCL.",
   "term5":"Student needs to complete the Application process as per stipulated schedule and time only. Extension in time beyond stipulated time is not allowed.",
   "term6":"Please do not register using multiple mobile numbers and email IDs. Multiple registrations using different mobile number/email ID may lead to disqualification from the application process. We suggest you to use only one mobile number and email ID for the complete recruitment process.",

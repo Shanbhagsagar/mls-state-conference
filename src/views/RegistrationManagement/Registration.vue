@@ -497,13 +497,13 @@
                         for="exam"
                         class="control-label form-label"
                       >
-                        Select Preference
+                        Select Training Location Preference
                         <span class="text-danger">*</span>
                       </label>
                       <v-select
                         v-model="other.preference"
                         label="location"
-                        placeholder="Select Preference"
+                        placeholder="Select Training Location Preference"
                         :options="preferenceOptions"
                       />
                       <div
@@ -513,7 +513,7 @@
                             $v.other.preference.$error
                         "
                       >
-                        {{ $t('registration.veducationLevel') }}
+                        {{ $t('registration.vPreferenceError') }}
                       </div>
                     </div>
                   </div>
@@ -523,14 +523,14 @@
                         for="exam"
                         class="control-label form-label"
                       >
-                        Select Reference
+                        Select Referral
                         <span class="text-danger">*</span>
                       </label>
                       <v-select
                         v-model="other.reference"
-                        label="displayName"
-                        placeholder="Select Reference"
-                        :options="Class"
+                        label="refferal"
+                        placeholder="Select Referral"
+                        :options="referralOptions"
                       />
                       <div
                         class="text-danger"
@@ -539,7 +539,7 @@
                             $v.other.reference.$error
                         "
                       >
-                        {{ $t('registration.veducationLevel') }}
+                        {{ $t('registration.vReferralError') }}
                       </div>
                     </div>
                   </div>
@@ -723,6 +723,7 @@ export default {
       faculties: [],
       courses: [],
       preferenceOptions: [],
+      referralOptions: [],
       password: '',
       cnfpassword: '',
       countryId: null,
@@ -869,6 +870,7 @@ export default {
     this.getClassDetails()
     this.getPreferences()
     this.getMaxMinDate()
+    this.getReferrals()
   },
   methods: {
     changeLanguage (lang) {
@@ -1208,6 +1210,30 @@ export default {
             if (res !== null) {
               vm.preferenceOptions = []
               vm.preferenceOptions = res
+              // if (vm.userDetails[0].selectedClass == null) {
+              //   vm.userDetails[0].selectedClass = vm.Class[0];
+              // }
+              // console.log("userdetails", vm.userDetails[0]);
+            }
+          } else {
+            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
+          }
+        })
+    },
+    getReferrals () {
+      const vm = this
+      new MQL()
+        .setActivity('o.[query_29KjCJHLzLgJLlA77DwHNGJ58Ve]')
+        // .setData(data)
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('query_29KjCJHLzLgJLlA77DwHNGJ58Ve', true)
+          if (rs.isValid('query_29KjCJHLzLgJLlA77DwHNGJ58Ve')) {
+            // console.log(res);
+
+            if (res !== null) {
+              vm.referralOptions = []
+              vm.referralOptions = res
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }

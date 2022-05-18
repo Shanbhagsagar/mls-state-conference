@@ -244,8 +244,10 @@
   "registerSuccess":"You have been successfully registered on MKCL Mock Exams portal and your login credentials have been sent to registered email id and Mobile Number.",
   "passwordNotMatch":"Password doesnt match!",
   "enterAllData":"Please enter all the required data!",
-  "verifyMobileNumber":"Please verify your Mobile Number !"
+  "verifyMobileNumber":"Please verify your Mobile Number !",
   
+  "vPreferenceError": "Please Select Training Location Preference",
+  "vReferralError": "Please Select Referral"
 },
 "studentDetail":{
   "heading":"Student Details",

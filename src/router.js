@@ -86,6 +86,20 @@ const router = new Router({
       },
     },
     {
+      path: '*', redirect: '/',
+      name: 'Login',
+      component: loadCommonView('Login'),
+      meta: {
+        title: 'Login | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+      },
+      beforeEnter(routeTo, routeFrom, next) {
+        store.dispatch('AUTH_LOGOUT').then(() => {
+          next()
+        })
+      },
+    },
+    {
       path: '/logout',
       name: 'logout',
       component: loadCommonView('Login'),
@@ -207,7 +221,8 @@ const router = new Router({
         title: 'Admin Dashboard | MKCL DNExT',
         icon: 'mdi mdi-home-outline',
       },
-    }
+    },
+    
   ],
 })
 router.beforeEach((to, from, next) => {

@@ -6,7 +6,11 @@
     <div class="applogo">
       <!-- <div class="logo-title"><span> MKCL </span> DNExt </div> -->
       <span class="logo">
-        <img class="img-fluid" src="../../../public/assets/images/logo_dnext.png" alt="MKCL DNExt">
+        <img
+          class="img-fluid"
+          src="../../../public/assets/images/logo_dnext.png"
+          alt="MKCL DNExt"
+        >
       </span>
     </div>
 
@@ -20,14 +24,14 @@
     >
       <i class="mdi mdi-menu" />
     </button> -->
-<!-- 
+    <!--
     <b-dropdown
             id="dropdown-right"
             text="Select Language"
             variant="light"
             class="m-2 text-primary"
           > -->
-            <!-- <b-dropdown-item
+    <!-- <b-dropdown-item
               href="#"
               @click="changeLanguage('en')"
             >
@@ -40,7 +44,6 @@
               मराठी
             </b-dropdown-item>
           </b-dropdown> -->
-
 
     <ul class="top-right">
       <li class="dropdown link">
@@ -55,7 +58,7 @@
               src="../../../public/assets/images/user.png"
               alt="img"
             >
-            <b>{{ username }}</b>
+            <b>   {{ userData.basic.fullName }}</b>
           </template>
           <b-dropdown-item to="/logout">
             <i class="mdi mdi-power" />Logout
@@ -73,6 +76,8 @@ export default {
   name: 'Headerbar',
   data () {
     return {
+      userData: {},
+      mobileNumber: this.$store.state.userName,
       userDetails: [{
         fullname: ''
       }],
@@ -89,19 +94,35 @@ export default {
       leftSidebar.classList.toggle('open-slide')
     },
     getUserDetails () {
-      const vm = this
+      // const vm = this
+      // new MQL()
+      //   .setActivity('r.[query_1hau0sZuZdl0MOZBrO1OaFpTTgI]')
+      //   .fetch()
+      //   .then((rs) => {
+      //     let res = rs.getActivity('query_1hau0sZuZdl0MOZBrO1OaFpTTgI', true)
+      //     if (rs.isValid('query_1hau0sZuZdl0MOZBrO1OaFpTTgI')) {
+      //       // console.log('inside user detals', res)
+      //       vm.userDetails = res
+      //       vm.username = vm.userDetails[0].fullName
+      //       // console.log('inside headerbar', vm.userDetails[0])
+      //     } else {
+      //       rs.showErrorToast('query_1hau0sZuZdl0MOZBrO1OaFpTTgI')
+      //     }
+      //   })
       new MQL()
-        .setActivity('r.[query_1hau0sZuZdl0MOZBrO1OaFpTTgI]')
+        .setActivity('o.[query_29FEeTzI2PoubDvgSxG7KZY0T3X]')
+        .setData({ userName: this.mobileNumber })
         .fetch()
         .then((rs) => {
-          let res = rs.getActivity('query_1hau0sZuZdl0MOZBrO1OaFpTTgI', true)
-          if (rs.isValid('query_1hau0sZuZdl0MOZBrO1OaFpTTgI')) {
-            // console.log('inside user detals', res)
-            vm.userDetails = res
-            vm.username = vm.userDetails[0].fullName
-            // console.log('inside headerbar', vm.userDetails[0])
+          console.log('here')
+          let res = rs.getActivity('query_29FEeTzI2PoubDvgSxG7KZY0T3X', true)
+          if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
+            console.log('here2')
+            if (res !== null) {
+              this.userData = res[0]
+            }
           } else {
-            rs.showErrorToast('query_1hau0sZuZdl0MOZBrO1OaFpTTgI')
+            rs.showErrorToast('query_29FEeTzI2PoubDvgSxG7KZY0T3X')
           }
         })
     },
@@ -113,17 +134,20 @@ export default {
       loadLanguageAsync(lang).then(() => {
         console.log('Updated')
       })
-    },
-    
+    }
+
+  },
+  created () {
+    this.getUserDetails()
   },
   mounted () {
     const vm = this
-
-    if (vm.$store.state.roles.some((obj) => obj === 'student')) {
-      vm.getUserDetails()
-    }else if(vm.$store.state.roles.some((obj) => obj === 'admin')){
-      vm.username="admin"
-    }
+    vm.getUserDetails()
+    // if (vm.$store.state.roles.some((obj) => obj === 'student')) {
+    //   vm.getUserDetails()
+    // } else if (vm.$store.state.roles.some((obj) => obj === 'admin')) {
+    //   vm.username = 'admin'
+    // }
   },
   watch: {
     $route (to, from) {

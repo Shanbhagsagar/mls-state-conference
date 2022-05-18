@@ -40,6 +40,8 @@
                   <input
                     oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                     class="form-control"
+                    minLength="4"
+                    maxLength="100"
                     v-model.trim="basic.fullName"
                     :placeholder="$t('registration.studentNamePlaceholder')"
                     id="fullName"
@@ -58,6 +60,18 @@
                     v-if="submitted && !$v.basic.fullName.isNameValid"
                   >
                     {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
                   </div>
                 </div>
               </div>
@@ -99,6 +113,7 @@
                     <b-form-datepicker
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
+                      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                       :disabled-dates="disabledDateOfBirthDates"
                       v-model="basic.dateOfBirth"
                       :max="this.maxDate"
@@ -453,7 +468,6 @@
                         label="displayName"
                         placeholder="Select Qualification"
                         :options="Class"
-                        @input="getClassDetails()"
                       />
                       <div
                         class="text-danger"
@@ -463,6 +477,69 @@
                         "
                       >
                         {{ $t('registration.veducationLevel') }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Other Details
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Select Training Location Preference
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="other.preference"
+                        label="location"
+                        placeholder="Select Training Location Preference"
+                        :options="preferenceOptions"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.other.preference.required &&
+                            $v.other.preference.$error
+                        "
+                      >
+                        {{ $t('registration.vPreferenceError') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Select Referral
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="other.reference"
+                        label="refferal"
+                        placeholder="Select Referral"
+                        :options="referralOptions"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.other.reference.required &&
+                            $v.other.reference.$error
+                        "
+                      >
+                        {{ $t('registration.vReferralError') }}
                       </div>
                     </div>
                   </div>
@@ -508,7 +585,6 @@
               </button>
             </div>
           </div>
-
           <div class="help-wrapper">
             <div class="copyright-holder">
               <img
@@ -600,6 +676,7 @@ import {
   helpers,
   email
 } from 'vuelidate/lib/validators'
+import Swal from 'sweetalert2'
 var moment = require('moment')
 export default {
   data () {
@@ -625,7 +702,10 @@ export default {
         qualificationId: '',
         qualificationName: ''
       },
-
+      other: {
+        preference: '',
+        reference: ''
+      },
       student_cred: {},
       isGenderSelected: false,
       iconChange: 'mdi mdi-eye',
@@ -642,9 +722,10 @@ export default {
       universities: [],
       faculties: [],
       courses: [],
+      preferenceOptions: [],
+      referralOptions: [],
       password: '',
       cnfpassword: '',
-
       countryId: null,
       universityId: null,
       facultyId: null,
@@ -732,6 +813,8 @@ export default {
       },
       fullName: {
         required,
+        minLength: minLength(4),
+        maxLength: maxLength(100),
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
       },
 
@@ -758,6 +841,10 @@ export default {
       qualificationName: {
         required
       }
+    },
+    other: {
+      preference: { required },
+      reference: { required }
     }
   },
   created () {
@@ -779,17 +866,17 @@ export default {
     // vm.getAllDistricts();
   },
   mounted () {
-    this.getDistrictsByStateId()
+    // this.getDistrictsByStateId()
     this.getClassDetails()
+    this.getPreferences()
     this.getMaxMinDate()
+    this.getReferrals()
   },
   methods: {
     changeLanguage (lang) {
-      console.log('lang change :', lang)
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
-        console.log('Updated')
       })
     },
 
@@ -799,7 +886,7 @@ export default {
 
       var dateEntered = this.student.dateOfBirth
       let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
-      console.log('age', age)
+   
       if (age < 18 || age >= 58) {
         this.isAgeValid = false
       } else {
@@ -838,12 +925,12 @@ export default {
       // )[0].countryId
       vm.countryId = '001'
       await vm.getStatesByCountryId()
+      await vm.getPreferences()
       // vm.stateId = vm.states.filter(
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
-      // console.log(vm.stateId)
-      vm.stateId = '21'
-      await vm.getDistrictsByStateId()
+      // vm.stateId = '21'
+      // await vm.getDistrictsByStateId()
 
       // await vm.getTalukaByDistrictId();
     },
@@ -880,7 +967,7 @@ export default {
               }, 30000)
             } else {
               this.showEmailOtpField = false
-              this.$toasted.error('email already exists', { duration: 3000 })
+              this.$toasted.error('Email ID already exists', { duration: 3000 })
               rs.showErrorToast('SendEmailOTP')
             }
           }
@@ -896,10 +983,10 @@ export default {
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendMobileOTP', true)
-          console.log(res)
+        
           if (rs.isValid('SendMobileOTP')) {
             if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your Mobile number', {
+              this.$toasted.success('OTP sent to your Mobile Number', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -919,7 +1006,7 @@ export default {
               }, 30000)
             } else {
               this.showOtpField = false
-              this.$toasted.error('mobile number already exists', { duration: 3000 })
+              this.$toasted.error('Mobile Number already exists', { duration: 3000 })
               rs.showErrorToast('SendMobileOTP')
             }
           } else {
@@ -1049,11 +1136,9 @@ export default {
               if (res == null) {
                 res = []
               }
-              // console.log("res", res);
               vm.address.district = null
               vm.districts = []
               vm.districts = res
-              console.log(vm.districts)
               resolve()
             } else {
               rs.showErrorToast('query_293k2pcHKiS7GMwuDb9e1veS2g4')
@@ -1073,9 +1158,6 @@ export default {
             this.currentDateTime = res.result.now
             this.minDate = res.result.minDate
             this.maxDate = res.result.maxDate
-            console.log(this.minDate)
-            console.log(this.maxDate)
-            console.log(this.currentDateTime)
           } else {
             rs.showErrorToast('BirthDateRange')
           }
@@ -1091,7 +1173,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_2942pqjL5MapX6N3RrGZeVmgHql', true)
           if (rs.isValid('query_2942pqjL5MapX6N3RrGZeVmgHql')) {
-            // console.log(res);
 
             if (res !== null) {
               vm.Class = []
@@ -1099,7 +1180,51 @@ export default {
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }
-              // console.log("userdetails", vm.userDetails[0]);
+            }
+          } else {
+            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
+          }
+        })
+    },
+    getPreferences () {
+      const vm = this
+      new MQL()
+        .setActivity('o.[query_29KhBLz03rP3i795THixK9jJTfl]')
+        // .setData(data)
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('query_29KhBLz03rP3i795THixK9jJTfl', true)
+          if (rs.isValid('query_29KhBLz03rP3i795THixK9jJTfl')) {
+        
+
+            if (res !== null) {
+              vm.preferenceOptions = []
+              vm.preferenceOptions = res
+              // if (vm.userDetails[0].selectedClass == null) {
+              //   vm.userDetails[0].selectedClass = vm.Class[0];
+              // }
+            }
+          } else {
+            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
+          }
+        })
+    },
+    getReferrals () {
+      const vm = this
+      new MQL()
+        .setActivity('o.[query_29KjCJHLzLgJLlA77DwHNGJ58Ve]')
+        // .setData(data)
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('query_29KjCJHLzLgJLlA77DwHNGJ58Ve', true)
+          if (rs.isValid('query_29KjCJHLzLgJLlA77DwHNGJ58Ve')) {
+
+            if (res !== null) {
+              vm.referralOptions = []
+              vm.referralOptions = res
+              // if (vm.userDetails[0].selectedClass == null) {
+              //   vm.userDetails[0].selectedClass = vm.Class[0];
+              // }
             }
           } else {
             rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
@@ -1107,45 +1232,32 @@ export default {
         })
     },
     applicantRegister () {
-      console.log('here')
       const vm = this
       vm.submitted = true
       vm.$v.$touch()
-      if (vm.flag === 1) {
-        if (!vm.$v.$invalid) {
-          this.basic.fullName = this.basic.fullName
-          this.basic.gender = this.basic.gender.value
-          this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-          this.basic.userName = this.basic.userName
-
-          this.address.state = this.address.state.displayName
-          this.address.district = this.address.district.displayName
-          this.address.pincode = this.address.pincode
-
-          this.contact.emailID = this.contact.emailID
-          this.contact.mobileNumber = this.contact.mobileNumber
-
-          this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-          this.qualification.qualificationName = this.qualification.qualificationName.displayName
-
-          new MQL()
-            .setActivity('o.[RegisterUser]')
-            .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
-            .fetch()
-            .then((rs) => {
-              let res = rs.getActivity('RegisterUser', true)
-              if (rs.isValid('RegisterUser')) {
-                if (res.result) {
-                  console.log(res.result)
-                  this.$router.push({
-                    name: 'success'
-                  })
-                }
-              } else {
-                rs.showErrorToast('RegisterUser')
+      if (vm.flag === 1 && vm.emailflag === 1 && !vm.$v.$invalid) {
+        this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
+        new MQL()
+          .setActivity('o.[RegisterUser]')
+          .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant', other: this.other })
+          .fetch()
+          .then((rs) => {
+            let res = rs.getActivity('RegisterUser', true)
+            if (rs.isValid('RegisterUser')) {
+              if (res.result) {
+                this.$router.push({
+                  name: 'success'
+                })
               }
-            })
-        }
+            } else {
+              rs.showErrorToast('RegisterUser')
+            }
+          })
+      } else {
+        Swal.fire({
+          title: 'Please fill all the fields properly',
+          icon: 'error'
+        })
       }
     }
 

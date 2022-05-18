@@ -502,9 +502,9 @@
                       </label>
                       <v-select
                         v-model="other.preference"
-                        label="displayName"
+                        label="location"
                         placeholder="Select Preference"
-                        :options="Class"
+                        :options="preferenceOptions"
                       />
                       <div
                         class="text-danger"
@@ -722,9 +722,9 @@ export default {
       universities: [],
       faculties: [],
       courses: [],
+      preferenceOptions: [],
       password: '',
       cnfpassword: '',
-
       countryId: null,
       universityId: null,
       facultyId: null,
@@ -867,6 +867,7 @@ export default {
   mounted () {
     // this.getDistrictsByStateId()
     this.getClassDetails()
+    this.getPreferences()
     this.getMaxMinDate()
   },
   methods: {
@@ -924,6 +925,7 @@ export default {
       // )[0].countryId
       vm.countryId = '001'
       await vm.getStatesByCountryId()
+      await vm.getPreferences()
       // vm.stateId = vm.states.filter(
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
@@ -1182,6 +1184,30 @@ export default {
             if (res !== null) {
               vm.Class = []
               vm.Class = res
+              // if (vm.userDetails[0].selectedClass == null) {
+              //   vm.userDetails[0].selectedClass = vm.Class[0];
+              // }
+              // console.log("userdetails", vm.userDetails[0]);
+            }
+          } else {
+            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
+          }
+        })
+    },
+    getPreferences () {
+      const vm = this
+      new MQL()
+        .setActivity('o.[query_29KhBLz03rP3i795THixK9jJTfl]')
+        // .setData(data)
+        .fetch()
+        .then((rs) => {
+          let res = rs.getActivity('query_29KhBLz03rP3i795THixK9jJTfl', true)
+          if (rs.isValid('query_29KhBLz03rP3i795THixK9jJTfl')) {
+            // console.log(res);
+
+            if (res !== null) {
+              vm.preferenceOptions = []
+              vm.preferenceOptions = res
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }

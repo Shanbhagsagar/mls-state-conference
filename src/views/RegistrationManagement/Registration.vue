@@ -860,7 +860,7 @@ export default {
           let res = rs.getActivity('SendEmailOTP', true)
           if (rs.isValid('SendEmailOTP')) {
             if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your phone number', {
+              this.$toasted.success('OTP sent to your Email ID', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -899,7 +899,7 @@ export default {
           console.log(res)
           if (rs.isValid('SendMobileOTP')) {
             if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your phone number', {
+              this.$toasted.success('OTP sent to your Mobile number', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000

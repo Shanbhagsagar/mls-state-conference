@@ -874,11 +874,9 @@ export default {
   },
   methods: {
     changeLanguage (lang) {
-      console.log('lang change :', lang)
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
-        console.log('Updated')
       })
     },
 
@@ -888,7 +886,7 @@ export default {
 
       var dateEntered = this.student.dateOfBirth
       let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
-      console.log('age', age)
+   
       if (age < 18 || age >= 58) {
         this.isAgeValid = false
       } else {
@@ -931,7 +929,6 @@ export default {
       // vm.stateId = vm.states.filter(
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
-      // console.log(vm.stateId)
       // vm.stateId = '21'
       // await vm.getDistrictsByStateId()
 
@@ -986,7 +983,7 @@ export default {
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendMobileOTP', true)
-          console.log(res)
+        
           if (rs.isValid('SendMobileOTP')) {
             if (res.result.result === undefined) {
               this.$toasted.success('OTP sent to your Mobile Number', {
@@ -1139,11 +1136,9 @@ export default {
               if (res == null) {
                 res = []
               }
-              // console.log("res", res);
               vm.address.district = null
               vm.districts = []
               vm.districts = res
-              console.log(vm.districts)
               resolve()
             } else {
               rs.showErrorToast('query_293k2pcHKiS7GMwuDb9e1veS2g4')
@@ -1163,9 +1158,6 @@ export default {
             this.currentDateTime = res.result.now
             this.minDate = res.result.minDate
             this.maxDate = res.result.maxDate
-            console.log(this.minDate)
-            console.log(this.maxDate)
-            console.log(this.currentDateTime)
           } else {
             rs.showErrorToast('BirthDateRange')
           }
@@ -1181,7 +1173,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_2942pqjL5MapX6N3RrGZeVmgHql', true)
           if (rs.isValid('query_2942pqjL5MapX6N3RrGZeVmgHql')) {
-            // console.log(res);
 
             if (res !== null) {
               vm.Class = []
@@ -1189,7 +1180,6 @@ export default {
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }
-              // console.log("userdetails", vm.userDetails[0]);
             }
           } else {
             rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
@@ -1205,7 +1195,7 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_29KhBLz03rP3i795THixK9jJTfl', true)
           if (rs.isValid('query_29KhBLz03rP3i795THixK9jJTfl')) {
-            // console.log(res);
+        
 
             if (res !== null) {
               vm.preferenceOptions = []
@@ -1213,7 +1203,6 @@ export default {
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }
-              // console.log("userdetails", vm.userDetails[0]);
             }
           } else {
             rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
@@ -1229,7 +1218,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_29KjCJHLzLgJLlA77DwHNGJ58Ve', true)
           if (rs.isValid('query_29KjCJHLzLgJLlA77DwHNGJ58Ve')) {
-            // console.log(res);
 
             if (res !== null) {
               vm.referralOptions = []
@@ -1237,7 +1225,6 @@ export default {
               // if (vm.userDetails[0].selectedClass == null) {
               //   vm.userDetails[0].selectedClass = vm.Class[0];
               // }
-              // console.log("userdetails", vm.userDetails[0]);
             }
           } else {
             rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
@@ -1245,35 +1232,19 @@ export default {
         })
     },
     applicantRegister () {
-      console.log('here')
       const vm = this
       vm.submitted = true
       vm.$v.$touch()
-      if (vm.flag === 1 && vm.emailFlag === 1 && !vm.$v.$invalid) {
-        this.basic.fullName = this.basic.fullName
-        this.basic.gender = this.basic.gender.value
+      if (vm.flag === 1 && vm.emailflag === 1 && !vm.$v.$invalid) {
         this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-        this.basic.userName = this.basic.userName
-
-        this.address.state = this.address.state.displayName
-        this.address.district = this.address.district.displayName
-        this.address.pincode = this.address.pincode
-
-        this.contact.emailID = this.contact.emailID
-        this.contact.mobileNumber = this.contact.mobileNumber
-
-        this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        this.qualification.qualificationName = this.qualification.qualificationName.displayName
-
         new MQL()
           .setActivity('o.[RegisterUser]')
-          .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant' })
+          .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant', other: this.other })
           .fetch()
           .then((rs) => {
             let res = rs.getActivity('RegisterUser', true)
             if (rs.isValid('RegisterUser')) {
               if (res.result) {
-                console.log(res.result)
                 this.$router.push({
                   name: 'success'
                 })

@@ -126,7 +126,7 @@ const router = new Router({
     {
       path: '/success',
       name: 'success',
-      component: loadApplicantView('Success'),
+      component: loadApplicantView('success'),
       meta: {
         title: 'Success | MKCL DNExT',
         icon: 'mdi mdi-information-variant',

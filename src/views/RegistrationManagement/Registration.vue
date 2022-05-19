@@ -941,7 +941,7 @@ export default {
       this.showEmailOtpField = true
       new MQL()
         .setActivity('o.[SendEmailOTP]')
-        .setData({ email: this.contact.emailID })
+        .setData({ contact: { emailID: this.contact.emailID } })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendEmailOTP', true)
@@ -979,7 +979,7 @@ export default {
       this.showOtpField = true
       new MQL()
         .setActivity('o.[SendMobileOTP]')
-        .setData({ mobileNumber: this.contact.mobileNumber })
+        .setData({ contact: { mobileNumber: this.contact.mobileNumber } })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendMobileOTP', true)
@@ -1037,11 +1037,26 @@ export default {
                 position: 'top-center',
                 duration: 3000
               })
-            }
-            if (res.result.verifyOTP === 'OTPNOTFOUND') {
+            } else if (res.result.verifyOTP === 'OTPNOTFOUND') {
               this.emailflag = 0
 
               this.$toasted.error('Invalid OTP ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            } else if (res.result.verifyOTP === 'OTPKEYNOTFOUND') {
+              this.emailflag = 0
+
+              this.$toasted.error('OTP Expired ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            } else {
+              this.emailflag = 0
+
+              this.$toasted.error('Invalid OTP', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -1075,11 +1090,26 @@ export default {
                 position: 'top-center',
                 duration: 3000
               })
-            }
-            if (res.result.verifyOTP === 'OTPNOTFOUND') {
+            } else if (res.result.verifyOTP === 'OTPNOTFOUND') {
               this.flag = 0
 
               this.$toasted.error('Invalid OTP ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            } else if (res.result.verifyOTP === 'OTPKEYNOTFOUND') {
+              this.flag = 0
+
+              this.$toasted.error('OTP Expired ', {
+                theme: 'bubble',
+                position: 'top-center',
+                duration: 3000
+              })
+            } else {
+              this.flag = 0
+
+              this.$toasted.error('Invalid OTP', {
                 theme: 'bubble',
                 position: 'top-center',
                 duration: 3000
@@ -1232,20 +1262,20 @@ export default {
       vm.submitted = true
       vm.$v.$touch()
       if (vm.flag === 1 && vm.emailflag === 1 && !vm.$v.$invalid) {
-        this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-        this.address.district = this.address.district.displayName
-        this.address.state = this.address.state.displayName
-        this.basic.gender = this.basic.gender.value
-        this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        this.qualification.qualificationName = this.qualification.qualificationName.displayName
-        this.other.preference = this.other.preference.location
-        this.other.reference = this.other.reference.refferal
         var sendData = {}
         sendData.basic = this.basic
+        sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
         sendData.address = this.address
+        sendData.address.district = this.address.district.displayName
+        sendData.address.state = this.address.state.displayName
+        sendData.basic.gender = this.basic.gender.value
         sendData.qualification = this.qualification
+        sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+        sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
         sendData.contact = this.contact
         sendData.other = this.other
+        sendData.other.preference = this.other.preference.location
+        sendData.other.reference = this.other.reference.refferal
         sendData.roleName = 'Applicant'
         new MQL()
           .setActivity('o.[RegisterUser]')
@@ -1254,10 +1284,17 @@ export default {
           .then((rs) => {
             let res = rs.getActivity('RegisterUser', true)
             if (rs.isValid('RegisterUser')) {
-              if (res.result) {
+              if (res.result.result === 'Success') {
+                this.$toasted.success('Registration Successfull', {
+                  theme: 'bubble',
+                  position: 'top-center',
+                  duration: 3000
+                })
                 this.$router.push({
                   name: 'success'
                 })
+              } else {
+                this.$toasted.error(res.result.result, { duration: 3000 })
               }
             } else {
               rs.showErrorToast('RegisterUser')

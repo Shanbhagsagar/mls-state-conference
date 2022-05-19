@@ -638,6 +638,9 @@
                 {{ $t('registration.term7') }}
               </li>
               <li>
+                {{ $t('registration.term71') }}
+              </li>
+              <li>
                 {{ $t('registration.term8') }}
               </li>
               <li>

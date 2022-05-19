@@ -571,11 +571,11 @@
                         class="text-danger"
                         v-if="
                           submitted &&
-                            (!pleaseSpecify.minLength ||
-                            !pleaseSpecify.maxLength)
+                            (!minLengthPlease ||
+                            !maxLengthPlease)
                         "
                       >
-                        Text should be between 4 to 200 charachters
+                        Text should be between 5 to 200 charachters
                       </div>
                     </div>
                   </div>
@@ -837,10 +837,12 @@ export default {
       var res = this.other.reference.refferal === 'Other' && this.pleaseSpecify !== ''
       return res
     },
-    'pleaseSpecify.minLength' () {
-      return this.pleaseSpecify.length > 4
+    minLengthPlease () {
+      console.log(this.pleaseSpecify)
+      console.log(this.pleaseSpecify.length)
+      return this.pleaseSpecify.length >= 5
     },
-    'pleaseSpecify.maxLength' () {
+    maxLengthPlease () {
       return this.pleaseSpecify.length < 200
     }
   },
@@ -1321,7 +1323,7 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid && vm.pleaseSpecifyBool) {
+      } else if (!vm.$v.$invalid && vm.pleaseSpecifyBool && (this.minLengthPlease && this.maxLengthPlease)) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
@@ -1336,6 +1338,11 @@ export default {
         sendData.other = this.other
         sendData.other.preference = this.other.preference.location
         sendData.other.reference = this.other.reference.refferal
+        if (sendData.other.reference === 'Other') {
+          sendData.other.reference = {
+            other: this.pleaseSpecify
+          }
+        }
         sendData.roleName = 'Applicant'
         new MQL()
           .setActivity('o.[RegisterUser]')

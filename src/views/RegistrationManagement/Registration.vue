@@ -1261,7 +1261,12 @@ export default {
       const vm = this
       vm.submitted = true
       vm.$v.$touch()
-      if (vm.flag === 1 && vm.emailflag === 1 && !vm.$v.$invalid) {
+      if (vm.flag !== 1 || vm.emailflag !== 1) {
+        Swal.fire({
+          title: 'Please Verify Mobile Number and Email ID',
+          icon: 'error'
+        })
+      } else if (!vm.$v.$invalid) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'

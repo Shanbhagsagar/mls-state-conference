@@ -352,7 +352,7 @@ export default {
 
       new MQL()
         .setActivity('o.[ResetPasswordSendOTP]')
-        .setData(this.otp_d)
+        .setData({ contact: this.otp_d })
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('ResetPasswordSendOTP', true)

@@ -491,7 +491,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md">
                     <div class="form-group">
                       <label
                         for="exam"
@@ -517,7 +517,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md">
                     <div class="form-group">
                       <label
                         for="exam"
@@ -540,6 +540,42 @@
                         "
                       >
                         {{ $t('registration.vReferralError') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col-md"
+                    v-show="other.reference.refferal === 'Other'"
+                  >
+                    <div class="form-group">
+                      <label
+                        for="exam"
+                        class="control-label form-label"
+                      >
+                        Please Specify
+                        <span class="text-danger">*</span>
+                      </label>
+                      <textarea
+                        type="textarea"
+                        class="form-control"
+                        minLength="5"
+                        maxLength="200"
+                        v-model.trim="pleaseSpecify"
+                        placeholder="Please Specify"
+                        id="fullName"
+                        :class="{
+                          'is-invalid': submitted && !pleaseSpecifyBool
+                        }"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!pleaseSpecify.minLength ||
+                            !pleaseSpecify.maxLength)
+                        "
+                      >
+                        Text should be between 4 to 200 charachters
                       </div>
                     </div>
                   </div>
@@ -677,7 +713,8 @@ import {
   minLength,
   maxLength,
   helpers,
-  email
+  email,
+  requiredIf
 } from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
 var moment = require('moment')
@@ -707,7 +744,9 @@ export default {
       },
       other: {
         preference: '',
-        reference: ''
+        reference: {
+          referral: ''
+        }
       },
       student_cred: {},
       isGenderSelected: false,
@@ -752,6 +791,7 @@ export default {
         mobileNumber: '',
         votp: ''
       },
+      pleaseSpecify: '',
       commonDateConfig: {
         dateFormat: 'Y-m-d',
         maxDate: this.maxDate,
@@ -790,6 +830,18 @@ export default {
         { text: 'नाही/No', value: false }
       ],
       showGuardianFlag: false
+    }
+  },
+  computed: {
+    pleaseSpecifyBool () {
+      var res = this.other.reference.refferal === 'Other' && this.pleaseSpecify !== ''
+      return res
+    },
+    'pleaseSpecify.minLength' () {
+      return this.pleaseSpecify.length > 4
+    },
+    'pleaseSpecify.maxLength' () {
+      return this.pleaseSpecify.length < 200
     }
   },
   // components: {
@@ -1269,7 +1321,7 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid) {
+      } else if (!vm.$v.$invalid && vm.pleaseSpecifyBool) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'

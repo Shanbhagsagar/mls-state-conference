@@ -886,7 +886,7 @@ export default {
 
       var dateEntered = this.student.dateOfBirth
       let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
-   
+
       if (age < 18 || age >= 58) {
         this.isAgeValid = false
       } else {
@@ -983,7 +983,7 @@ export default {
         .fetch()
         .then((rs) => {
           let res = rs.getActivity('SendMobileOTP', true)
-        
+
           if (rs.isValid('SendMobileOTP')) {
             if (res.result.result === undefined) {
               this.$toasted.success('OTP sent to your Mobile Number', {
@@ -1173,7 +1173,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_2942pqjL5MapX6N3RrGZeVmgHql', true)
           if (rs.isValid('query_2942pqjL5MapX6N3RrGZeVmgHql')) {
-
             if (res !== null) {
               vm.Class = []
               vm.Class = res
@@ -1195,8 +1194,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_29KhBLz03rP3i795THixK9jJTfl', true)
           if (rs.isValid('query_29KhBLz03rP3i795THixK9jJTfl')) {
-        
-
             if (res !== null) {
               vm.preferenceOptions = []
               vm.preferenceOptions = res
@@ -1218,7 +1215,6 @@ export default {
         .then((rs) => {
           let res = rs.getActivity('query_29KjCJHLzLgJLlA77DwHNGJ58Ve', true)
           if (rs.isValid('query_29KjCJHLzLgJLlA77DwHNGJ58Ve')) {
-
             if (res !== null) {
               vm.referralOptions = []
               vm.referralOptions = res
@@ -1237,9 +1233,23 @@ export default {
       vm.$v.$touch()
       if (vm.flag === 1 && vm.emailflag === 1 && !vm.$v.$invalid) {
         this.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
+        this.address.district = this.address.district.displayName
+        this.address.state = this.address.state.displayName
+        this.basic.gender = this.basic.gender.value
+        this.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+        this.qualification.qualificationName = this.qualification.qualificationName.displayName
+        this.other.preference = this.other.preference.location
+        this.other.reference = this.other.reference.refferal
+        var sendData = {}
+        sendData.basic = this.basic
+        sendData.address = this.address
+        sendData.qualification = this.qualification
+        sendData.contact = this.contact
+        sendData.other = this.other
+        sendData.roleName = 'Applicant'
         new MQL()
           .setActivity('o.[RegisterUser]')
-          .setData({ address: this.address, basic: this.basic, contact: this.contact, qualification: this.qualification, roleName: 'Applicant', other: this.other })
+          .setData(sendData)
           .fetch()
           .then((rs) => {
             let res = rs.getActivity('RegisterUser', true)

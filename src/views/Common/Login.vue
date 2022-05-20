@@ -183,7 +183,6 @@ export default {
               // let token = rs.getHeaders().authorization
               // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])
               // let role = JSON.parse(atob(token.split('.')[1])).groups[0]
-              // // console.log("role",role)
               // this.$store.commit('SET_ROLE', role)
               // if (role === 'applicant') {
               //   this.$router.push({ name: 'StudentDetails' })
@@ -208,11 +207,9 @@ export default {
       }
     },
     changeLanguage (lang) {
-      console.log('lang change :', lang)
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
-        console.log('Updated')
       })
     }
 

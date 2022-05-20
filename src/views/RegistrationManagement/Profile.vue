@@ -471,7 +471,6 @@ export default {
       //     if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
       //       vm.userDetails = res
 
-      //       console.log('user details', vm.userDetails)
 
       // vm.userDetails[0].dateOfBirth =
       //   vm.userDetails[0].dateOfBirth + " " + "00:00:00";
@@ -486,10 +485,8 @@ export default {
         .setData({ userName: this.mobileNumber })
         .fetch()
         .then((rs) => {
-          console.log('here')
           let res = rs.getActivity('query_29FEeTzI2PoubDvgSxG7KZY0T3X', true)
           if (rs.isValid('query_29FEeTzI2PoubDvgSxG7KZY0T3X')) {
-            console.log('here2')
             if (res !== null) {
               this.userData = res[0]
             }

@@ -3,9 +3,6 @@
     <div class="card-login">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <!-- <a href="https://dnext.mkcl.org/" class="btn btn-back btn-back-login">
-            Login
-          </a> -->
           <a
             href="https://dnext.mkcl.org/"
             class="btn btn-back"

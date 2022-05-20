@@ -7,7 +7,10 @@ import './registerServiceWorker'
 import VueLogger from 'vuejs-logger'
 import mqlOptions from './plugins/mqlOptions.js'
 import VueLocalStorage from 'vue-localstorage'
-import { loadLanguageAsync, i18n } from './setup/i18n-setup.js'
+import {
+  loadLanguageAsync,
+  i18n
+} from './setup/i18n-setup.js'
 import VuejsDialog from 'vuejs-dialog'
 import BootstrapVue from 'bootstrap-vue'
 import vSelect from 'vue-select'
@@ -24,6 +27,7 @@ import 'vue-select/dist/vue-select.css'
 import '../public/assets/css/style.css'
 import '../public/assets/css/responsive.css'
 import '../public/assets/css/template.scss'
+import VueGtag from "vue-gtag";
 
 Vue.config.productionTip = false
 const isProduction = process.env.NODE_ENV === 'production'
@@ -46,6 +50,11 @@ Vue.component("v-select", vSelect);
 Vue.use(Toasted)
 Vue.use(Vuebar)
 Vue.use(Vuelidate)
+Vue.use(VueGtag, {
+  config: {
+    id: "G-FF9LPQZKL8"
+  }
+})
 // Vue.use(Datepicker)
 
 var baseURL = '/server'
@@ -53,8 +62,7 @@ var cdnBaseURL = '/cdnserver'
 Vue.use(mqlOptions, {
   baseURL: baseURL,
   cdnBaseURL: cdnBaseURL,
-  cdnConfig: [
-    {
+  cdnConfig: [{
       'purposeId': '1',
       'bucketId': '123456',
       'bucketName': 'client2',
@@ -114,13 +122,13 @@ router.beforeEach((to, from, next) => {
 
   if (!nearestWithMeta) return next()
   nearestWithMeta.meta.metaTags.map(tagDef => {
-    const tag = document.createElement('meta')
-    Object.keys(tagDef).forEach(key => {
-      tag.setAttribute(key, tagDef[key])
+      const tag = document.createElement('meta')
+      Object.keys(tagDef).forEach(key => {
+        tag.setAttribute(key, tagDef[key])
+      })
+      tag.setAttribute('data-vue-router-controlled', '')
+      return tag
     })
-    tag.setAttribute('data-vue-router-controlled', '')
-    return tag
-  })
     .forEach(tag => document.head.appendChild(tag))
   next()
 })

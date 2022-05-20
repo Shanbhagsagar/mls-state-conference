@@ -3,22 +3,46 @@
     <div class="card-login">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <a href="https://dnext.mkcl.org/" class="btn btn-back">
-            {{$t('login.backToHome')}}
+          <!-- <a href="https://dnext.mkcl.org/" class="btn btn-back btn-back-login">
+            Login
+          </a> -->
+          <a
+            href="https://dnext.mkcl.org/"
+            class="btn btn-back"
+          >
+            {{ $t('login.backToHome') }}
           </a>
+          <router-link
+            to="/login"
+            class="btn btn-back btn-back-alt"
+          >
+            Back to Login
+          </router-link>
           <div class="logo-wrapper">
-            <img class="img-fluid" src="../../../public/assets/images/logo_dnext.png" alt="MKCL DNExT">
+            <img
+              class="img-fluid"
+              src="../../../public/assets/images/logo_dnext.png"
+              alt="MKCL DNExT"
+            >
           </div>
           <!-- <div class="alert-warning">We are updating the portal, the Mock exams will start from Thursday 22nd October 2020 at 10.00 AM</div>
           <br> -->
           <div class="form-wrapper">
             <div class="welcome-holder">
-              <div class="welcome-head">Thank You</div>
-              <div class="welcome-subhead">for registering with us!</div>
+              <div class="welcome-head">
+                Thank You
+              </div>
+              <div class="welcome-subhead">
+                for registering with us!
+              </div>
             </div>
             <div class="help-wrapper">
               <div class="copyright-holder">
-                <img src="../../../public/assets/images/logo_mkcl.svg" class="img-adj" alt="MKCL" />
+                <img
+                  src="../../../public/assets/images/logo_mkcl.svg"
+                  class="img-adj"
+                  alt="MKCL"
+                >
                 <div class="copyright">
                   Powered by
                   <a

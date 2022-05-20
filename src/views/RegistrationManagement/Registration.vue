@@ -562,17 +562,15 @@
                         maxLength="200"
                         v-model.trim="pleaseSpecify"
                         placeholder="Please Specify"
-                        id="fullName"
+                        ipleaseSpecifyInvalidd="fullName"
                         :class="{
-                          'is-invalid': submitted && !pleaseSpecifyBool
+                          'is-invalid': submitted && pleaseSpecifyInvalid
                         }"
                       />
                       <div
                         class="text-danger"
                         v-if="
-                          submitted &&
-                            (!minLengthPlease ||
-                            !maxLengthPlease)
+                          submitted && pleaseSpecifyInvalid
                         "
                       >
                         Text should be between 5 to 200 charachters
@@ -833,17 +831,16 @@ export default {
     }
   },
   computed: {
-    pleaseSpecifyBool () {
-      var res = this.other.reference.refferal === 'Other' && this.pleaseSpecify !== ''
-      return res
-    },
-    minLengthPlease () {
-      console.log(this.pleaseSpecify)
-      console.log(this.pleaseSpecify.length)
-      return this.pleaseSpecify.length >= 5
-    },
-    maxLengthPlease () {
-      return this.pleaseSpecify.length < 200
+    pleaseSpecifyInvalid () {
+      if (this.other.reference.refferal === 'Other') {
+        if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
+          return false
+        } else {
+          return true
+        }
+      } else {
+        return false
+      }
     }
   },
   // components: {
@@ -901,7 +898,9 @@ export default {
     },
     other: {
       preference: { required },
-      reference: { required }
+      reference: {
+        refferal: { required }
+      }
     }
   },
   created () {
@@ -1323,7 +1322,7 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid && vm.pleaseSpecifyBool && (this.minLengthPlease && this.maxLengthPlease)) {
+      } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'

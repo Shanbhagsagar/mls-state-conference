@@ -114,7 +114,6 @@
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
                       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                      :disabled-dates="disabledDateOfBirthDates"
                       v-model="basic.dateOfBirth"
                       :max="this.maxDate"
                       :min="this.minDate"
@@ -141,6 +140,76 @@
                     <small>
                       Your age should be between 18 to 58 Years .
                     </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="category"
+                    class="control-label form-label"
+                  >
+                    Category
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.category"
+                    :placeholder="$t('registration.categoryPlaceholder')"
+                    label="displayName"
+                    :options="category"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.category.required"
+                  >
+                    {{ $t('registration.vcategory') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="Mother Tongue"
+                    class="control-label form-label"
+                  >
+                    Mother Tongue
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.motherTongue"
+                    :placeholder="$t('registration.motherTonguePlaceholder')"
+                    label="displayName"
+                    :options="motherTongue"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.motherTongue.required"
+                  >
+                    {{ $t('registration.vmotherTongue') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="Mother Tongue"
+                    class="control-label form-label"
+                  >
+                    Language Known
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.languageKnown"
+                    :placeholder="$t('registration.languageKnownPlaceholder')"
+                    label="displayName"
+                    :options="motherTongue"
+                    multiple
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.languageKnown.required"
+                  >
+                    {{ $t('registration.vlanguageKnown') }}
                   </div>
                 </div>
               </div>
@@ -344,7 +413,62 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Address Details
+            </div>
             <div class="row">
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Address
+                    <span class="text-danger">*</span>
+                  </label>
+                  <textarea
+                    class="form-control"
+                    v-model.trim="address.address"
+                    placeholder="Enter Your Address"
+                    id="address"
+                    type="textarea"
+                    :class="{
+                      'is-invalid':
+                        submitted && $v.address.address.$invalid
+                    }"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.address.required"
+                  >
+                    {{ $t('registration.address') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    City/Village/Town
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    class="form-control"
+                    v-model.trim="address.city_village_town"
+                    placeholder="Enter Your City/Village/Town"
+                    id="city_village_town"
+                    :class="{
+                      'is-invalid':
+                        submitted && $v.address.city_village_town.$invalid
+                    }"
+                  >
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.city_village_town.required"
+                  >
+                    {{ $t('registration.city_village_town') }}
+                  </div>
+                </div>
+              </div>
               <div class="col-md-6 col-lg-4">
                 <div class="form-group">
                   <label
@@ -454,7 +578,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                       <label
                         for="exam"
@@ -480,11 +604,127 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-6 col-lg-4">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Year Of Passing
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input
+                        class="form-control"
+                        v-model.trim="qualification.yearOfPassing"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                        placeholder="Enter Your Year Of Passing"
+                        maxlength="4"
+                        minlength="4"
+                        id="yearOfPassing"
+                        :class="{
+                          'is-invalid':
+                            submitted && $v.qualification.yearOfPassing.$invalid
+                        }"
+                      >
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.qualification.yearOfPassing.required"
+                      >
+                        {{ $t('registration.yearOfPassing') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.qualification.yearOfPassing.numeric"
+                      >
+                        {{ $t('registration.yearOfPassing2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.qualification.yearOfPassing.minLength ||
+                            !$v.qualification.yearOfPassing.maxLength)
+                        "
+                      >
+                        {{ $t('registration.yearOfPassing3') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.qualification.yearOfPassing.minValue ||
+                            !$v.qualification.yearOfPassing.maxValue)
+                        "
+                      >
+                        {{ $t('registration.yearOfPassing4') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                    <div class="form-group">
+                      <label
+                        for="stream"
+                        class="control-label form-label"
+                      >
+                        Stream
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="qualification.stream"
+                        label="displayName"
+                        placeholder="Select Stream"
+                        :options="stream"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.qualification.stream.required &&
+                            $v.qualification.stream.$error
+                        "
+                      >
+                        {{ $t('registration.vstream') }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-12 d-flex justify-content-center">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customCheck3"
+                      value="checkbox3text"
+                      v-model="checked"
+                    >
+                    <label
+                      class="custom-control-label"
+                      for="customCheck3"
+                    >
+                      I agree to
+                      <a
+                        href="javascript:void(0)"
+                        id="show-btn"
+                        v-b-modal.modal-lg
+                        @click="$bvModal.show('tc-modal')"
+                      >Terms and Conditions.</a>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-action-alt">
+              <button
+                :disabled="checked === false"
+                type="button"
+                class="btn btn-page"
+                @click="applicantRegister()"
+              >
+                Apply
+              </button>
+            </div>
           </div>
-          <div class="card-form">
+          <!-- <div class="card-form">
             <div class="card-header card-header-alt">
               Other Details
             </div>
@@ -618,7 +858,7 @@
                 Register
               </button>
             </div>
-          </div>
+          </div> -->
           <div class="help-wrapper">
             <div class="copyright-holder">
               <img
@@ -711,8 +951,9 @@ import {
   minLength,
   maxLength,
   helpers,
-  email,
-  requiredIf
+  minValue,
+  maxValue,
+  email
 } from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
 var moment = require('moment')
@@ -746,6 +987,8 @@ export default {
           referral: ''
         }
       },
+      maxDate: '',
+      minDate: '',
       student_cred: {},
       isGenderSelected: false,
       iconChange: 'mdi mdi-eye',
@@ -764,6 +1007,9 @@ export default {
       courses: [],
       preferenceOptions: [],
       referralOptions: [],
+      motherTongue: [],
+      category: [],
+      stream: [],
       password: '',
       cnfpassword: '',
       countryId: null,
@@ -830,19 +1076,6 @@ export default {
       showGuardianFlag: false
     }
   },
-  computed: {
-    pleaseSpecifyInvalid () {
-      if (this.other.reference.refferal === 'Other') {
-        if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
-          return false
-        } else {
-          return true
-        }
-      } else {
-        return false
-      }
-    }
-  },
   // components: {
   //   Datepicker
   // },
@@ -853,6 +1086,12 @@ export default {
         numeric,
         minLength: minLength(6),
         maxLength: maxLength(6)
+      },
+      address: {
+        required
+      },
+      city_village_town: {
+        required
       },
       state: {
         required
@@ -865,14 +1104,22 @@ export default {
       dateOfBirth: {
         required
       },
+      category: {
+        required
+      },
       fullName: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(100),
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
       },
-
+      motherTongue: {
+        required
+      },
       gender: {
+        required
+      },
+      languageKnown: {
         required
       }
     },
@@ -894,12 +1141,17 @@ export default {
     qualification: {
       qualificationName: {
         required
-      }
-    },
-    other: {
-      preference: { required },
-      reference: {
-        refferal: { required }
+      },
+      yearOfPassing: {
+        required,
+        numeric,
+        minLength: minLength(4),
+        maxLength: maxLength(4),
+        minValue: minValue(1990),
+        maxValue: maxValue(2022)
+      },
+      stream: {
+        required
       }
     }
   },
@@ -940,7 +1192,7 @@ export default {
       // this.$store.dispatch('getServerTime').then((res) => {
       // let age = moment(res.result.date).diff(date, 'years', false)
 
-      var dateEntered = this.student.dateOfBirth
+      var dateEntered = this.basic.dateOfBirth
       let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
 
       if (age < 18 || age >= 58) {
@@ -982,6 +1234,9 @@ export default {
       vm.countryId = '001'
       await vm.getStatesByCountryId()
       await vm.getPreferences()
+      await vm.getCategory()
+      await vm.getLanguages()
+      await vm.getStream()
       // vm.stateId = vm.states.filter(
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
@@ -1176,6 +1431,20 @@ export default {
           }
         })
     },
+    getCategory () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZMBs80F5AGNcbK14MkePeJo8Z]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZMBs80F5AGNcbK14MkePeJo8Z', true)
+          if (rs.isValid('query_2CZMBs80F5AGNcbK14MkePeJo8Z')) {
+            this.category = res
+          } else {
+            rs.showErrorToast('query_2CZMBs80F5AGNcbK14MkePeJo8Z')
+          }
+        })
+    },
     getStatesByCountryId () {
       return new Promise((resolve) => {
         const vm = this
@@ -1197,9 +1466,6 @@ export default {
               vm.states = res
 
               //  if (vm.initflag){
-              vm.student.selectedState = vm.states.find(
-                (state) => state.stateName === 'Maharashtra'
-              ).stateId
               resolve()
             } else {
               rs.showErrorToast('query_293ccRYOvTADqM5DVvZGDX6ceNb')
@@ -1292,6 +1558,34 @@ export default {
           }
         })
     },
+    getStream () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZU59KPj3t4TvL466OdpGyQvw6]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZU59KPj3t4TvL466OdpGyQvw6', true)
+          if (rs.isValid('query_2CZU59KPj3t4TvL466OdpGyQvw6')) {
+            this.stream = res
+          } else {
+            rs.showErrorToast('query_2CZU59KPj3t4TvL466OdpGyQvw6')
+          }
+        })
+    },
+    getLanguages () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZPhRIpGKBepQdkdAzdxAYLMCE]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZPhRIpGKBepQdkdAzdxAYLMCE', true)
+          if (rs.isValid('query_2CZPhRIpGKBepQdkdAzdxAYLMCE')) {
+            this.motherTongue = res
+          } else {
+            rs.showErrorToast('query_2CZPhRIpGKBepQdkdAzdxAYLMCE')
+          }
+        })
+    },
     getReferrals () {
       const vm = this
       new MQL()
@@ -1322,26 +1616,26 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
+      } else if (!vm.$v.$invalid) {
         var sendData = {}
         sendData.basic = this.basic
-        sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
+        sendData.basic.dateOfBirth = this.basic.dateOfBirth
+        sendData.basic.motherTongue = this.basic.motherTongue.displayName
+        sendData.basic.languageKnown = this.basic.languageKnown.map(el => {
+          return el.displayName
+        })
+        sendData.basic.category = this.basic.category.displayName
         sendData.address = this.address
         sendData.address.district = this.address.district.displayName
         sendData.address.state = this.address.state.displayName
         sendData.basic.gender = this.basic.gender.value
+        sendData.basic.category = this.basic.category.displayName
         sendData.qualification = this.qualification
         sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
         sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
+        sendData.qualification.stream = this.qualification.stream.displayName
+        sendData.qualification.yearOfPassing = this.qualification.yearOfPassing
         sendData.contact = this.contact
-        sendData.other = this.other
-        sendData.other.preference = this.other.preference.location
-        sendData.other.reference = this.other.reference.refferal
-        if (sendData.other.reference === 'Other') {
-          sendData.other.reference = {
-            other: this.pleaseSpecify
-          }
-        }
         sendData.roleName = 'Applicant'
         new MQL()
           .setActivity('o.[RegisterUser]')

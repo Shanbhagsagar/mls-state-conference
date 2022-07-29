@@ -34,6 +34,8 @@
               {{ userData.basic.dateOfBirth.slice(0, 11) }}
             </div>
           </div>
+        </div>
+        <div class="row no-gutters">
           <div class="col-md-4 card-items">
             <div class="label">
               Category
@@ -54,7 +56,7 @@
             <div class="label">
               Langage Known
             </div>
-            <div class="value" >
+            <div class="value">
               {{ userData.basic.languageKnown.join(', ') }}
             </div>
           </div>
@@ -103,7 +105,9 @@
               {{ userData.address.state }}
             </div>
           </div>
-          <div class="col-md-4 card-items">
+        </div>
+        <div class="row no-gutters">
+          <div class="col-md-6 card-items">
             <div class="label">
               District:
             </div>
@@ -111,7 +115,7 @@
               {{ userData.address.district }}
             </div>
           </div>
-          <div class="col-md-4 card-items">
+          <div class="col-md-6 card-items">
             <div class="label">
               Pincode:
             </div>

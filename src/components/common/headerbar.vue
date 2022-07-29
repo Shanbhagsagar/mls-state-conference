@@ -8,8 +8,13 @@
       <span class="logo">
         <img
           class="img-fluid"
-          src="../../../public/assets/images/logo_dnext.png"
-          alt="MKCL DNExt"
+          src="../../../public/assets/images/bba-logo.png"
+          alt="BBA @ Work Place"
+        >
+        <img
+          class="img-fluid img-logo-alt"
+          src="../../../public/assets/images/wns-logo-black.svg"
+          alt="WNS"
         >
       </span>
     </div>
@@ -159,8 +164,11 @@ export default {
 </script>
 
 <style lang="scss">
+
 #top.headerbar {
-  background-image:linear-gradient(-225deg, #ff9544, #f50162 48%, #b3004a);
+ height: 64px;
+  background-image:linear-gradient(-225deg, #ff841a 5%, #e0004b 48%, #ce0052);
+  padding: 2px 10px;
 }
 // .btn-noti i {
 //   font-size: 25px;

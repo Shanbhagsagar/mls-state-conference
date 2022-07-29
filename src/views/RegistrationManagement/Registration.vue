@@ -13,11 +13,27 @@
           >
             Already a member? Login
           </router-link>
-          <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
+          <!-- <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
             <img
               class="img-fluid"
               src="../../../public/assets/images/logo_dnext.png"
               alt="MKCL Mock Exams"
+            >
+          </div> -->
+          <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
+            <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
+            <!-- <img class="img-fluid" src="../../public/assets/images/emblem.png" alt="GOI">
+            <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP">-->
+            <!--<h1>MKCL EXAM LIVE</h1>-->
+            <img
+              class="img-fluid"
+              src="../../../public/assets/images/bba-logo.png"
+              alt="BBA @ Work Place"
+            >
+            <img
+              class="img-fluid img-logo-alt"
+              src="../../../public/assets/images/wns-logo-black.svg"
+              alt="WNS"
             >
           </div>
           <div class="d-block text-center">
@@ -114,7 +130,6 @@
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
                       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                      :disabled-dates="disabledDateOfBirthDates"
                       v-model="basic.dateOfBirth"
                       :max="this.maxDate"
                       :min="this.minDate"
@@ -141,6 +156,76 @@
                     <small>
                       Your age should be between 18 to 58 Years .
                     </small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="category"
+                    class="control-label form-label"
+                  >
+                    Category
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.category"
+                    :placeholder="$t('registration.categoryPlaceholder')"
+                    label="displayName"
+                    :options="category"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.category.required"
+                  >
+                    {{ $t('registration.vcategory') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="Mother Tongue"
+                    class="control-label form-label"
+                  >
+                    Mother Tongue
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.motherTongue"
+                    :placeholder="$t('registration.motherTonguePlaceholder')"
+                    label="displayName"
+                    :options="motherTongue"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.motherTongue.required"
+                  >
+                    {{ $t('registration.vmotherTongue') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="Mother Tongue"
+                    class="control-label form-label"
+                  >
+                    Language Known
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="basic.languageKnown"
+                    :placeholder="$t('registration.languageKnownPlaceholder')"
+                    label="displayName"
+                    :options="motherTongue"
+                    multiple
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.languageKnown.required"
+                  >
+                    {{ $t('registration.vlanguageKnown') }}
                   </div>
                 </div>
               </div>
@@ -296,9 +381,9 @@
 
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.emailID.required"
+                        v-if="submitted && (!$v.contact.emailID.required || $v.contact.emailID.$invalid)"
                       >
-                        Please provide valid email
+                        Please Provide valid email
                       </div>
                     </div>
                   </div>
@@ -344,7 +429,71 @@
                 </div>
               </div>
             </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Address Details
+            </div>
             <div class="row">
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Address
+                    <span class="text-danger">*</span>
+                  </label>
+                  <textarea
+                    class="form-control"
+                    v-model.trim="address.address"
+                    placeholder="Enter Your Address"
+                    id="address"
+                    minLength="5"
+                    maxLength="200"
+                    type="textarea"
+                    :class="{
+                      'is-invalid':
+                        submitted && $v.address.address.$invalid
+                    }"
+                  />
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.address.required"
+                  >
+                    {{ $t('registration.address') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && (!$v.address.address.minLength ||
+                      !$v.address.address.maxLength)"
+                  >
+                    Address Length should be betwwen 5 To 200
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    City/Village/Town
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    class="form-control"
+                    v-model.trim="address.city_village_town"
+                    placeholder="Enter Your City/Village/Town"
+                    id="city_village_town"
+                    :class="{
+                      'is-invalid':
+                        submitted && $v.address.city_village_town.$invalid
+                    }"
+                  >
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.address.city_village_town.required"
+                  >
+                    {{ $t('registration.city_village_town') }}
+                  </div>
+                </div>
+              </div>
               <div class="col-md-6 col-lg-4">
                 <div class="form-group">
                   <label
@@ -454,7 +603,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                       <label
                         for="exam"
@@ -480,11 +629,115 @@
                       </div>
                     </div>
                   </div>
+                  <div class="col-md-6 col-lg-4">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Year Of Passing
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input
+                        class="form-control"
+                        v-model.trim="qualification.yearOfPassing"
+                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                        placeholder="Enter Your Year Of Passing"
+                        id="yearOfPassing"
+                        :class="{
+                          'is-invalid':
+                            submitted && $v.qualification.yearOfPassing.$invalid
+                        }"
+                      >
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.qualification.yearOfPassing.required"
+                      >
+                        {{ $t('registration.yearOfPassing') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.qualification.yearOfPassing.numeric"
+                      >
+                        {{ $t('registration.yearOfPassing2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.qualification.yearOfPassing.minValue ||
+                            !$v.qualification.yearOfPassing.maxValue)
+                        "
+                      >
+                        {{ $t('registration.yearOfPassing4') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                    <div class="form-group">
+                      <label
+                        for="stream"
+                        class="control-label form-label"
+                      >
+                        Stream
+                        <span class="text-danger">*</span>
+                      </label>
+                      <v-select
+                        v-model="qualification.stream"
+                        label="displayName"
+                        placeholder="Select Stream"
+                        :options="stream"
+                      />
+                      <div
+                        class="text-danger"
+                        v-if="
+                          !$v.qualification.stream.required &&
+                            $v.qualification.stream.$error
+                        "
+                      >
+                        {{ $t('registration.vstream') }}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-12 d-flex justify-content-center">
+                <div class="form-group">
+                  <div class="custom-control custom-checkbox">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      id="customCheck3"
+                      value="checkbox3text"
+                      v-model="checked"
+                    >
+                    <label
+                      class="custom-control-label"
+                      for="customCheck3"
+                    >
+                      I agree to
+                      <a
+                        href="javascript:void(0)"
+                        id="show-btn"
+                        v-b-modal.modal-lg
+                        @click="$bvModal.show('tc-modal')"
+                      >Terms and Conditions.</a>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-action-alt">
+              <button
+                :disabled="checked === false"
+                type="button"
+                class="btn btn-page"
+                @click="applicantRegister()"
+              >
+                Apply
+              </button>
+            </div>
           </div>
-          <div class="card-form">
+          <!-- <div class="card-form">
             <div class="card-header card-header-alt">
               Other Details
             </div>
@@ -618,7 +871,7 @@
                 Register
               </button>
             </div>
-          </div>
+          </div> -->
           <div class="help-wrapper">
             <div class="copyright-holder">
               <img
@@ -650,38 +903,278 @@
           <div class="modal-content-alt">
             <ol class="mb-2">
               <li>
-                {{ $t('registration.term1') }}
+                <b>Personal information and payment of fees</b>
+                <ol>
+                  <li>
+                    I, hereby, declare that, the entries made by me in the Application
+                    Form are complete and true to the best of my knowledge and
+                    based on records.
+                  </li>
+                  <li>
+                    “In case, you are selected by WNS, this offer would be made
+                    under WNS’s special initiative of Work-based learning leading to
+                    a Work-based degree BBA (Services Management) offered by
+                    Indira Gandhi National Open University (IGNOU) in collaboration
+                    with MKCL.
+                  </li>
+                  <li>
+                    Upon accepting this offer you agree to comply the necessary
+                    procedures stipulated by IGNOU and MKCL towards admission
+                    to BBA (Services Management) offered by IGNOU in ongoing /
+                    upcoming session (July or January).”
+                  </li>
+                  <li>
+                    I understand and accept that the program fees paid by me is
+                    non-refundable and non-transferable to anyone else and non-
+                    transferable to next year under any circumstances.
+                  </li>
+                  <li>
+                    I hereby undertake to present the original documents
+                    immediately upon demand by the concerned authorities.
+                  </li>
+                </ol>
               </li>
 
               <li>
-                {{ $t('registration.term2') }}
+                <b>Application</b>
+                <ol>
+                  <li>
+                    I understand and accept that in order to get admission to Work-
+                    based degree program, s/he needs to complete pre-admission
+                    process comprising of completing the profile, selecting the
+                    course &amp; work location(s), appearing for practice/ mock exam(As
+                    may be applicable as per university norms), main entrance exam
+                    (As may be applicable as per university norms), selecting the
+                    workplace provided by industry partners, personal Interview
+                    allotted to him/her by the system.
+                  </li>
+                  <li>
+                    I understand and accept that apart from educational eligibility
+                    criteria mentioned on the program website, some of the Industry
+                    Partners offering workplace, shall have separate selection
+                    criteria of Age, English communication and soft skills, IT skills,
+                    physical fitness etc.
+                  </li>
+                </ol>
               </li>
               <li>
-                {{ $t('registration.term3') }}
+                <b>Selection</b>
+                <ol>
+                  <li>
+                    the admission form sent directly to the University will NOT be
+                    accepted.
+                  </li>
+                  <li>
+                    the admission to BBA(SM) program by IGNOU may be granted
+                    only to those candidates who have received an internship letter
+                    from the industry partner offering the workplace.
+                  </li>
+                  <li>
+                    the industry partners reserve the right of offering internship
+                    based on their own selection norms for the internship, to any
+                    candidate who has passed IGNOU BBA (SM) entrance exam(As
+
+                    may be applicable as per university norms) and irrespective of
+                    the category to which the candidate may belong.
+                  </li>
+                  <li>
+                    neither MKCL nor IGNOU shall have any right and/or
+                    responsibility to impose any norms on the industry partners.
+                    Also they will not be responsible for the selection process done
+                    by the industry partners. Therefore, MKCL and/or IGNOU shall
+                    not be held liable by the candidate directly and/or indirectly for
+                    any cost or consequences arising from getting admission or
+                    otherwise to BBA(SM) program.
+                  </li>
+                  <li>
+                    after receiving the offer of internship from the industry partner,
+                    the admission to BBA(SM) shall be granted to all the selected
+                    candidates by IGNOU subject to their compliance with the
+                    eligibility criteria for the BBA(SM) programme.
+                  </li>
+                </ol>
               </li>
               <li>
-                {{ $t('registration.term4') }}
+                <b>Workplace offered by the Industry Partner</b>
+                <ol>
+                  <li>
+                    I understand that by accepting the Admission to this three-year
+                    degree program being offered collaboratively by Indira Gandhi
+                    National Open University (IGNOU) and Maharashtra Knowledge
+                    Corporation Limited (MKCL), I am getting associated with the
+                    Workplace provided by the industry partner
+                    company/organization as per mentioned in the Admission Letter,
+                    as a Student of this degree program for three years only.
+                  </li>
+                  <li>
+                    I understand and accept that it is necessary for me to perform at
+                    the Workplace allotted to me for three years continuously in
+                    order to get the degree mentioned above. The Workplace once
+                    allotted shall remain the same for all three years of the degree
+                    mentioned above.
+                  </li>
+                  <li>
+                    I understand and accept that in case intern leaves the Workplace
+                    before the stipulated period of the work based learning, s/he
+                    shall not be able to complete the work based component of
+                    continuous comprehensive evaluation necessary to appear for
+                    the term end examination thereby not getting considered eligible
+                    to appear for the respective term end examination attempt.
+                  </li>
+                  <li>
+                    I understand and accept that this is purely a temporary
+                    association for three years with the Workplace, under the
+                    program mentioned above and does not guarantee any job at
+                    the industry partner company/organization mentioned in the
+                    Internship Letter, either during or after 3 years degree program.
+                  </li>
+                  <li>
+                    I understand and accept that it is not mandatory to industry
+                    partner company/organization mentioned in the Internship
+                    Letter, to offer a job to me after completing three years of
+                    internship at the Workplace and I have no right whatsoever to
+
+                    claim any permanent employment or preference in selection
+                    during or after completion of the period of internship.
+                  </li>
+                  <li>
+                    I understand and accept that it is mandatory for me to join the
+                    Workplace on stipulated date and time as would be mentioned
+                    in the Internship offer letter / Scholarship Letter or any other
+                    form of communication from the industry partner
+                    company/organization providing Workplace, failing which my
+                    admission to the aforesaid degree program shall get
+                    automatically cancelled and I alone shall be fully responsible for
+                    the same./li>
+                  </li><li>
+                    I understand and accept that I shall abide by all the applicable
+                    and admissible rules, regulations and policies for scholars
+                    stipulated by the company/organization offering Workplace to
+                    me.
+                  </li>
+                </ol>
               </li>
               <li>
-                {{ $t('registration.term5') }}
+                <b>Learning, Assessment</b>
+                <ol>
+                  <li>
+                    I understand and accept that I will be regular in studying
+                    eLearning modules through the eLearning framework for which
+                    login shall be provided to me by MKCL, at mutually convenient
+                    timings agreed with the company/organization offering
+                    Workplace. Further, I understand that it is mandatory for me to
+                    complete the eLearning modules, take interim performance
+                    tests, submit assignments, activities etc. by following the
+                    schedule published by MKCL from time to time on program
+                    website – ignou.mkcl.org or bbaworkplace.mkcl.org I also
+                    promise to be punctual and proactive in completing my learning
+                    and assessment activities and shall be solely responsible to
+                    follow the communication being published on the website by
+                    MKCL from time to time.
+                  </li>
+                  <li>
+                    I understand and accept that the term end examinations are
+                    conducted by University as per the scheduled and norms of the
+                    University and I will have to fill in examination form for each
+                    course for term end examination by paying exam fees as
+                    stipulated by the University from time to time. I am aware and I
+                    agree that, I have to select exam center from the list of available
+                    exam centers of the University at the time of filling the
+                    examination form on University website – www.ignou.ac.in .
+                  </li>
+                </ol>
               </li>
               <li>
-                {{ $t('registration.term6') }}
-              </li>
-              <li>
-                {{ $t('registration.term7') }}
-              </li>
-              <li>
-                {{ $t('registration.term71') }}
-              </li>
-              <li>
-                {{ $t('registration.term8') }}
-              </li>
-              <li>
-                {{ $t('registration.term9') }}
-              </li>
-              <li>
-                {{ $t('registration.term10') }}
+                <b>Other</b>
+                <ol>
+                  <li>
+                    I understand and accept that 100% completion of in eLearning
+                    sessions is compulsory and I commit myself to adhere to the
+                    same.
+                  </li>
+                  <li>
+                    I understand and accept that I shall be entitled to holidays at the
+                    Workplace as per the rules and regulations stipulated by the
+
+                    company/organization offering Workplace which would be
+                    mentioned in the scholarship letter or any other form of
+                    communication to me. I understand that I will not have any right
+                    to claim for any kind of un-approved vacation other than that
+                    mentioned in the formal communication to me, which in case
+                    availed shall lead to action as per the norms of the
+                    company/organization offering Workplace and it will be
+                    mandatory for me to abide by it.
+                  </li>
+                  <li>
+                    I understand and accept that the terms and conditions in the
+                    scholarship letter or any other form of communication to me as
+                    a student under the above mentioned degree program are
+                    subject to change as per University norms from time to time and
+                    shall be mandatory and binding on me.
+                  </li>
+                  <li>
+                    I understand and accept that in the following cases student’s
+                    association with the workplace provided by the industry partner
+                    for the work-based degree program shall get cancelled and the
+                    learner will have to re-register for the program:
+                    <ul>
+                      <li>
+                        In case the learner fails to join the Workplace offered by
+                        Industry Partner (i.e. Learning Centre) on stipulated date
+                        and time OR
+                      </li>
+                      <li>
+                        In case s/he remains absent or is absconding for a period
+                        beyond consideration as per the policies of respective
+                        Workplace provided by the Industry Partner (i.e. Learning
+                        Centre) OR
+                      </li>
+                      <li>
+                        In case her/his performance at the Workplace is not
+                        satisfactory and therefore s/he has not been able to earn
+                        the work ratings necessary for the award of degree OR
+                      </li>
+                      <li>
+                        In case of non-performance s/he gets terminated at the
+                        Workplace before completion of 3 years OR
+                      </li>
+                      <li>Not having necessary eligibility qualification. </li>
+                      <li>
+                        Any other reason as per University norms stipulated for
+                        this program from time to time
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    I, hereby declare that, I shall be solely responsible if I am found
+                    involved in any kind of undesirable / indisciplinary activities
+                    outside the Workplace campus. I, further understand that, MKCL
+                    shall in no way provide any support to me and shall not be held
+                    responsible for my any such action.
+                  </li>
+                  <li>
+                    I, understand and accept that, my admission may be cancelled,
+                    at any stage, if I am found ineligible and/or the information
+                    provided by me is found incorrect/ false.
+                  </li>
+                  <li>
+                    I, hereby undertake to inform IGNOU/ MKCL, about any changes
+                    in the information submitted by me, in the Application Form and
+
+                    any other documents, including change in name, marital status,
+                    address, phone no. email id, from time to time.
+                  </li>
+                  <li>
+                    I, hereby declare that, I have read the rules related to admission
+                    and University rules mentioned in the prospectus of this
+                    program as well as on the University website and that the
+                    information furnished by me is true and complete to the best of
+                    my knowledge. I am aware that my admission will be finalized by
+                    the University. I further agree that the decision taken by the
+                    University and any changes made in the rules regarding
+                    admission from time to time will be binding on me.
+                  </li>
+                </ol>
               </li>
             </ol>
             <span class="terms-info">I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
@@ -711,8 +1204,9 @@ import {
   minLength,
   maxLength,
   helpers,
-  email,
-  requiredIf
+  minValue,
+  maxValue,
+  email
 } from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
 var moment = require('moment')
@@ -746,6 +1240,8 @@ export default {
           referral: ''
         }
       },
+      maxDate: '',
+      minDate: '',
       student_cred: {},
       isGenderSelected: false,
       iconChange: 'mdi mdi-eye',
@@ -764,6 +1260,9 @@ export default {
       courses: [],
       preferenceOptions: [],
       referralOptions: [],
+      motherTongue: [],
+      category: [],
+      stream: [],
       password: '',
       cnfpassword: '',
       countryId: null,
@@ -830,19 +1329,6 @@ export default {
       showGuardianFlag: false
     }
   },
-  computed: {
-    pleaseSpecifyInvalid () {
-      if (this.other.reference.refferal === 'Other') {
-        if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
-          return false
-        } else {
-          return true
-        }
-      } else {
-        return false
-      }
-    }
-  },
   // components: {
   //   Datepicker
   // },
@@ -853,6 +1339,14 @@ export default {
         numeric,
         minLength: minLength(6),
         maxLength: maxLength(6)
+      },
+      address: {
+        required,
+        minLength: minLength(5),
+        maxLength: maxLength(200)
+      },
+      city_village_town: {
+        required
       },
       state: {
         required
@@ -865,14 +1359,22 @@ export default {
       dateOfBirth: {
         required
       },
+      category: {
+        required
+      },
       fullName: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(100),
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
       },
-
+      motherTongue: {
+        required
+      },
       gender: {
+        required
+      },
+      languageKnown: {
         required
       }
     },
@@ -894,12 +1396,15 @@ export default {
     qualification: {
       qualificationName: {
         required
-      }
-    },
-    other: {
-      preference: { required },
-      reference: {
-        refferal: { required }
+      },
+      yearOfPassing: {
+        required,
+        numeric,
+        minValue: minValue(1990),
+        maxValue: maxValue(2022)
+      },
+      stream: {
+        required
       }
     }
   },
@@ -940,7 +1445,7 @@ export default {
       // this.$store.dispatch('getServerTime').then((res) => {
       // let age = moment(res.result.date).diff(date, 'years', false)
 
-      var dateEntered = this.student.dateOfBirth
+      var dateEntered = this.basic.dateOfBirth
       let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
 
       if (age < 18 || age >= 58) {
@@ -982,6 +1487,9 @@ export default {
       vm.countryId = '001'
       await vm.getStatesByCountryId()
       await vm.getPreferences()
+      await vm.getCategory()
+      await vm.getLanguages()
+      await vm.getStream()
       // vm.stateId = vm.states.filter(
       //   (state) => state.STATE_NAME == 'Maharashtra'
       // )[0].STATE_CODE
@@ -1176,6 +1684,20 @@ export default {
           }
         })
     },
+    getCategory () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZMBs80F5AGNcbK14MkePeJo8Z]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZMBs80F5AGNcbK14MkePeJo8Z', true)
+          if (rs.isValid('query_2CZMBs80F5AGNcbK14MkePeJo8Z')) {
+            this.category = res
+          } else {
+            rs.showErrorToast('query_2CZMBs80F5AGNcbK14MkePeJo8Z')
+          }
+        })
+    },
     getStatesByCountryId () {
       return new Promise((resolve) => {
         const vm = this
@@ -1197,9 +1719,6 @@ export default {
               vm.states = res
 
               //  if (vm.initflag){
-              vm.student.selectedState = vm.states.find(
-                (state) => state.stateName === 'Maharashtra'
-              ).stateId
               resolve()
             } else {
               rs.showErrorToast('query_293ccRYOvTADqM5DVvZGDX6ceNb')
@@ -1292,6 +1811,34 @@ export default {
           }
         })
     },
+    getStream () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZU59KPj3t4TvL466OdpGyQvw6]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZU59KPj3t4TvL466OdpGyQvw6', true)
+          if (rs.isValid('query_2CZU59KPj3t4TvL466OdpGyQvw6')) {
+            this.stream = res
+          } else {
+            rs.showErrorToast('query_2CZU59KPj3t4TvL466OdpGyQvw6')
+          }
+        })
+    },
+    getLanguages () {
+      // Automatically generated
+      new MQL()
+        .setActivity('o.[query_2CZPhRIpGKBepQdkdAzdxAYLMCE]')
+        .fetch()
+        .then(rs => {
+          let res = rs.getActivity('query_2CZPhRIpGKBepQdkdAzdxAYLMCE', true)
+          if (rs.isValid('query_2CZPhRIpGKBepQdkdAzdxAYLMCE')) {
+            this.motherTongue = res
+          } else {
+            rs.showErrorToast('query_2CZPhRIpGKBepQdkdAzdxAYLMCE')
+          }
+        })
+    },
     getReferrals () {
       const vm = this
       new MQL()
@@ -1313,6 +1860,28 @@ export default {
           }
         })
     },
+    prepareData () {
+      var sendData = {}
+      sendData.basic = this.basic
+      sendData.basic.dateOfBirth = this.basic.dateOfBirth
+      sendData.basic.motherTongue = this.basic.motherTongue.displayName
+      sendData.basic.languageKnown = this.basic.languageKnown.map(el => {
+        return el.displayName
+      })
+      sendData.address = this.address
+      sendData.address.district = this.address.district.displayName
+      sendData.address.state = this.address.state.displayName
+      sendData.basic.gender = this.basic.gender.value
+      sendData.basic.category = this.basic.category.displayName
+      sendData.qualification = this.qualification
+      sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+      sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
+      sendData.qualification.stream = this.qualification.stream.displayName
+      sendData.qualification.yearOfPassing = this.qualification.yearOfPassing
+      sendData.contact = this.contact
+      sendData.roleName = 'Applicant'
+      return sendData
+    },
     applicantRegister () {
       const vm = this
       vm.submitted = true
@@ -1322,27 +1891,8 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
-        var sendData = {}
-        sendData.basic = this.basic
-        sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-        sendData.address = this.address
-        sendData.address.district = this.address.district.displayName
-        sendData.address.state = this.address.state.displayName
-        sendData.basic.gender = this.basic.gender.value
-        sendData.qualification = this.qualification
-        sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
-        sendData.contact = this.contact
-        sendData.other = this.other
-        sendData.other.preference = this.other.preference.location
-        sendData.other.reference = this.other.reference.refferal
-        if (sendData.other.reference === 'Other') {
-          sendData.other.reference = {
-            other: this.pleaseSpecify
-          }
-        }
-        sendData.roleName = 'Applicant'
+      } else if (!vm.$v.$invalid) {
+        var sendData = this.prepareData()
         new MQL()
           .setActivity('o.[RegisterUser]')
           .setData(sendData)

@@ -365,9 +365,9 @@
 
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.emailID.required"
+                        v-if="submitted && (!$v.contact.emailID.required || $v.contact.emailID.$invalid)"
                       >
-                        Please provide valid email
+                        Please Provide valid email
                       </div>
                     </div>
                   </div>
@@ -431,6 +431,8 @@
                     v-model.trim="address.address"
                     placeholder="Enter Your Address"
                     id="address"
+                    minLength="5"
+                    maxLength="200"
                     type="textarea"
                     :class="{
                       'is-invalid':
@@ -442,6 +444,13 @@
                     v-if="submitted && !$v.address.address.required"
                   >
                     {{ $t('registration.address') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && (!$v.address.address.minLength ||
+                      !$v.address.address.maxLength)"
+                  >
+                    Address Length should be betwwen 5 To 200
                   </div>
                 </div>
               </div>
@@ -615,8 +624,6 @@
                         v-model.trim="qualification.yearOfPassing"
                         oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                         placeholder="Enter Your Year Of Passing"
-                        maxlength="4"
-                        minlength="4"
                         id="yearOfPassing"
                         :class="{
                           'is-invalid':
@@ -634,16 +641,6 @@
                         v-if="submitted && !$v.qualification.yearOfPassing.numeric"
                       >
                         {{ $t('registration.yearOfPassing2') }}
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="
-                          submitted &&
-                            (!$v.qualification.yearOfPassing.minLength ||
-                            !$v.qualification.yearOfPassing.maxLength)
-                        "
-                      >
-                        {{ $t('registration.yearOfPassing3') }}
                       </div>
                       <div
                         class="text-danger"
@@ -1088,7 +1085,9 @@ export default {
         maxLength: maxLength(6)
       },
       address: {
-        required
+        required,
+        minLength: minLength(5),
+        maxLength: maxLength(200)
       },
       city_village_town: {
         required
@@ -1145,8 +1144,6 @@ export default {
       yearOfPassing: {
         required,
         numeric,
-        minLength: minLength(4),
-        maxLength: maxLength(4),
         minValue: minValue(1990),
         maxValue: maxValue(2022)
       },
@@ -1607,6 +1604,28 @@ export default {
           }
         })
     },
+    prepareData () {
+      var sendData = {}
+      sendData.basic = this.basic
+      sendData.basic.dateOfBirth = this.basic.dateOfBirth
+      sendData.basic.motherTongue = this.basic.motherTongue.displayName
+      sendData.basic.languageKnown = this.basic.languageKnown.map(el => {
+        return el.displayName
+      })
+      sendData.address = this.address
+      sendData.address.district = this.address.district.displayName
+      sendData.address.state = this.address.state.displayName
+      sendData.basic.gender = this.basic.gender.value
+      sendData.basic.category = this.basic.category.displayName
+      sendData.qualification = this.qualification
+      sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
+      sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
+      sendData.qualification.stream = this.qualification.stream.displayName
+      sendData.qualification.yearOfPassing = this.qualification.yearOfPassing
+      sendData.contact = this.contact
+      sendData.roleName = 'Applicant'
+      return sendData
+    },
     applicantRegister () {
       const vm = this
       vm.submitted = true
@@ -1617,26 +1636,7 @@ export default {
           icon: 'error'
         })
       } else if (!vm.$v.$invalid) {
-        var sendData = {}
-        sendData.basic = this.basic
-        sendData.basic.dateOfBirth = this.basic.dateOfBirth
-        sendData.basic.motherTongue = this.basic.motherTongue.displayName
-        sendData.basic.languageKnown = this.basic.languageKnown.map(el => {
-          return el.displayName
-        })
-        sendData.basic.category = this.basic.category.displayName
-        sendData.address = this.address
-        sendData.address.district = this.address.district.displayName
-        sendData.address.state = this.address.state.displayName
-        sendData.basic.gender = this.basic.gender.value
-        sendData.basic.category = this.basic.category.displayName
-        sendData.qualification = this.qualification
-        sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
-        sendData.qualification.stream = this.qualification.stream.displayName
-        sendData.qualification.yearOfPassing = this.qualification.yearOfPassing
-        sendData.contact = this.contact
-        sendData.roleName = 'Applicant'
+        var sendData = this.prepareData()
         new MQL()
           .setActivity('o.[RegisterUser]')
           .setData(sendData)

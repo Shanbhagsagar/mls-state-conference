@@ -286,15 +286,16 @@ a {color: lighten($pricolor, 5%);
   background-size: cover;
   background-attachment: fixed;
   position: relative;
-  &::before{
+  &::before{    
     content: "";
     position: absolute;
-    background: #ff4380;
+    //background: #ff991a;
+    background-color: #c5812e;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.9;
+    opacity: 0.5;
   }
   // background: url(../../../public/assets/images/bg.jpg) no-repeat center / cover;
   .card-login {
@@ -374,6 +375,9 @@ a {color: lighten($pricolor, 5%);
         // img {margin-right: auto; margin-left: 0;}
         img{
           height: 70px;
+          &.img-logo-alt{
+            height: 54px;
+          }
         }
       }
     }
@@ -2398,6 +2402,7 @@ $dwidth: 120px;
 .headerbar .applogo .logo{
   height: 54px;
   display: inline-flex;
+  align-items: center;
   padding: 6px 10px 4px;
   width: auto;
   background-color: #fff;
@@ -2405,6 +2410,9 @@ $dwidth: 120px;
   img{
     height: 100%;
     margin-right: 6px;
+    &.img-logo-alt{
+      height: 36px;
+    }
     &:last-child{
       margin-right: 0;
     }
@@ -3011,11 +3019,19 @@ $dwidth: 120px;
       padding: 70px 20px;
     }
   }
-  .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {flex-direction: column;}
+  // .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {
+  //   flex-direction: column;
+  //   img{
+  //     margin: 8px 0;      
+  //   }
+  // }
   .help-wrapper {
     .logo-holder {
       .item {width: auto;}
     }
+  }
+  .headerbar .applogo {
+    padding: 0 10px 0 0;
   }
 }
 @media (max-width:576.98px){
@@ -3053,6 +3069,13 @@ $dwidth: 120px;
   .wrapper .content-area{
     padding-left: 12px;
     padding-right: 12px;
+  }
+
+  .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {
+    flex-direction: column;
+    img{
+      margin: 8px 0;      
+    }
   }
 }
 

@@ -31,7 +31,7 @@
               alt="BBA @ Work Place"
             >
             <img
-              class="img-fluid"
+              class="img-fluid img-logo-alt"
               src="../../../public/assets/images/wns-logo-black.svg"
               alt="WNS"
             >

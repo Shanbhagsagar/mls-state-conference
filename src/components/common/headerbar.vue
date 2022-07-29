@@ -12,7 +12,7 @@
           alt="BBA @ Work Place"
         >
         <img
-          class="img-fluid"
+          class="img-fluid img-logo-alt"
           src="../../../public/assets/images/wns-logo-black.svg"
           alt="WNS"
         >
@@ -164,8 +164,11 @@ export default {
 </script>
 
 <style lang="scss">
+
 #top.headerbar {
+ height: 64px;
   background-image:linear-gradient(-225deg, #ff841a 5%, #e0004b 48%, #ce0052);
+  padding: 2px 10px;
 }
 // .btn-noti i {
 //   font-size: 25px;

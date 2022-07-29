@@ -9,20 +9,15 @@
           >
             Back to Login
           </router-link>
-          <div class="logo-wrapper logo-wrapper-alt">
+          <div class="logo-wrapper">
             <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
             <!-- <img class="img-fluid" src="../../public/assets/images/emblem.png" alt="GOI">
-            <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP">-->
-            <!--<h1>MKCL EXAM LIVE</h1>-->
+            <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP"> -->
+            <!-- <h1>MKCL EXAM LIVE</h1> -->
             <img
               class="img-fluid"
-              src="../../../public/assets/images/bba-logo.png"
-              alt="BBA @ Work Place"
-            >
-            <img
-              class="img-fluid img-logo-alt"
-              src="../../../public/assets/images/wns-logo-black.svg"
-              alt="WNS"
+              src="../../../public/assets/images/logo_dnext.png"
+              alt="MKCL MKCL DNExT"
             >
           </div>
           <div class="card-header">

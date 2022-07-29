@@ -35,14 +35,6 @@
               {{ userData.basic.dateOfBirth.slice(0,11) }}
             </div>
           </div>
-          <div class="col-md-4 card-items">
-            <div class="label">
-              category
-            </div>
-            <div class="value">
-              {{ userData.basic.category }}
-            </div>
-          </div>
         </div>
         <div class="row no-gutters">
           <div class="col-md-6 card-items">

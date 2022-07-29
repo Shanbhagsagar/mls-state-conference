@@ -1,10 +1,11 @@
 $fontcolor        : /*#576989*/ #555;
 $pricolor         : #ce0052/*#399bff*/;
 $pricolor-alt     : #e0004b;
-$seccolor         : #ff841a;
-$seccolor-alt     : #ff5e12;
+$seccolor         : #ff9f55;
+$seccolor-alt     : #f1791c;
 $bgcolor          : #f5f5f5;
 $bgcolor-alt      : #f7f7f7;
+
 body {
   /*overflow: hidden;*/
   color: $fontcolor;
@@ -286,16 +287,15 @@ a {color: lighten($pricolor, 5%);
   background-size: cover;
   background-attachment: fixed;
   position: relative;
-  &::before{    
+  &::before{
     content: "";
     position: absolute;
-    //background: #ff991a;
-    background-color: #c5812e;
+    background: #811756;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.5;
+    opacity: 0.9;
   }
   // background: url(../../../public/assets/images/bg.jpg) no-repeat center / cover;
   .card-login {
@@ -367,22 +367,12 @@ a {color: lighten($pricolor, 5%);
         color: #676767;
         margin: 0;
       }
-      &.logo-wrapper-alt {
-        padding-bottom: 40px;
-        padding-top: 34px;
-        margin-bottom: 0;
-        flex-direction: row;
+      &.logo-wrapper-alt {margin-bottom: 20px; padding-top: 0; flex-direction: row;
         // img {margin-right: auto; margin-left: 0;}
-        img{
-          height: 70px;
-          &.img-logo-alt{
-            height: 54px;
-          }
-        }
       }
     }
   }
-  .login-block .logo-wrapper.logo-wrapper-alt2 {margin-bottom: 0; padding-bottom: 20px;
+  .login-block .logo-wrapper.logo-wrapper-alt2 {margin-bottom: 10px;
     + .d-block .modal-title {margin-top: 0;}
   }
   .logo-title {padding: 5px 0; font-size: 30px; line-height: 36px; font-weight: 600; color: #444;
@@ -1862,7 +1852,7 @@ header {
 
 .btn-purple{
   color: #fff;
-  background-image: linear-gradient(-180deg, #ff841a 50%, #ff5e12 50%);
+  background-image: linear-gradient(-180deg, #f06a03 50%, #f1791c 50%);
   background-size: 100% 200%;
   background-position: bottom center; 
   transition: all 0.2s ease;
@@ -2286,7 +2276,7 @@ $dwidth: 120px;
     }
   } 
 }
-@media screen and (max-width:767px){
+@media screen and(max-width:767px){
   .pagination-holder{
     text-align: center;
     justify-content: center;
@@ -2392,7 +2382,7 @@ $dwidth: 120px;
 //LOGO
 .applogo {
   padding: 0;
-  width: auto;
+  width: 200px;
   background: transparent;
   display: flex; align-items: center; justify-content: center;
   .logo-title {font-size: 24px; line-height: 28px;
@@ -2401,21 +2391,13 @@ $dwidth: 120px;
 }
 .headerbar .applogo .logo{
   height: 54px;
-  display: inline-flex;
-  align-items: center;
+  display: inline-block;
   padding: 6px 10px 4px;
   width: auto;
   background-color: #fff;
   border-radius: 4px;
   img{
     height: 100%;
-    margin-right: 6px;
-    &.img-logo-alt{
-      height: 36px;
-    }
-    &:last-child{
-      margin-right: 0;
-    }
   }
 }
 
@@ -2502,15 +2484,14 @@ $dwidth: 120px;
   border: none;
   color: #fff;
   padding: 10px 40px;
-  //box-shadow:  0px 25px 40px rgba(#ff8629, 0.25);
-  //background-image: linear-gradient(to right bottom, #ff9f55 40%, #f1791c 100%);
-  background-image: linear-gradient(270deg, #ff841a 0%, #ff5e12 100%);
+  box-shadow:  0px 25px 40px rgba(#ff8629, 0.25);
+  background-image: linear-gradient(to right bottom, #ff9f55 40%, #f1791c 100%);
   background-size: 100% 200%;
   background-position: bottom center;
   transition: all 0.2s ease;
   &:hover, &:focus{
-    background-color: #ff841a;  
-    //box-shadow:  0px 15px 20px rgba(#ff8629, 0.45);
+    background-color: #ff913d;  
+    box-shadow:  0px 15px 20px rgba(#ff8629, 0.45);
     color: #fff;
     text-decoration: none;
     outline: none;
@@ -3019,19 +3000,11 @@ $dwidth: 120px;
       padding: 70px 20px;
     }
   }
-  // .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {
-  //   flex-direction: column;
-  //   img{
-  //     margin: 8px 0;      
-  //   }
-  // }
+  .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {flex-direction: column;}
   .help-wrapper {
     .logo-holder {
       .item {width: auto;}
     }
-  }
-  .headerbar .applogo {
-    padding: 0 10px 0 0;
   }
 }
 @media (max-width:576.98px){
@@ -3069,13 +3042,6 @@ $dwidth: 120px;
   .wrapper .content-area{
     padding-left: 12px;
     padding-right: 12px;
-  }
-
-  .card-wrapper .login-block .logo-wrapper.logo-wrapper-alt {
-    flex-direction: column;
-    img{
-      margin: 8px 0;      
-    }
   }
 }
 

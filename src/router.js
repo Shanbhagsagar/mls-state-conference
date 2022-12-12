@@ -124,6 +124,15 @@ const router = new Router({
       },
     },
     {
+      path: '/HireUs',
+      name: 'HireUs',
+      component: loadView('HireUs'),
+      meta: {
+        title: 'HireUs',
+        icon: 'mdi mdi-information-variant',
+      },
+    },
+    {
       path: '/success',
       name: 'success',
       component: loadApplicantView('success'),

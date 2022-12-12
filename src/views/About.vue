@@ -27,6 +27,10 @@
               <b-nav-item to="/">
                 Home
               </b-nav-item>
+           
+              <b-nav-item to="/HireUs">
+                Hire US
+              </b-nav-item>
               <b-nav-item to="/about">
                 About
               </b-nav-item>

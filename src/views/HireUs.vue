@@ -162,7 +162,7 @@
             </div>
           </div>
 
-                    <div class="card-form">
+            <div class="card-form">
             <div class="card-header card-header-alt">
               Employer  Details
             </div>
@@ -355,7 +355,7 @@
                   <div
                     class="col-md-6 col-lg-5"
                     v-if="showEmailOtpField == true"
-                  >
+                  ><table></table>
                     <div class="form-group">
                       <label
                         class="control-label form-label"
@@ -432,18 +432,7 @@
                           >
                              {{ $t('HireUs.vJobRole') }}
                            </div>
-                            <div
-                              class="text-danger"
-                              v-if="submitted && !$v.jobDetails1.jobeRole1.maxLength"
-                            >
-                                  {{ $t('HireUs.vsMaxLength') }} 100 charachters
-                            </div>
-                             <div
-                              class="text-danger"
-                               v-if="submitted && !$v.jobDetails1.jobeRole1.minLength"
-                              >
-                                  {{ $t('HireUs.vsMinLength') }} 4 charachters
-                            </div>
+                          
                   </div>
                </div>
 
@@ -454,10 +443,6 @@
                        No Of Opening 
                         <span class="text-danger">*</span>
                       </label>
-                     
-
-
-
                       <input
                        oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                         class="form-control"
@@ -497,9 +482,9 @@
                       placeholder="DD/MM/YYYY"
                       format="dd-MM-yyyy"
                       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                      locale=""
                       :min="min" :max="max"
                       v-model="jobDetails1.tentativeJoiningDate1"
-                     
                       :input-class="{
                         'form-control': 'form-control',
                       }"
@@ -533,14 +518,16 @@
                     label="displayName"
                     :placeholder="$t('registration.statePlaceholder')"
                     :options="states"
-                    :value="jobDetails1.state"
+                    :value="address.state"
                     @input="getDistrictsByStateId()"
                   />
+
+                  <p>{{address.state}}</p>
                   <div
                     class="text-danger"
                     v-if="
-                      !$v.jobDetails1.state.required &&
-                        $v.jobDetails1.state.$error
+                      !$v.address.state.required &&
+                        $v.address.state.$error
                     "
                   >
                     {{ $t('registration.vstate') }}
@@ -563,13 +550,13 @@
                     label="displayName"
                     :placeholder="$t('registration.districtPlaceholder')"
                     :options="districts"
-                    :value="jobDetails1.district"
+                    :value="address.district"
                   />
                   <div
                     class="text-danger"
                     v-if="
-                      !$v.jobDetails1.district.required &&
-                        $v.jobDetails1.district.$error
+                      !$v.address.district.required &&
+                        $v.address.district.$error
                     "
                   >
                     {{ $t('registration.vdistrict') }}
@@ -584,7 +571,7 @@
                   </label>
                   <input
                     class="form-control"
-                    v-model.trim="jobDetails1.pincode"
+                    v-model.trim="address.pincode"
                     oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                     placeholder="Enter Your Pincode"
                     maxlength="6"
@@ -592,31 +579,17 @@
                     id="pincode"
                     :class="{
                       'is-invalid':
-                        submitted && $v.jobDetails1.pincode.$invalid
+                        submitted && $v.address.pincode.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.pincode.required"
+                    v-if="submitted && !$v.address.pincode.required"
                   >
                     {{ $t('registration.pincode') }}
                   </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.pincode.numeric"
-                  >
-                    {{ $t('registration.pincode2') }}
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="
-                      submitted &&
-                        (!$v.jobDetails1.pincode.minLength ||
-                        !$v.jobDetails1.pincode.maxLength)
-                    "
-                  >
-                    {{ $t('registration.pincode3') }}
-                  </div>
+                 
+                  
                 </div>
               </div>
 
@@ -694,8 +667,8 @@
                     <span class="text-danger">*</span>
                   </label>
                   
-                  <input
-                  data-role="tagsinput"
+                  <!-- <input
+                  data-role="skillsRequiredinput"
                     oninput=""
                     class="form-control"
                     minLength="1"
@@ -706,13 +679,19 @@
                       'is-invalid': submitted && $v.jobDetails1.skillsRequired.$invalid
                     }"
                   >
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.skillsRequired.required"
-                  >
-                    {{ $t('HireUs.vskillsRequired') }}
-                  </div>
-                 
+                   -->
+                
+                 <div>
+                  
+                  <b-form-tags class="form-control" 
+                   input-id="skillsRequired"
+                    v-model="jobDetails1.skillsRequired"
+                    tag-variant="warning"
+                    size="lg"
+                    separator=" "
+                    placeholder="Enter new skills  separated by space"></b-form-tags>
+                  <label for="skillsRequired-basic">Type a new tag and press enter</label>
+                  </div> 
                 </div>
              </div>
             </div>
@@ -856,8 +835,12 @@ import {
   requiredIf
 } from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
+
+
+
 var moment = require('moment')
 export default {
+
   data () {
     const now = new Date()
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -876,6 +859,7 @@ export default {
        value: '',
         min: minDate,
         max: maxDate,
+        dirty: false,
       
       address: {
         district: null,
@@ -895,17 +879,17 @@ export default {
         noOfOpening1:'',
         locationOfJob1:'',
         minSalary:'',
-        maxSalary:'',
+         maxSalary:'',
         tentativeJoiningDate1:'',
         RequiredSkills1:'',
-        salaryRange1:'',
-        skillsRequired:[],
+        skillsRequired: [],
+       
+       
 
       },
       employerDetails:{
         contactPersonName:'',
-        contactPersonEmailID:'',
-        contactPersonNumber:''
+   
       },
       contact: {
         emailID: '',
@@ -913,6 +897,7 @@ export default {
         votp: '',
         eotp: ''
       },
+      
       
 
       
@@ -969,18 +954,20 @@ export default {
     
   },
   computed: {
-    pleaseSpecifyInvalid () {
-      if (this.other.reference.refferal === 'Other') {
-        if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
-          return false
-        } else {
-          return true
-        }
-      } else {
-        return false
+   
+    
+      skillsRequired(newValue, oldValue) {
+        // Set the dirty flag on first change to the skillsRequired array
+        this.dirty = true
+      }
+    ,
+    Tagstate() {
+        // Overall component validation state
+        return this.dirty ? (this.skillsRequired.length > 2 && this.skillsRequired.length < 9) : null
       }
     }
-  },
+  ,
+   
   // components: {
   //   Datepicker
   // },
@@ -990,15 +977,8 @@ export default {
     
       OrganizationWebsite: {
         required,
-        minLength: minLength(4),
-        maxLength: maxLength(20),
-        isWebsiteValid: helpers.regex('isWebsiteValid', /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/)
-      },
-      fullName: {
-        required,
-        minLength: minLength(4),
-        maxLength: maxLength(20),
-        isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
+      
+      
       },
       OrganizationName: {
         required,
@@ -1012,14 +992,10 @@ export default {
     },
     jobDetails1:{
       jobeRole1:{
-        required,
-        minLength: minLength(4),
-        maxLength: maxLength(20),
+        required
       },
       noOfOpening1:{
         required,
-        minLength: minLength(1),
-        maxLength: maxLength(3),
       },
       minSalary:{
         required,
@@ -1036,33 +1012,16 @@ export default {
       }, 
       skillsRequired:{
           required
-      },
-      
-      pincode: {
-        required,
-        numeric,
-        minLength: minLength(6),
-        maxLength: maxLength(6)
-      },
-      state: {
-        required
-      },
-      district: {
-        required
       }
-    },
-    
+    }, 
     employerDetails:{
         contactPersonName:{
           required,
-           minLength: minLength(4),
-        maxLength: maxLength(20),
+           minLength: minLength(4)
+    
         },
         
       },
-    
-    
-    
     contact: {
       emailID: {
         email,
@@ -1079,6 +1038,17 @@ export default {
       votp: { required },
       eotp: { required }
     },
+    address:{
+      pincode:{
+        required
+      },
+      state:{
+        required
+      },
+      district:{
+        required
+      }
+    }
    
    
   },
@@ -1102,11 +1072,7 @@ export default {
   },
   mounted () {
     // this.getDistrictsByStateId()
-    this.getClassDetails()
-    this.getPreferences()
-    
-    this.getReferrals()
-    this.getOrganizationDetails()
+ 
     
   },
   methods: {
@@ -1115,45 +1081,13 @@ export default {
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
       })
-    },
-
-
-    getOrganizationDetails(){
-      const vm = this
-      // Automatically generated
-			new MQL()
-			.setActivity("o.[query_2Hqfg3G8nTPfItVYAmAnC8pfNMa]")
-			
-			.fetch()
-			 .then(rs => {
-			let res = rs.getActivity("query_2Hqfg3G8nTPfItVYAmAnC8pfNMa",true)
-			if (rs.isValid("query_2Hqfg3G8nTPfItVYAmAnC8pfNMa")) {
-        if (res != null){
-          vm.sector =[]
-          vm.sector=res
-        }
-			} else
-			 { 
-			rs.showErrorToast("query_2Hqfg3G8nTPfItVYAmAnC8pfNMa")
-			}
-			})
-    }
-    ,
+    }, tagValidator(tag) {
+        // Individual tag validator function
+        return tag === tag.toLowerCase() && tag.length > 2 && tag.length < 6
+      },
+    
   
-    validateAge () {
-      // this.$store.dispatch('getServerTime').then((res) => {
-      // let age = moment(res.result.date).diff(date, 'years', false)
-
-      var dateEntered = this.student.dateOfBirth
-      let age = moment(this.currentDateTime).diff(dateEntered, 'years', false)// let age = 20
-
-      if (age < 18 || age >= 58) {
-        this.isAgeValid = false
-      } else {
-        this.isAgeValid = true
-      }
-      // })
-    },
+ 
     phonenumber (mobileNumber) {
       var phoneNo = /^((?![0-5])[0-9]{10})$/
 
@@ -1170,10 +1104,6 @@ export default {
       const vm = this
       vm.checked = true
       vm.$bvModal.hide('tc-modal')
-    },
-    genderSelected () {
-      const vm = this
-      vm.isGenderSelected = true
     },
     async starter () {
       const vm = this
@@ -1452,31 +1382,37 @@ export default {
       } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
         var sendData = {}
         sendData.basic = this.basic
-        sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
         sendData.address = this.address
+        sendData.jobDetails1= this.jobDetails1
+        sendData.employerDetails=this.employerDetails
         sendData.address.district = this.address.district.displayName
         sendData.address.state = this.address.state.displayName
-        sendData.basic.gender = this.basic.gender.value
-        sendData.qualification = this.qualification
-        sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
         sendData.contact = this.contact
-        sendData.other = this.other
-        sendData.other.preference = this.other.preference.location
-        sendData.other.reference = this.other.reference.refferal
-        if (sendData.other.reference === 'Other') {
-          sendData.other.reference = {
-            other: this.pleaseSpecify
-          }
-        }
-        sendData.roleName = 'Applicant'
+
+
+        sendData.roleName = 'Employer'
+
+      
+					// Automatically generated
+		
+      
+			
+
+
+
+
+
+
+
+
         new MQL()
-          .setActivity('o.[RegisterUser]')
+          .setActivity('o.[EmployerHD]')
+          .setHeader({'Service-Branch':'DNExT_BRANCH'})
           .setData(sendData)
           .fetch()
           .then((rs) => {
-            let res = rs.getActivity('RegisterUser', true)
-            if (rs.isValid('RegisterUser')) {
+            let res = rs.getActivity('EmployerHD', true)
+            if (rs.isValid('EmployerHD')) {
               if (res.result.result === 'Success') {
                 this.$toasted.success('Registration Successfull', {
                   theme: 'bubble',
@@ -1490,7 +1426,7 @@ export default {
                 this.$toasted.error(res.result.result, { duration: 3000 })
               }
             } else {
-              rs.showErrorToast('RegisterUser')
+              rs.showErrorToast('EmployerHD')
             }
           })
       } else {

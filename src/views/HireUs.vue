@@ -401,34 +401,36 @@
             </div>
           </div>
 
-          <div class="card-form">
+          <div class="card-form" v-for="(jobDetail, index) in jobDetails1" :key="index">
             <div class="card-header card-header-alt">
               Job  Details
             </div>
 
-           <div class="row">
+           <div class="row" >
               <div class="col-md-12 col-lg-4">
                  <div class="form-group">
+
                      <label class="control-label form-label">
                        Job Role
                         <span class="text-danger">*</span>
                       </label>
+
                       <input
                        oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
                         class="form-control"
                         minLength="4"
                         maxLength="15"
-                        v-model.trim="jobDetails1.jobeRole1"
+                        v-model.trim="jobDetails1[index].jobeRole1"
                         :placeholder="$t('HireUs.JobRole')"
                         id="jobRole"
                         :class="{
-                         'is-invalid': submitted && $v.jobDetails1.jobeRole1.$invalid
+                         'is-invalid': submitted && $v.jobDetails1[index].jobeRole1.$invalid
                         }"
                         >
                         
                          <div
                            class="text-danger"
-                           v-if="submitted && !$v.jobDetails1.jobeRole1.required"
+                           v-if="submitted && !$v.jobDetails1[index].jobeRole1.required"
                           >
                              {{ $t('HireUs.vJobRole') }}
                            </div>
@@ -448,17 +450,18 @@
                         class="form-control"
                         minLength="1"
                         maxLength="3"
-                        v-model.trim="jobDetails1.noOfOpening1"
+                        v-model.trim="jobDetails1[index].noOfOpening1"
+                        :name="`jobDetails1[${index}][noOfOpening1]`"
                         :placeholder="$t('HireUs.noOfOpening1')"
                         id="noOfOpening1"
                         :class="{
-                         'is-invalid': submitted && $v.jobDetails1.noOfOpening1.$invalid
+                         'is-invalid': submitted && $v.jobDetails1[index].noOfOpening1.$invalid
                         }"
                         >
                         
                          <div
                            class="text-danger"
-                           v-if="submitted && !$v.jobDetails1.noOfOpening1.required"
+                           v-if="submitted && !$v.jobDetails1[index].noOfOpening1.required"
                           >
                              {{ $t('HireUs.vnoOfOpening1') }}
                            </div>
@@ -484,19 +487,20 @@
                       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                       locale=""
                       :min="min" :max="max"
-                      v-model="jobDetails1.tentativeJoiningDate1"
+                      v-model="jobDetails1[index].tentativeJoiningDate1"
+                      :name="`jobDetails1[${index}][tentativeJoiningDate1]`"
                       :input-class="{
                         'form-control': 'form-control',
                       }"
                       :class="{
                         'is-invalid':
-                          submitted && $v.jobDetails1.tentativeJoiningDate1.$invalid,
+                          submitted && $v.jobDetails1[index].tentativeJoiningDate1.$invalid,
                       }"
                     />
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.tentativeJoiningDate1.required"
+                    v-if="submitted && !$v.jobDetails1[index].tentativeJoiningDate1.required"
                   >
                     {{ $t('HireUs.vJD') }}
                   </div>
@@ -514,24 +518,17 @@
                   <span class="text-danger">*</span>
 
                   <v-select
-                    v-model="address.state"
+                    v-model="jobDetails1[index].state"
+                  
                     label="displayName"
                     :placeholder="$t('registration.statePlaceholder')"
                     :options="states"
-                    :value="address.state"
-                    @input="getDistrictsByStateId()"
+                    :value="jobDetails1[index].state"
+                    @input="getDistrictsByStateId(index)"
                   />
 
-                  <p>{{address.state}}</p>
-                  <div
-                    class="text-danger"
-                    v-if="
-                      !$v.address.state.required &&
-                        $v.address.state.$error
-                    "
-                  >
-                    {{ $t('registration.vstate') }}
-                  </div>
+                  <p>{{jobDetails1[index].state}}</p>
+                 
                 </div>
               </div>
               <div class="col-md-6 col-lg-4">
@@ -545,23 +542,17 @@
                   </label>
 
                   <v-select
-
-                    v-model="address.district"
+                    v-model="jobDetails1[index].district"
+                    :name="`jobDetails1[${index}][district]`"
                     label="displayName"
                     :placeholder="$t('registration.districtPlaceholder')"
                     :options="districts"
-                    :value="address.district"
+                    :value="jobDetails1[index].district"
                   />
-                  <div
-                    class="text-danger"
-                    v-if="
-                      !$v.address.district.required &&
-                        $v.address.district.$error
-                    "
-                  >
-                    {{ $t('registration.vdistrict') }}
-                  </div>
+
+                <p>{{jobDetails1[index].district}}</p>
                 </div>
+
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="form-group">
@@ -571,7 +562,8 @@
                   </label>
                   <input
                     class="form-control"
-                    v-model.trim="address.pincode"
+                    v-model.trim="jobDetails1[index].pincode"
+                    :name="`jobDetails1[${index}][pincode]`"
                     oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                     placeholder="Enter Your Pincode"
                     maxlength="6"
@@ -579,12 +571,12 @@
                     id="pincode"
                     :class="{
                       'is-invalid':
-                        submitted && $v.address.pincode.$invalid
+                        submitted && $v.jobDetails1[index].pincode.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.address.pincode.required"
+                    v-if="submitted && !$v.jobDetails1[index].pincode.required"
                   >
                     {{ $t('registration.pincode') }}
                   </div>
@@ -603,18 +595,17 @@
                   <input
                     oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                     class="form-control"
-                
-                    v-model.trim="jobDetails1.minSalary"
+                    :name="`jobDetails1[${index}][minSalary]`"
+                    v-model.trim="jobDetails1[index].minSalary"
                     id="minSalary"
                     :class="{
-                      'is-invalid': submitted && $v.jobDetails1.minSalary.$invalid
+                      'is-invalid': submitted && $v.jobDetails1[index].minSalary.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.minSalary.required"
+                    v-if="submitted && !$v.jobDetails1[index].minSalary.required"
                   >
-                    <!-- {{ $t('HireUs.vminSalary') }} -->
                   </div>
                     <div class="input-group-append">
                           <b-button
@@ -631,17 +622,17 @@
                     class="form-control"
                     minLength="1"
                     maxLength="2"
-                    v-model.trim="jobDetails1.maxSalary"
+                    v-model.trim="jobDetails1[index].maxSalary"
+                    :name="`jobDetails1[${index}][maxSalary]`"
                     id="maxSalary"
                     :class="{
-                      'is-invalid': submitted && $v.jobDetails1.maxSalary.$invalid
+                      'is-invalid': submitted && $v.jobDetails1[index].maxSalary.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1.maxSalary.required"
-                  >
-                  <!-- {{ $t('HireUs.vmaxSalary') }} -->
+                    v-if="submitted && !$v.jobDetails1[index].maxSalary.required"
+                  > 
                   </div>
                    <div class="input-group-append">
                           <b-button
@@ -666,26 +657,11 @@
                     Skills Required 
                     <span class="text-danger">*</span>
                   </label>
-                  
-                  <!-- <input
-                  data-role="skillsRequiredinput"
-                    oninput=""
-                    class="form-control"
-                    minLength="1"
-                    maxLength="2"
-                    v-model.trim="jobDetails1.skillsRequired"
-                    id="skillsRequired"
-                    :class="{
-                      'is-invalid': submitted && $v.jobDetails1.skillsRequired.$invalid
-                    }"
-                  >
-                   -->
-                
                  <div>
                   
                   <b-form-tags class="form-control" 
                    input-id="skillsRequired"
-                    v-model="jobDetails1.skillsRequired"
+                    v-model="jobDetails1[index].skillsRequired"
                     tag-variant="warning"
                     size="lg"
                     separator=" "
@@ -695,8 +671,18 @@
                 </div>
              </div>
             </div>
-          </div>
 
+            
+          </div>
+           <div class="form-group">
+              <button @click="addJobDetail()" type="button" class="btn btn-secondary">Add </button>
+              </div>
+            <div class="form-group">
+              <button @click="RemoveJobDetail(index)" type="button" class="btn btn-secondary">Remove</button>
+              </div>
+            
+
+        <hr>
 
           <div class="card-form">
             <div class="card-header card-header-alt">
@@ -861,11 +847,7 @@ export default {
         max: maxDate,
         dirty: false,
       
-      address: {
-        district: null,
-        pincode: null,
-        state: null
-      },
+      
       basic: {
      
        OrganizationWebsite:'',
@@ -874,19 +856,22 @@ export default {
        
       },
 
-      jobDetails1:{
+      jobDetails1:[{
         jobeRole1:'',
         noOfOpening1:'',
         locationOfJob1:'',
         minSalary:'',
          maxSalary:'',
         tentativeJoiningDate1:'',
-        RequiredSkills1:'',
         skillsRequired: [],
-       
-       
+        district: null,
+        pincode: null,
+        state: null
+        }
+        ]
+      
 
-      },
+      ,
       employerDetails:{
         contactPersonName:'',
    
@@ -897,12 +882,6 @@ export default {
         votp: '',
         eotp: ''
       },
-      
-      
-
-      
-      
-     
       iconChange: 'mdi mdi-eye',
       iconChangeCnf: 'mdi mdi-eye',
       submitted: false,
@@ -913,8 +892,8 @@ export default {
       states: [],
       districts: [],
       talukas: [],
-      password: '',
-      cnfpassword: '',
+    
+   
       countryId: null,
 
       stateId: null,
@@ -927,9 +906,6 @@ export default {
       sendEmailOtpFlag: false,
       showOtpField: false,
       showEmailOtpField: false,
-      isAgeValid: null,
-      PasswordInputType: 'password',
-      PasswordInput: 'password',
       flag: 0,
       emailflag: 0,
       otp_d: {
@@ -942,13 +918,8 @@ export default {
         maxDate: this.maxDate,
         minDate: this.minDate
       },
-      
-     
       years: [],
       customDate: null,
-    
-      EducationLevels: [],
-    
       showGuardianFlag: false
     }
     
@@ -960,11 +931,11 @@ export default {
         // Set the dirty flag on first change to the skillsRequired array
         this.dirty = true
       }
-    ,
-    Tagstate() {
-        // Overall component validation state
-        return this.dirty ? (this.skillsRequired.length > 2 && this.skillsRequired.length < 9) : null
-      }
+    // ,
+    // Tagstate() {
+    //     // Overall component validation state
+    //     return this.dirty ? (this.skillsRequired.length > 2 && this.skillsRequired.length < 9) : null
+    //   }
     }
   ,
    
@@ -977,20 +948,22 @@ export default {
     
       OrganizationWebsite: {
         required,
-      
-      
       },
       OrganizationName: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(10),
         isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
-      },  
+      }, 
       OrganizationSector: {
         required
       }
+
     },
+
+    
     jobDetails1:{
+      $each: {
       jobeRole1:{
         required
       },
@@ -1013,7 +986,11 @@ export default {
       skillsRequired:{
           required
       }
-    }, 
+      
+   
+      }
+    }
+    , 
     employerDetails:{
         contactPersonName:{
           required,
@@ -1037,18 +1014,8 @@ export default {
       
       votp: { required },
       eotp: { required }
-    },
-    address:{
-      pincode:{
-        required
-      },
-      state:{
-        required
-      },
-      district:{
-        required
-      }
     }
+    
    
    
   },
@@ -1076,6 +1043,28 @@ export default {
     
   },
   methods: {
+
+ addJobDetail() {
+      this.jobDetails1.push({
+     jobeRole1:'',
+        noOfOpening1:'',
+        locationOfJob1:'',
+        minSalary:'',
+         maxSalary:'',
+        tentativeJoiningDate1:'',
+        skillsRequired: [],
+        district: null,
+        pincode: null,
+        state: null
+      
+      })
+    }
+    ,
+
+    RemoveJobDetail(index){
+      this.jobDetails1.splice(index,1);
+      
+    },
     changeLanguage (lang) {
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
@@ -1342,13 +1331,13 @@ export default {
       })
     },
 
-    getDistrictsByStateId () {
+    getDistrictsByStateId (index) {
       return new Promise((resolve) => {
         const vm = this
 
         new MQL()
           .setActivity('o.[query_293k2pcHKiS7GMwuDb9e1veS2g4]')
-          .setData({ stateName: this.address.state.displayName })
+          .setData({ stateName: this.jobDetails1[index].state.displayName })
           .fetch()
           .then((rs) => {
             let res = rs.getActivity('query_293k2pcHKiS7GMwuDb9e1veS2g4', true)
@@ -1356,7 +1345,7 @@ export default {
               if (res == null) {
                 res = []
               }
-              vm.address.district = null
+           
               vm.districts = []
               vm.districts = res
               resolve()
@@ -1379,31 +1368,17 @@ export default {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
+      } else if (!vm.$v.$invalid) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.address = this.address
         sendData.jobDetails1= this.jobDetails1
         sendData.employerDetails=this.employerDetails
-        sendData.address.district = this.address.district.displayName
-        sendData.address.state = this.address.state.displayName
+   
         sendData.contact = this.contact
 
 
         sendData.roleName = 'Employer'
-
-      
-					// Automatically generated
-		
-      
-			
-
-
-
-
-
-
-
 
         new MQL()
           .setActivity('o.[EmployerHD]')

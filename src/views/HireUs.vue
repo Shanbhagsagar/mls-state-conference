@@ -55,7 +55,7 @@
                     <span class="text-danger">*</span>
                   </label>
                   <input
-                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z'-'0-9\s]/g,'');"
                     class="form-control"
                     minLength="4"
                     maxLength="100"
@@ -143,12 +143,12 @@
                     :placeholder="$t('HireUs.OrganizationWebsite')"
                     id="OrganizationWebsite"
                     :class="{
-                      'is-invalid': submitted && $v.basic.OrganizationName.$invalid
+                      'is-invalid': submitted && $v.basic.OrganizationWebsite.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.OrganizationName.required"
+                    v-if="submitted && !$v.basic.OrganizationWebsite.required"
                   >
                     {{ $t('HireUs.vOrganizationWebsite1') }}
                   </div>                           
@@ -170,7 +170,7 @@
               <div class="col-md-12 col-lg-4">
                   <div class="form-group">
                      <label class="control-label form-label">
-                        Person Name
+                        Point of Contact
                         <span class="text-danger">*</span>
                       </label>
                       <input
@@ -401,7 +401,7 @@
             </div>
           </div>
 
-          <div class="card-form" v-for="(jobDetail, index) in jobDetails1" :key="index">
+          <div class="card-form" v-for="(jobDetail, index) in jobDetails1" :set="v = $v.jobDetails1.$each[index]" :key="index">
             <div class="card-header card-header-alt">
               Job  Details
             </div>
@@ -424,16 +424,16 @@
                         :placeholder="$t('HireUs.JobRole')"
                         id="jobRole"
                         :class="{
-                         'is-invalid': submitted && $v.jobDetails1[index].jobeRole1.$invalid
+                         'is-invalid': submitted && v.jobeRole1.$invalid
                         }"
                         >
                         
                          <div
                            class="text-danger"
-                           v-if="submitted && !$v.jobDetails1[index].jobeRole1.required"
+                           v-if="submitted && !v.jobeRole1.required"
                           >
                              {{ $t('HireUs.vJobRole') }}
-                           </div>
+                          </div>
                           
                   </div>
                </div>
@@ -455,13 +455,13 @@
                         :placeholder="$t('HireUs.noOfOpening1')"
                         id="noOfOpening1"
                         :class="{
-                         'is-invalid': submitted && $v.jobDetails1[index].noOfOpening1.$invalid
+                         'is-invalid': submitted && v.noOfOpening1.$invalid
                         }"
                         >
                         
                          <div
                            class="text-danger"
-                           v-if="submitted && !$v.jobDetails1[index].noOfOpening1.required"
+                           v-if="submitted && !v.noOfOpening1.required"
                           >
                              {{ $t('HireUs.vnoOfOpening1') }}
                            </div>
@@ -494,13 +494,13 @@
                       }"
                       :class="{
                         'is-invalid':
-                          submitted && $v.jobDetails1[index].tentativeJoiningDate1.$invalid,
+                          submitted && v.tentativeJoiningDate1.$invalid,
                       }"
                     />
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1[index].tentativeJoiningDate1.required"
+                    v-if="submitted && !v.tentativeJoiningDate1.required"
                   >
                     {{ $t('HireUs.vJD') }}
                   </div>
@@ -527,7 +527,7 @@
                     @input="getDistrictsByStateId(index)"
                   />
 
-                  <p>{{jobDetails1[index].state}}</p>
+                  
                  
                 </div>
               </div>
@@ -550,7 +550,7 @@
                     :value="jobDetails1[index].district"
                   />
 
-                <p>{{jobDetails1[index].district}}</p>
+               
                 </div>
 
               </div>
@@ -571,12 +571,12 @@
                     id="pincode"
                     :class="{
                       'is-invalid':
-                        submitted && $v.jobDetails1[index].pincode.$invalid
+                        submitted && v.pincode.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1[index].pincode.required"
+                    v-if="submitted && !v.pincode.required"
                   >
                     {{ $t('registration.pincode') }}
                   </div>
@@ -593,18 +593,18 @@
                   </label>
                   <div class="input-group">
                   <input
-                    oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                    oninput="this.value=this.value.replace(/[^\d*(\.)?(\d{0,1})?$]/g,'');"
                     class="form-control"
-                    :name="`jobDetails1[${index}][minSalary]`"
+                    maxlength=3
                     v-model.trim="jobDetails1[index].minSalary"
                     id="minSalary"
                     :class="{
-                      'is-invalid': submitted && $v.jobDetails1[index].minSalary.$invalid
+                      'is-invalid': submitted && v.minSalary.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1[index].minSalary.required"
+                    v-if="submitted && !v.minSalary.required"
                   >
                   </div>
                     <div class="input-group-append">
@@ -618,20 +618,18 @@
                     </div>
 
                   <input
-                    oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                    oninput="this.value=this.value.replace(/[^\d*(\.)?(\d{0,1})?$]/g,'');"
                     class="form-control"
-                    minLength="1"
-                    maxLength="2"
+                   maxlength=3
                     v-model.trim="jobDetails1[index].maxSalary"
-                    :name="`jobDetails1[${index}][maxSalary]`"
                     id="maxSalary"
                     :class="{
-                      'is-invalid': submitted && $v.jobDetails1[index].maxSalary.$invalid
+                      'is-invalid': submitted && v.maxSalary.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.jobDetails1[index].maxSalary.required"
+                    v-if="submitted && !v.maxSalary.required"
                   > 
                   </div>
                    <div class="input-group-append">
@@ -665,12 +663,74 @@
                     tag-variant="warning"
                     size="lg"
                     separator=" "
-                    placeholder="Enter new skills  separated by space"></b-form-tags>
+                    placeholder="Enter new skills  separated by space"
+                    :class="{
+                      'is-invalid': submitted && v.skillsRequired.$invalid
+                    }"></b-form-tags>
+                    <div
+                    class="text-danger"
+                    v-if="submitted && !v.skillsRequired.required"
+                  > 
+                  </div>
                   <label for="skillsRequired-basic">Type a new tag and press enter</label>
                   </div> 
                 </div>
              </div>
-            </div>
+
+                 
+              <div class="col-md-6 col-lg-4">
+                <div class="form-group">
+                <label class="control-label form-label">
+                    Upload Job Description
+                    <span class="text-danger">*</span>
+                  </label>
+              <input
+                class="form-control mb-2"
+                id="files"
+                @change="submitFile"
+                type="file"
+              >
+              <button
+                type="button"
+                class="btn btn-primary btn-sm"
+                id="uploadtBtn"
+                @click.stop.prevent="uploadFile(index)"
+              >
+                Upload
+              </button>
+              
+              
+                 <div v-if="uploadedFilePath">
+                cdnServer :
+                <input
+                
+                  class="form-control mb-2"
+                  id="filesData"
+                  v-model="jobDetails1.uploadedFilePath.cdnServer"
+                  type="text"
+                  readonly
+                >
+                filePath :
+                <textarea
+                  class="form-control mb-2"
+                  id="filesData"
+                  rows="2"
+                  cols="5"
+                  v-model="jobDetails1.uploadedFilePath.filePath"
+                  readonly
+                />
+              </div>
+              <button
+                id="downloadBtn"
+                class="btn btn-primary btn-sm"
+                @click.stop.prevent="downloadFile(index)"
+              >
+                Download
+              </button>
+                </div>
+             </div> 
+             
+            </div> 
 
             
           </div>
@@ -682,7 +742,7 @@
               </div>
             
 
-        <hr>
+        
 
           <div class="card-form">
             <div class="card-header card-header-alt">
@@ -727,8 +787,7 @@
           </div>
           <div class="help-wrapper">
             <div class="copyright-holder">
-              <img
-                
+              <img              
                 class="img-adj"
                 alt="MKCL"
               >
@@ -811,6 +870,8 @@
 <script>
 import { loadLanguageAsync } from '@/setup/i18n-setup.js'
 import MQL from '@/plugins/mql.js'
+import MQLCdn from '@/plugins/mqlCdn.js'
+import Vue from 'vue'
 import {
   required,
   numeric,
@@ -846,14 +907,12 @@ export default {
         min: minDate,
         max: maxDate,
         dirty: false,
-      
-      
+
+        
       basic: {
-     
        OrganizationWebsite:'',
         OrganizationName:'',
-        OrganizationSector:'',
-       
+        OrganizationSector:'',     
       },
 
       jobDetails1:[{
@@ -864,13 +923,13 @@ export default {
          maxSalary:'',
         tentativeJoiningDate1:'',
         skillsRequired: [],
+       uploadedFilePath: null,
         district: null,
         pincode: null,
+         fileURL: '',
         state: null
         }
         ]
-      
-
       ,
       employerDetails:{
         contactPersonName:'',
@@ -891,11 +950,9 @@ export default {
       countries: [],
       states: [],
       districts: [],
-      talukas: [],
-    
-   
+      talukas: [], 
+     count:1,
       countryId: null,
-
       stateId: null,
       timer: 0,
       districtId: null,
@@ -920,13 +977,31 @@ export default {
       },
       years: [],
       customDate: null,
-      showGuardianFlag: false
+      showGuardianFlag: false,
+      inputFileName: '',
+      cdnBaserURl: Vue.getCDNBaseURL(),
+      fileURL: '',
+      files: '',
+     
+      dropOptions: {
+        url: 'https://httpbin.org/post',
+        acceptedFiles: '.pdf',
+        maxFilesize: 2, // MB
+        maxFiles: 3,
+        chunking: true,
+        chunkSize: 500, // Bytes
+        thumbnailWidth: 150, // px
+        thumbnailHeight: 150,
+        addRemoveLinks: true,
+        title: 'Upload Teachers'
+      },
+       
+      
     }
     
   },
   computed: {
-   
-    
+
       skillsRequired(newValue, oldValue) {
         // Set the dirty flag on first change to the skillsRequired array
         this.dirty = true
@@ -943,22 +1018,19 @@ export default {
   //   Datepicker
   // },
   validations: {
-   
-    basic: {
-    
+    basic: { 
       OrganizationWebsite: {
-        required,
+        required
       },
       OrganizationName: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(10),
-        isNameValid: helpers.regex('isNameValid', /^[a-zA-Z ]*$/)
+        isNameValid: helpers.regex('isNameValid', /^[a-zA-Z0-9_.-]*$/)
       }, 
       OrganizationSector: {
         required
       }
-
     },
 
     
@@ -968,26 +1040,23 @@ export default {
         required
       },
       noOfOpening1:{
-        required,
+        required
       },
       minSalary:{
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(2),
+        required
       },
        maxSalary:{
-        required,
-        minLength: minLength(1),
-        maxLength: maxLength(2),
+        required
       },
      tentativeJoiningDate1:{
         required
       }, 
       skillsRequired:{
           required
-      }
-      
-   
+      },
+      pincode:{
+        required
+      }  
       }
     }
     , 
@@ -995,9 +1064,7 @@ export default {
         contactPersonName:{
           required,
            minLength: minLength(4)
-    
-        },
-        
+        },    
       },
     contact: {
       emailID: {
@@ -1010,8 +1077,7 @@ export default {
         minLength: minLength(10),
         maxLength: maxLength(10),
         isMobileValid: helpers.regex('isMobileValid', /^((?![0-5])[0-9]{10})$/)
-      },
-      
+      },    
       votp: { required },
       eotp: { required }
     }
@@ -1022,7 +1088,6 @@ export default {
   created () {
     const vm = this
     vm.starter()
-
     // vm.getEducationLevelDetails()
 
     // vm.selectTypeOfExam();
@@ -1043,27 +1108,80 @@ export default {
     
   },
   methods: {
-
+      
+submitFile (event) {
+      this.files = event.target.files[0]
+    },
+    uploadFile (index) {
+      let formData = new FormData()
+      formData.append('file', this.files) // append your file as 'file' in formdata.
+      new MQLCdn()
+        .enablePageLoader(true)
+        // FIXED: change this to directory path
+        .setDirectoryPath('/JobDescription') // (optional field) if you want to save  file to specific directory path
+        .setFormData(formData) // (required) sets file data
+        .setFileName(this.inputFileName) // (optional field) if you want to set name to file that is being uploaded
+        // FIXED: pass buckeyKey instead of name
+        .setBucketKey('2LRkINIy1JDbD8DUkf8xUxG8sDd') // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId('2LRkA2OAa1FkTqNaehpIGLkizV2') // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId('290nuuzo7gn5wlah7nwOc7ZO9L4') // (required) valid purposeId need to set in which file will be uploaded.
+        .uploadFile('uploadtBtn').then(res => { // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
+          if (res.isValid()) {
+            this.jobDetails1[index].uploadedFilePath = res.uploadedFileURL() // returns uploaded file url..
+            console.log('res cdn path',  this.uploadedFilePath)
+           this.jobDetails1[index].fileURL = this.jobDetails1[index].uploadedFilePath.cdnServer+'/'+this.jobDetails1[index].uploadedFilePath.filePath
+            this.$toasted.success('file uploaded.', {
+              theme: 'bubble',
+              position: 'top-center',
+              duration: 5000
+            })
+          } else {
+            res.showErrorToast()
+          }
+        })
+    },
  addJobDetail() {
+  if (this.count <3){
       this.jobDetails1.push({
-     jobeRole1:'',
+        jobeRole1:'',
         noOfOpening1:'',
         locationOfJob1:'',
         minSalary:'',
-         maxSalary:'',
+        maxSalary:'',
         tentativeJoiningDate1:'',
+         fileURL: '',
+      uploadedFilePath: null,
         skillsRequired: [],
         district: null,
         pincode: null,
         state: null
-      
       })
+      this.count++;}
     }
     ,
+    
+    downloadFile (index) {
+     
+        new MQLCdn()
+          .setCDNPath(this.jobDetails1[index].fileURL) // (required) set a filepath whihch needs to be download.
+          .setBucketKey('10')
+          .setPurposeId('10') // (required) valid purposeId need to set in which file will be uploaded.
+          .setClientId('26') // (required) if you are providing relative path
+          .enablePageLoader(true)
+          .downloadFile('downloadBtn').then(res => { // (required) this will take elemnt id (optional) which will be blocked while file being downloaded.
+            if (!res.isValid()) {
+              res.showErrorToast()
+            }
+          })
+      
+    },
 
     RemoveJobDetail(index){
-      this.jobDetails1.splice(index,1);
       
+      if (this.count >1){
+      this.jobDetails1.splice(index,1);
+      this.count--;
+      }
     },
     changeLanguage (lang) {
       this.$i18n.locale = lang
@@ -1096,7 +1214,6 @@ export default {
     },
     async starter () {
       const vm = this
-
       // await vm.getAllCountries()
 
       // vm.countryId = vm.countries.filter(
@@ -1116,7 +1233,6 @@ export default {
 
     getEmailOtp () {
       const vm = this
-
       this.showEmailOtpField = true
       new MQL()
         .setActivity('o.[SendEmailOTP]')
@@ -1154,7 +1270,6 @@ export default {
     },
     getOtp () {
       const vm = this
-
       this.showOtpField = true
       new MQL()
         .setActivity('o.[SendMobileOTP]')
@@ -1315,7 +1430,6 @@ export default {
               if (res == null) {
                 res = []
               }
-
               vm.districts = []
               vm.states = res
 
@@ -1344,8 +1458,8 @@ export default {
             if (rs.isValid('query_293k2pcHKiS7GMwuDb9e1veS2g4')) {
               if (res == null) {
                 res = []
-              }
-           
+              } 
+              vm.jobDetails1[index].district=null         
               vm.districts = []
               vm.districts = res
               resolve()
@@ -1373,13 +1487,10 @@ export default {
         sendData.basic = this.basic
         sendData.address = this.address
         sendData.jobDetails1= this.jobDetails1
-        sendData.employerDetails=this.employerDetails
-   
+       
+        sendData.employerDetails=this.employerDetails   
         sendData.contact = this.contact
-
-
         sendData.roleName = 'Employer'
-
         new MQL()
           .setActivity('o.[EmployerHD]')
           .setHeader({'Service-Branch':'DNExT_BRANCH'})
@@ -1388,7 +1499,7 @@ export default {
           .then((rs) => {
             let res = rs.getActivity('EmployerHD', true)
             if (rs.isValid('EmployerHD')) {
-              if (res.result.result === 'Success') {
+              if (res.result === 'SUCCESS') {
                 this.$toasted.success('Registration Successfull', {
                   theme: 'bubble',
                   position: 'top-center',

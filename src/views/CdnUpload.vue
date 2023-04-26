@@ -119,7 +119,7 @@
             </div>
           </div>
         </div>
-        <!--div class="col-sm-6">
+        <div class="col-sm-6">
           <div class="card p-3">
             <div class="form-group">
               <h5>Download File</h5>
@@ -150,7 +150,7 @@
               >
             </div>
           </div>
-        </div>-->
+        </div>
       </div>
     </div>
   </div>
@@ -200,13 +200,14 @@ export default {
         .setFormData(formData) // (required) sets file data
         .setFileName(this.inputFileName) // (optional field) if you want to set name to file that is being uploaded
         // FIXED: pass buckeyKey instead of name
-        .setBucketKey('1hYDBo7EqY01b86AOjtaDCHDSLp') // (required) valid bucket key need to set in which file will be uploaded.
-        .setPurposeId('1hXISGxTltoiZSdKJiUIk6RJYxA') // (required) valid purposeId need to set in which file will be uploaded.
-        .setClientId('1hXISGxTltoiZSdKJiUIk6RJYxA') // (required) valid purposeId need to set in which file will be uploaded.
+        .setBucketKey('2LRkINIy1JDbD8DUkf8xUxG8sDd') // (required) valid bucket key need to set in which file will be uploaded.
+        .setPurposeId('2LRkA2OAa1FkTqNaehpIGLkizV2') // (required) valid purposeId need to set in which file will be uploaded.
+        .setClientId('290nuuzo7gn5wlah7nwOc7ZO9L4') // (required) valid purposeId need to set in which file will be uploaded.
         .uploadFile('uploadtBtn').then(res => { // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
           if (res.isValid()) {
             this.uploadedFilePath = res.uploadedFileURL() // returns uploaded file url..
             console.log('res cdn path', this.uploadedFilePath)
+            this.fileURL = this.uploadedFilePath.cdnServer+'/'+this.uploadedFilePath.filePath
             this.$toasted.success('file uploaded.', {
               theme: 'bubble',
               position: 'top-center',
@@ -218,7 +219,7 @@ export default {
         })
     },
     downloadFile () {
-      if (this.fileURL !== '') {
+     
         new MQLCdn()
           .setCDNPath(this.fileURL) // (required) set a filepath whihch needs to be download.
           .setBucketKey('10')
@@ -230,7 +231,7 @@ export default {
               res.showErrorToast()
             }
           })
-      }
+      
     }
 
     // fileData (file) {

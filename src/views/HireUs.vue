@@ -401,9 +401,11 @@
             </div>
           </div>
 
+
+          <div v-if="Verified">
           <div class="card-form" v-for="(jobDetail, index) in jobDetails1" :set="v = $v.jobDetails1.$each[index]" :key="index">
             <div class="card-header card-header-alt">
-              Job  Details
+              Job  Details {{index +1 }}
             </div>
 
            <div class="row" >
@@ -684,65 +686,43 @@
                     Upload Job Description
                     <span class="text-danger">*</span>
                   </label>
-              <input
-                class="form-control mb-2"
-                id="files"
-                @change="submitFile"
-                type="file"
-              >
-              <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                id="uploadtBtn"
-                @click.stop.prevent="uploadFile(index)"
-              >
-                Upload
-              </button>
-              
-              
-                 <div v-if="uploadedFilePath">
-                cdnServer :
-                <input
-                
-                  class="form-control mb-2"
-                  id="filesData"
-                  v-model="jobDetails1.uploadedFilePath.cdnServer"
-                  type="text"
-                  readonly
-                >
-                filePath :
-                <textarea
-                  class="form-control mb-2"
-                  id="filesData"
-                  rows="2"
-                  cols="5"
-                  v-model="jobDetails1.uploadedFilePath.filePath"
-                  readonly
-                />
-              </div>
-              <button
-                id="downloadBtn"
-                class="btn btn-primary btn-sm"
-                @click.stop.prevent="downloadFile(index)"
-              >
-                Download
-              </button>
+                    <input
+                      class="form-control mb-2"
+                      id="files"
+                      @change="submitFile"
+                      type="file"
+                    >
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      id="uploadtBtn"
+                      @click.stop.prevent="uploadFile(index)"
+                    >
+                      Upload
+                    </button>
+                  
+                    <button
+                      id="downloadBtn"
+                      class="btn btn-primary btn-sm"
+                      @click.stop.prevent="downloadFile(index)"
+                    >
+                      Preview
+                    </button>
                 </div>
              </div> 
              
             </div> 
 
+            <div class="form-group col-md-12  text-right">
+               <!-- /*<button @click="addJobDetail()" type="button" class="btn btn-default btn-circle">Add </button>
+               <button @click="RemoveJobDetail(index)" type="button" class="btn btn-secondary">Remove</button> -->
+               <b-button pill variant="outline-secondary" size="sm" @click="addJobDetail()" v-if="index<3" >Add</b-button>
+               <b-button pill variant="outline-secondary" size="sm" @click="RemoveJobDetail(index)" v-if="index>0"  >Remove</b-button>
+            </div>
             
-          </div>
-           <div class="form-group">
-              <button @click="addJobDetail()" type="button" class="btn btn-secondary">Add </button>
-              </div>
-            <div class="form-group">
-              <button @click="RemoveJobDetail(index)" type="button" class="btn btn-secondary">Remove</button>
-              </div>
+            </div>
+           </div>
             
-
-        
 
           <div class="card-form">
             <div class="card-header card-header-alt">
@@ -897,7 +877,7 @@ export default {
       minDate.setDate(minDate.getDate())
       // 15th in two months
       const maxDate = new Date(today)
-      maxDate.setMonth(maxDate.getMonth() + 2)
+      maxDate.setMonth(maxDate.getMonth() + 6)
       maxDate.setDate(15)
 
   
@@ -917,8 +897,7 @@ export default {
 
       jobDetails1:[{
         jobeRole1:'',
-        noOfOpening1:'',
-        locationOfJob1:'',
+        noOfOpening1:'',     
         minSalary:'',
          maxSalary:'',
         tentativeJoiningDate1:'',
@@ -941,8 +920,7 @@ export default {
         votp: '',
         eotp: ''
       },
-      iconChange: 'mdi mdi-eye',
-      iconChangeCnf: 'mdi mdi-eye',
+      Verified:true,
       submitted: false,
       button: 'Verify',
       emailButton: 'Verify',
@@ -1128,7 +1106,6 @@ submitFile (event) {
         .uploadFile('uploadtBtn').then(res => { // (required) this will upload file takes element id (optional param) which will be blocked while file upload..
           if (res.isValid()) {
             this.jobDetails1[index].uploadedFilePath = res.uploadedFileURL() // returns uploaded file url..
-            console.log('res cdn path',  this.uploadedFilePath)
            this.jobDetails1[index].fileURL = this.jobDetails1[index].uploadedFilePath.cdnServer+'/'+this.jobDetails1[index].uploadedFilePath.filePath
             this.$toasted.success('file uploaded.', {
               theme: 'bubble',
@@ -1375,6 +1352,7 @@ submitFile (event) {
               this.flag = 1
 
               this.button = 'Verified'
+              this.Verified=true
               if (vm.timer) {
                 clearTimeout(vm.timer)
                 vm.timer = 0
@@ -1482,12 +1460,19 @@ submitFile (event) {
           title: 'Please Verify Mobile Number and Email ID',
           icon: 'error'
         })
-      } else if (!vm.$v.$invalid) {
+      } 
+      else if(this.jobDetails1[0].uploadedFilePath == null)
+      {
+        Swal.fire({
+          title: 'Please Enter job Description File',
+          icon: 'error'
+        })
+      }
+      else if (!vm.$v.$invalid) {
         var sendData = {}
         sendData.basic = this.basic
         sendData.address = this.address
-        sendData.jobDetails1= this.jobDetails1
-       
+        sendData.jobDetails1= this.jobDetails1       
         sendData.employerDetails=this.employerDetails   
         sendData.contact = this.contact
         sendData.roleName = 'Employer'
@@ -1499,6 +1484,7 @@ submitFile (event) {
           .then((rs) => {
             let res = rs.getActivity('EmployerHD', true)
             if (rs.isValid('EmployerHD')) {
+             
               if (res.result === 'SUCCESS') {
                 this.$toasted.success('Registration Successfull', {
                   theme: 'bubble',

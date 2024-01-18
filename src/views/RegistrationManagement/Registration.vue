@@ -10,7 +10,12 @@
           </div>
          <div class="card-form">
             <div class="card-header card-header-alt mt-0">
-              Personal Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                Officer1 Personal Details
+                </div>
+                <div v-else>
+                Personal Details
+              </div>
             </div>
             <div class="row">
               <div class="d-block text-center">
@@ -34,12 +39,27 @@
                   <span class="text-danger">*</span>
 
                   <v-select
-                    v-model="delegates[0].designation"
-                    label="name"
-                    placeholder="Please Select your Designation"
-                    :options="delegateDesignation"
-                    :value="delegates[0].designation.name"
-                  />
+                      v-model="delegates[0].designation"
+                      label="name"
+                      :hidden="this.$route.query.subtype == 'Officials'"     
+                      placeholder="Please Select Your Designation"
+                      :options="delegateDesignation"
+                      :value="delegates[0].designation.name"
+                    />
+
+                  <div v-if="this.$route.query.subtype == 'Officials'">
+                      <input
+                      type="text"
+                      class="form-control"
+                      minLength="4"
+                      maxLength="100"
+                      v-model.trim="designations"
+                      placeholder="Please Enter Your Designation"
+                      id="designations"
+                     >
+                  </div>
+               
+                    
                   <!-- <div
                     class="text-danger"
                     v-if="
@@ -212,7 +232,12 @@
 
           <div class="card-form">
             <div class="card-header card-header-alt">
-              Contacts Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer1 Contact Details
+                </div>
+                <div v-else>
+                  Contact Details
+              </div>
             </div>
 
             <div class="row">
@@ -329,7 +354,12 @@
 
           <div class="card-form">
             <div class="card-header card-header-alt mt-0">
-              Spouse Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer2 Personal Details
+                </div>
+                <div v-else>
+                  Spouse Details
+              </div>              
             </div>
              <div class="row">
               <div class="d-block text-center">
@@ -420,9 +450,13 @@
 
           <div class="card-form">
             <div class="card-header card-header-alt">
-              Spouse Contacts Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer2 Contact Details
+                </div>
+                <div v-else>
+                  Spouse Contact Details
+              </div>  
             </div>
-
             <div class="row">
               <div class="col-md-6 col-lg-6">
                     <div class="form-group">
@@ -493,7 +527,7 @@
            </div>
          <div class="card-form">
           <div class="card-header card-header-alt">
-              Travel Details:
+            Delegate Travel Details:
             </div>
           <h5>Arrival Details:-</h5>  
           <div class="row">
@@ -772,8 +806,13 @@
                 </div>
               </div>
             </div>
-          <h4>Spouse Travel Details: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input
+          <h4>
+            <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer2 Travel Details
+                </div>
+                <div v-else>
+                  Spouse Travel Details: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input
                       type="checkbox"
                       class="custom-control-input"
                       id="customCheck4"
@@ -786,7 +825,10 @@
                       for="customCheck4"
                     >
                       (Check If details are same as above)                  
-                    </label></h4>
+                    </label>
+              </div>  
+            
+                  </h4>
             <h5>Arrival Details:-</h5>  
           <div class="row">
                <div class="col-md-4 col-lg-4">
@@ -972,13 +1014,12 @@
                   >
                     Mode of Travel
                   </label>
-
                   <v-select
-                    v-model="delegates[0].travelDetail[0].dtravelModel.name"
+                    v-model="delegates[0].travelDetail[1].dtravelModel"
                     label="name"
                     placeholder="Please Enter Your Mode of Travel "
                     :options="travelModes"
-                    :value="delegates[0].travelDetail[0].dtravelModel.name"
+                    :value="delegates[0].travelDetail[1].dtravelModel.name"
                   />
                   <!-- <div
                     class="text-danger"
@@ -1066,7 +1107,7 @@
             </div>
             </div>
           <br/>
-          <div class="card-form">
+          <!-- <div class="card-form">
             <div class="card-header card-header-alt mt-0">
               Others:
             </div>
@@ -1086,7 +1127,7 @@
                     :options="siteSeeing"
                     :value="delegates[0].siteSeeing"
                   />
-                  <!-- <div
+                   <div
                     class="text-danger"
                     v-if="
                       !$v.delegates.siteSeeing.name.required &&
@@ -1094,11 +1135,11 @@
                     "
                   >
                     {{ $t('registration.vstate') }}
-                  </div> -->
+                  </div> 
                 </div>
               </div>
              </div>
-          </div>
+          </div> -->
           <br/>
           <div class="card-form">
             <div class="form-action-alt">
@@ -1386,6 +1427,7 @@ export default {
         },
         siteSeeing :[],
         delegateDesignation : [],
+        designations:'',
         airportTerminal : [
           {
             id : 1,
@@ -1478,10 +1520,7 @@ export default {
             departureDate : {required},
             isDelegate : {required},
           }
-         },
-         siteSeeing: {
-          name :{required}
-         } 
+         }
         }
       },
     address: {
@@ -2131,7 +2170,11 @@ export default {
       const vm = this;
       //console.log( this.$store.getters['getStateId'])
       vm.delegateFinal[0].titleId = vm.delegates[0].title.id;
-      vm.delegateFinal[0].designationId = vm.delegates[0].designation.id;
+      if(this.$route.query.subtype == 'Officials'){
+        vm.delegateFinal[0].designationId = 11;
+      }else{
+        vm.delegateFinal[0].designationId = vm.delegates[0].designation.id;
+      }
       vm.delegateFinal[0].stateId = vm.$store.getters["getStateId"];
       vm.delegateFinal[0].delegatePhotoId = vm.delegates[0].photoPath;
       vm.delegateFinal[0].firstname = vm.delegates[0].firstname;
@@ -2228,14 +2271,21 @@ export default {
       params.append("travelDetails[0][isDelegate]", true);
       params.append("travelDetails[1][isDelegate]", false);
       params.append("titleId", vm.delegates[0].title.id);
-      params.append("designationId", vm.delegates[0].designation.id);
+      if(this.$route.query.subtype == "Officials"){
+        params.append("designationId", "11");
+      }
+      else {
+        params.append("designationId", vm.delegates[0].designation.id);
+      }
       params.append("stateId", vm.$store.getters["getStateId"]);
       params.append("delegatePhotoId", vm.delegates[0].photoPath);
       params.append("middlename", vm.delegates[0].middlename);
-      params.append("visitingPlacesIds", vm.delegates[0].siteSeeing.id);
+      params.append("visitingPlacesIds", 3);
       params.append("lastname", vm.delegates[0].lastname);
+      params.append("firstname", vm.delegates[0].firstname);
       params.append("email", vm.delegates[0].email);
       params.append("mobileNo", vm.delegates[0].mobileNo);
+      console.log();
       axios
         .post(
           vm.$store.getters["getIpaddress"]+"delegate/userId/" +

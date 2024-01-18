@@ -4,7 +4,7 @@
       <div class="row card-wrapper">
         <div class="col login-block">
           <a
-            href="http://mls.org.in/"
+            href="http://mls.org.in/AIPOC/"
             class="btn btn-back"
           >
             {{ $t('login.backToHome') }}
@@ -130,7 +130,7 @@ export default {
          securePassword = bcryptjs.hashSync(plainTextPassword, salt); 
           axios
            .get(
-             "http://172.1.0.81:9292/auth/getAuth?username=" +
+            vm.$store.getters["getIpaddress"]+"auth/getAuth?username=" +
                vm.cr.username +
                "&password=" +
                securePassword

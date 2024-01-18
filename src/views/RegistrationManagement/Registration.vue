@@ -570,7 +570,7 @@
                     <span class="text-danger">*</span>
                   </label>
                   <v-select
-                    v-model="delegates[0].travelDetail[0].arrivalTo.name"
+                    v-model="delegates[0].travelDetail[0].arrivalTo"
                     label="name"
                     placeholder="Please Select Travel Mode"
                     :options="airportTerminal"
@@ -867,7 +867,7 @@
                     Arrival To
                   </label>
                   <v-select
-                    v-model="delegates[0].travelDetail[1].arrivalTo.name"
+                    v-model="delegates[0].travelDetail[1].arrivalTo"
                     label="name"
                     placeholder="Please Select Travel Mode"
                     :options="airportTerminal"
@@ -1155,7 +1155,7 @@ export default {
        const  formData = new FormData();
         formData.append('file',file);
         
-       axios.post('http://172.1.0.81:9292/photo/uploadFile',formData)
+       axios.post(this.$store.getters["getIpaddress"]+'photo/uploadFile',formData)
        .then((response) => {
         console.log(response);
         this.delegates[0].photoPath = response.data;
@@ -1174,7 +1174,7 @@ export default {
        const formData1 = new FormData();
         formData1.append('file',file1);
         
-       axios.post('http://172.1.0.81:9292/photo/uploadFile',formData1)
+       axios.post(this.$store.getters["getIpaddress"]+'photo/uploadFile',formData1)
        .then((response) => {
         console.log(response);
         this.delegates[0].sphotoPath = response.data;
@@ -2127,65 +2127,139 @@ export default {
           }
         })
     },
-    applicantRegister () {
-      const vm = this
+    applicantRegister() {
+      const vm = this;
       //console.log( this.$store.getters['getStateId'])
-      vm.delegateFinal[0].titleId = vm.delegates[0].title.id
-      vm.delegateFinal[0].designationId = vm.delegates[0].designation.id
-      vm.delegateFinal[0].stateId = vm.$store.getters['getStateId']
-      vm.delegateFinal[0].delegatePhotoId = vm.delegates[0].photoPath
-      vm.delegateFinal[0].firstname =  vm.delegates[0].firstname
-      vm.delegateFinal[0].middlename = vm.delegates[0].middlename
-      vm.delegateFinal[0].lastname = vm.delegates[0].lastname
-      vm.delegateFinal[0].email = vm.delegates[0].email
-      vm.delegateFinal[0].mobileNo = vm.delegates[0].mobileNo
-      vm.delegateFinal[0].spouseName = vm.delegates[0].family[0].name
-      vm.delegateFinal[0].spouseEmail = vm.delegates[0].family[0].email
-      vm.delegateFinal[0].spouseMobileNo = vm.delegates[0].family[0].mobileNo
-      vm.delegateFinal[0].spouseTitleId = vm.delegates[0].family[0].title.id
-      vm.delegateFinal[0].spousePhotoId = vm.delegates[0].sphotoPath
-      vm.delegateFinal[0].visitingPlacesIds = vm.delegates[0].siteSeeing.id
-      vm.delegateFinal[0].totalTravelDetailSize = 2
-      vm.delegateFinal[0].travelDetails[0].arrivalTravelMode= vm.delegates[0].travelDetail[0].travelModel.id
-      vm.delegateFinal[0].travelDetails[0].arrivalVehicleNumber= vm.delegates[0].travelDetail[0].vehicleNumber
-      vm.delegateFinal[0].travelDetails[0].travelStartDate = vm.delegates[0].travelDetail[0].travelDate
-      vm.delegateFinal[0].travelDetails[0].arrivalStartDate= vm.delegates[0].travelDetail[0].arrivalDate
-      vm.delegateFinal[0].travelDetails[0].departureTravelMode= vm.delegates[0].travelDetail[0].dtravelModel.id
-      vm.delegateFinal[0].travelDetails[0].departureDate= vm.delegates[0].travelDetail[0].departureDate
-      vm.delegateFinal[0].travelDetails[0].departureVehicleNumber= vm.delegates[0].travelDetail[0].rvehicleNumber
-      vm.delegateFinal[0].travelDetails[0].isDelegate= true
-			vm.delegateFinal[0].travelDetails[0].arriveTo=vm.delegates[0].travelDetail[0].arrivalTo.id+"##"+vm.delegates[0].travelDetail[0].arrivalTo.name
-      vm.delegateFinal[0].travelDetails[1].arrivalTravelMode= vm.delegates[0].travelDetail[1].travelModel.id
-      vm.delegateFinal[0].travelDetails[1].arrivalVehicleNumber= vm.delegates[0].travelDetail[1].vehicleNumber
-      vm.delegateFinal[0].travelDetails[1].travelStartDate = vm.delegates[0].travelDetail[1].travelDate
-      vm.delegateFinal[0].travelDetails[1].arrivalStartDate= vm.delegates[0].travelDetail[1].arrivalDate
-      vm.delegateFinal[0].travelDetails[1].departureTravelMode= vm.delegates[0].travelDetail[1].dtravelModel.id
-      vm.delegateFinal[0].travelDetails[1].departureDate= vm.delegates[0].travelDetail[1].departureDate
-      vm.delegateFinal[0].travelDetails[1].departureVehicleNumber= vm.delegates[0].travelDetail[1].rvehicleNumber
-      vm.delegateFinal[0].travelDetails[1].isDelegate= false
-			vm.delegateFinal[0].travelDetails[1].arriveTo=vm.delegates[0].travelDetail[1].arrivalTo.id+"##"+vm.delegates[0].travelDetail[1].arrivalTo.name
+      vm.delegateFinal[0].titleId = vm.delegates[0].title.id;
+      vm.delegateFinal[0].designationId = vm.delegates[0].designation.id;
+      vm.delegateFinal[0].stateId = vm.$store.getters["getStateId"];
+      vm.delegateFinal[0].delegatePhotoId = vm.delegates[0].photoPath;
+      vm.delegateFinal[0].firstname = vm.delegates[0].firstname;
+      vm.delegateFinal[0].middlename = vm.delegates[0].middlename;
+      vm.delegateFinal[0].lastname = vm.delegates[0].lastname;
+      vm.delegateFinal[0].email = vm.delegates[0].email;
+      vm.delegateFinal[0].mobileNo = vm.delegates[0].mobileNo;
+      vm.delegateFinal[0].spouseName = vm.delegates[0].family[0].name;
+      vm.delegateFinal[0].spouseEmail = vm.delegates[0].family[0].email;
+      vm.delegateFinal[0].spouseMobileNo = vm.delegates[0].family[0].mobileNo;
+      vm.delegateFinal[0].spouseTitleId = vm.delegates[0].family[0].title.id;
+      vm.delegateFinal[0].spousePhotoId = vm.delegates[0].sphotoPath;
+      vm.delegateFinal[0].visitingPlacesIds = vm.delegates[0].siteSeeing.id;
+      vm.delegateFinal[0].totalTravelDetailSize = 2;
+      vm.delegateFinal[0].travelDetails[0].arrivalTravelMode =
+        vm.delegates[0].travelDetail[0].travelModel.id;
+      vm.delegateFinal[0].travelDetails[0].arrivalVehicleNumber =
+        vm.delegates[0].travelDetail[0].vehicleNumber;
+      vm.delegateFinal[0].travelDetails[0].travelStartDate =
+        vm.delegates[0].travelDetail[0].travelDate;
+      vm.delegateFinal[0].travelDetails[0].arrivalStartDate =
+        vm.delegates[0].travelDetail[0].arrivalDate;
+      vm.delegateFinal[0].travelDetails[0].departureTravelMode =
+        vm.delegates[0].travelDetail[0].dtravelModel.id;
+      vm.delegateFinal[0].travelDetails[0].departureDate =
+        vm.delegates[0].travelDetail[0].departureDate;
+      vm.delegateFinal[0].travelDetails[0].departureVehicleNumber =
+        vm.delegates[0].travelDetail[0].rvehicleNumber;
+      vm.delegateFinal[0].travelDetails[0].isDelegate = true;
+      vm.delegateFinal[0].travelDetails[0].arriveTo =
+        vm.delegates[0].travelDetail[0].arrivalTo.id +
+        "##" +
+        vm.delegates[0].travelDetail[0].arrivalTo.name;
+      vm.delegateFinal[0].travelDetails[1].arrivalTravelMode =
+        vm.delegates[0].travelDetail[1].travelModel.id;
+      vm.delegateFinal[0].travelDetails[1].arrivalVehicleNumber =
+        vm.delegates[0].travelDetail[1].vehicleNumber;
+      vm.delegateFinal[0].travelDetails[1].travelStartDate =
+        vm.delegates[0].travelDetail[1].travelDate;
+      vm.delegateFinal[0].travelDetails[1].arrivalStartDate =
+        vm.delegates[0].travelDetail[1].arrivalDate;
+      vm.delegateFinal[0].travelDetails[1].departureTravelMode =
+        vm.delegates[0].travelDetail[1].dtravelModel.id;
+      vm.delegateFinal[0].travelDetails[1].departureDate =
+        vm.delegates[0].travelDetail[1].departureDate;
+      vm.delegateFinal[0].travelDetails[1].departureVehicleNumber =
+        vm.delegates[0].travelDetail[1].rvehicleNumber;
+      vm.delegateFinal[0].travelDetails[1].isDelegate = false;
+      vm.delegateFinal[0].travelDetails[1].arriveTo =
+        vm.delegates[0].travelDetail[1].arrivalTo.id +
+        "##" +
+        vm.delegates[0].travelDetail[1].arrivalTo.name;
 
-      console.log(vm.delegateFinal[0])
-      let test ={
-        totalTravelDetailSize:1
+      let totalTravelDetailSize = 2;
+
+      const params = new FormData();
+      params.append("totalTravelDetailSize", 2);
+      for (let i = 0; i < totalTravelDetailSize; i++) {
+        params.append(
+          "travelDetails[" + i + "][arrivalTravelMode]",
+          vm.delegates[0].travelDetail[0].travelModel.id
+        );
+        params.append(
+          "travelDetails[" + i + "][arrivalVehicleNumber]",
+          vm.delegates[0].travelDetail[i].vehicleNumber
+        );
+        params.append(
+          "travelDetails[" + i + "][travelStartDate]",
+          vm.delegates[0].travelDetail[i].travelDate
+        );
+        params.append(
+          "travelDetails[" + i + "][arrivalStartDate]",
+          vm.delegates[0].travelDetail[i].arrivalDate
+        );
+        params.append(
+          "travelDetails[" + i + "][departureTravelMode]",
+          vm.delegates[0].travelDetail[i].dtravelModel.id
+        );
+        params.append(
+          "travelDetails[" + i + "][departureDate]",
+          vm.delegates[0].travelDetail[i].departureDate
+        );
+        params.append(
+          "travelDetails[" + i + "][departureVehicleNumber]",
+          vm.delegates[0].travelDetail[i].rvehicleNumber
+        );
+        params.append(
+          "travelDetails[" + i + "][arriveTo]",
+          vm.delegates[0].travelDetail[i].arrivalTo.id +
+            "##" +
+            vm.delegates[0].travelDetail[i].arrivalTo.name
+        );
       }
-
-
-          axios.post('http://172.1.0.81:9292/delegate/userId/'+vm.$store.getters['getUserId']+'/addDelegate',vm.delegateFinal[0],
-         {headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        }})
-       .then((response) => {
-        console.log(response);
-        this.delegates[0].photoPath = response.data;
-        this.$toasted.success('Submitted Success', {
-          theme: 'bubble',
-          position: 'top-center',
-          duration: 3000
+      params.append("travelDetails[0][isDelegate]", true);
+      params.append("travelDetails[1][isDelegate]", false);
+      params.append("titleId", vm.delegates[0].title.id);
+      params.append("designationId", vm.delegates[0].designation.id);
+      params.append("stateId", vm.$store.getters["getStateId"]);
+      params.append("delegatePhotoId", vm.delegates[0].photoPath);
+      params.append("middlename", vm.delegates[0].middlename);
+      params.append("visitingPlacesIds", vm.delegates[0].siteSeeing.id);
+      params.append("lastname", vm.delegates[0].lastname);
+      params.append("email", vm.delegates[0].email);
+      params.append("mobileNo", vm.delegates[0].mobileNo);
+      axios
+        .post(
+          vm.$store.getters["getIpaddress"]+"delegate/userId/" +
+            vm.$store.getters["getUserId"] +
+            "/addDelegate",
+          params,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          // this.delegates[0].photoPath = response.data;
+          this.$toasted.success("Submitted Successfully", {
+            theme: "bubble",
+            position: "top-center",
+            duration: 3000,
+          });
+          this.$router.push({
+            name: 'Profile'
+        })
         });
-       });
-
-
     },
 
   }

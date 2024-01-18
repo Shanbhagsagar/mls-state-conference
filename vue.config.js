@@ -7,7 +7,7 @@ const webpack = require('webpack')
 const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = {
-  publicPath: '/application',
+  publicPath: '/mls-state-conference',
   chainWebpack: (config) => {
     config.plugins.delete('prefetch')
   },

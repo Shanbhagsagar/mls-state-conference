@@ -107,7 +107,7 @@ export default {
     delegatesCounter(userId){
        axios
            .get(
-             "http://172.1.0.81:9292/user/getDelegatesCount/"+userId
+            this.$store.getters["getIpaddress"]+"user/getDelegatesCount/"+userId
            )
            .then(response => {
              console.log(response);

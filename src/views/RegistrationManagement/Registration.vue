@@ -3,38 +3,87 @@
     <div class="card-login card-register">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <a
-            href="https://dnext.mkcl.org/"
-            class="btn btn-back"
-          >Back to Home</a>
-          <router-link
-            to="/login"
-            class="btn btn-back btn-back-alt"
-          >
-            Already a member? Login
-          </router-link>
-          <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
-            <img
-              class="img-fluid"
-              src="../../../public/assets/images/logo_dnext.png"
-              alt="MKCL Mock Exams"
-            >
-          </div>
-          <div class="d-block text-center">
+           <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
             <h1 class="modal-title">
-              Registration
+             {{ this.$route.query.subtype }} Registration 
             </h1>
           </div>
-
-          <div class="card-form">
+         <div class="card-form">
             <div class="card-header card-header-alt mt-0">
               Personal Details
+            </div>
+            <div class="row">
+              <div class="d-block text-center">
+              <div size="180" class="user">
+              <input @change="handleFileChange" ref="fileInput" type="file" style="display: none">
+              <b-avatar size="180" :src="profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+              <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput"></i></template>
+            </b-avatar>
+            </div>
+            </div>
+              <!-- <img @click="openFileInput" class="profile-user-img img-circle" :src="profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png'" alt="User"/> -->
+            </div>
+            <br/> 
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="designation"
+                    class="control-label form-label"
+                  >Designation</label>
+                  <span class="text-danger">*</span>
+
+                  <v-select
+                    v-model="delegates[0].designation"
+                    label="name"
+                    placeholder="Please Select your Designation"
+                    :options="delegateDesignation"
+                    :value="delegates[0].designation.name"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.delegates.designation.required &&
+                        $v.delegates.designation.$error">
+                    Please Select Designation
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="title"
+                    class="control-label form-label"
+                  >
+                    Title
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <v-select
+
+                    v-model="delegates[0].title"
+                    label="name"
+                    placeholder="Please Select your title"
+                    :options="delegateTitles"
+                    :value="delegates[0].title.name"
+                  />
+                <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.title.name.required &&
+                        $v.title.name.$error
+                    "
+                  >
+                    Please Select Title
+                  </div> -->
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-md-12 col-lg-4">
                 <div class="form-group">
                   <label class="control-label form-label">
-                    Applicant Name
+                    First Name
                     <span class="text-danger">*</span>
                   </label>
                   <input
@@ -42,34 +91,34 @@
                     class="form-control"
                     minLength="4"
                     maxLength="100"
-                    v-model.trim="basic.fullName"
-                    :placeholder="$t('registration.studentNamePlaceholder')"
-                    id="fullName"
+                    v-model.trim="delegates[0].firstname"
+                     placeholder="Please Enter Your First Name"
+                    id="firstname"
                     :class="{
-                      'is-invalid': submitted && $v.basic.fullName.$invalid
+                      'is-invalid': submitted && $v.delegates[0].firstname.$invalid
                     }"
                   >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.fullName.required"
+                    v-if="submitted && !$v.delegates[0].firstname.required"
                   >
                     {{ $t('registration.vstudnetName1') }}
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.fullName.isNameValid"
+                    v-if="submitted && !$v.delegates[0].firstname.isNameValid"
                   >
                     {{ $t('registration.vstudnetName2') }}
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.fullName.maxLength"
+                    v-if="submitted && !$v.delegates[0].firstname.maxLength"
                   >
                     {{ $t('registration.vsMaxLength') }} 100 charachters
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.fullName.minLength"
+                    v-if="submitted && !$v.delegates[0].firstname.minLength"
                   >
                     {{ $t('registration.vsMinLength') }} 4 charachters
                   </div>
@@ -78,69 +127,83 @@
 
               <div class="col-md-12 col-lg-4">
                 <div class="form-group">
-                  <label
-                    for="gender"
-                    class="control-label form-label"
-                  >
-                    Gender
-                    <span class="text-danger">*</span>
+                  <label class="control-label form-label">
+                    Middle Name
                   </label>
-                  <v-select
-                    v-model="basic.gender"
-                    :placeholder="$t('registration.genderPlaceholder')"
-                    label="value"
-                    :options="gender"
-                    @input="genderSelected"
-                  />
+                  <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].middlename"
+                    placeholder="Please Enter Your Middle Name"
+                    id="fullName"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].middlename.$invalid
+                    }"
+                  >
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.gender.required"
+                    v-if="submitted && !$v.delegates[0].middlename.isNameValid"
                   >
-                    {{ $t('registration.vgender') }}
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].middlename.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].middlename.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
                   </div>
                 </div>
               </div>
+
               <div class="col-md-12 col-lg-4">
                 <div class="form-group">
-                  <label
-                    for="dob"
-                    class="control-label form-label"
-                  >
-                    {{ $t('registration.dob') }}
+                  <label class="control-label form-label">
+                    Last Name
                     <span class="text-danger">*</span>
                   </label>
-                  <div class="fp-holder">
-                    <b-form-datepicker
-                      placeholder="DD/MM/YYYY"
-                      format="dd-MM-yyyy"
-                      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                      :disabled-dates="disabledDateOfBirthDates"
-                      v-model="basic.dateOfBirth"
-                      :max="this.maxDate"
-                      :min="this.minDate"
-                      @input="validateAge()"
-                      :input-class="{
-                        'form-control': 'form-control',
-                      }"
-                      :class="{
-                        'is-invalid':
-                          submitted && $v.basic.dateOfBirth.$invalid,
-                      }"
-                    />
+                  <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].lastname"
+                    placeholder="Please Enter Your Last Name"
+                    id="fullName"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].lastname.$invalid
+                    }"
+                  >
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].lastname.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
                   </div>
                   <div
                     class="text-danger"
-                    v-if="submitted && !$v.basic.dateOfBirth.required"
+                    v-if="submitted && !$v.delegates[0].lastname.isNameValid"
                   >
-                    {{ $t('registration.vdob') }}
+                    {{ $t('registration.vstudnetName2') }}
                   </div>
                   <div
-                    class="form-text text-danger"
-                    v-if="isAgeValid === false"
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].lastname.maxLength"
                   >
-                    <small>
-                      Your age should be between 18 to 58 Years .
-                    </small>
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].lastname.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
                   </div>
                 </div>
               </div>
@@ -153,9 +216,7 @@
             </div>
 
             <div class="row">
-              <div class="col-md-12 col-lg-6">
-                <div class="form-row">
-                  <div class="col-md-6 col-lg-7">
+              <div class="col-md-6 col-lg-6">
                     <div class="form-group">
                       <label class="control-label form-label">
                         Mobile Number
@@ -167,42 +228,30 @@
                           oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                           maxlength="10"
                           minlength="10"
-                          v-model.trim="contact.mobileNumber"
-                          id="mobileNumber"
+                          v-model.trim="delegates[0].mobileNo"
+                          id="mobileNo"
                           :placeholder="$t('registration.mobilePlaceholder')"
-                          :disabled="flag == 1"
                           :class="{
                             'is-invalid':
-                              submitted && $v.contact.mobileNumber.$invalid
+                              submitted && $v.delegates[0].mobileNo.$invalid
                           }"
                         >
-                        <div class="input-group-append">
-                          <button
-                            class="btn btn-purple"
-                            @click="getOtp()"
-                            :disabled="
-                              sendOtpFlag || $v.contact.mobileNumber.$invalid
-                            "
-                          >
-                            {{ $t('registration.sendOtp') }}
-                          </button>
-                        </div>
-                      </div>
+                       </div>
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.mobileNumber.required"
+                        v-if="submitted && !$v.delegates[0].mobileNo.required"
                       >
                         {{ $t('registration.vmobile1') }}
                       </div>
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.mobileNumber.numeric"
+                        v-if="submitted && !$v.delegates[0].mobileNo.numeric"
                       >
                         {{ $t('registration.vmobile2') }}
                       </div>
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.mobileNumber.isMobileValid"
+                        v-if="submitted && !$v.delegates[0].mobileNo.isMobileValid"
                       >
                         Invalid Mobile Number
                       </div>
@@ -210,59 +259,15 @@
                         class="text-danger"
                         v-if="
                           submitted &&
-                            (!$v.contact.mobileNumber.minLength ||
-                            !$v.contact.mobileNumber.maxLength)
+                            (!$v.delegates[0].mobileNo.minLength ||
+                            !$v.delegates[0].mobileNo.maxLength)
                         "
                       >
                         {{ $t('registration.vmobile3') }}
                       </div>
                     </div>
                   </div>
-
-                  <div
-                    class="col-md-6 col-lg-5"
-                    v-if="showOtpField == true"
-                  >
-                    <div class="form-group">
-                      <label
-                        class="control-label form-label"
-                      >Enter OTP</label>
-                      <div class="input-group">
-                        <input
-                          class="form-control"
-                          v-model.trim="contact.votp"
-                          :placeholder="$t('registration.enterOtpPlaceholder')"
-                          id="votp"
-                          :disabled="flag == 1"
-                          :class="{
-                            'is-invalid':
-                              otp_submitted && $v.contact.votp.$invalid
-                          }"
-                        >
-                        <div class="input-group-append">
-                          <button
-                            type="button"
-                            class="btn btn-green"
-                            @click="verifyOtp()"
-                            :disabled="flag == 1 || contact.votp == ''"
-                          >
-                            {{ button }}
-                          </button>
-                        </div>
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="otp_submitted && !$v.contact.votp.required"
-                      >
-                        {{ $t('registration.venterOtp') }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-12 col-lg-6">
-                <div class="form-row">
-                  <div class="col-md-6 col-lg-7">
+                  <div class="col-md-6 col-lg-6">
                     <div class="form-group">
                       <label
                         class="control-label form-label"
@@ -272,80 +277,27 @@
                         <input
                           type="email"
                           class="form-control"
-                          v-model.trim="contact.emailID"
+                          v-model.trim="delegates[0].email"
                           :placeholder="$t('registration.emailIdPlaceholder')"
-                          id="emailID"
-                          :disabled="emailflag == 1"
+                          id="email"
                           :class="{
                             'is-invalid':
-                              submitted && $v.contact.emailID.$invalid
+                              submitted && $v.delegates[0].email.$invalid
                           }"
                         >
-                        <div class="input-group-append">
-                          <button
-                            class="btn btn-purple"
-                            @click="getEmailOtp()"
-                            :disabled="
-                              sendEmailOtpFlag || $v.contact.emailID.$invalid
-                            "
-                          >
-                            {{ $t('registration.sendOtp') }}
-                          </button>
-                        </div>
                       </div>
 
                       <div
                         class="text-danger"
-                        v-if="submitted && !$v.contact.emailID.required"
+                        v-if="submitted && !$v.delegates[0].email.required"
                       >
                         Please provide valid email
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="col-md-6 col-lg-5"
-                    v-if="showEmailOtpField == true"
-                  >
-                    <div class="form-group">
-                      <label
-                        class="control-label form-label"
-                      >Enter OTP</label>
-                      <div class="input-group">
-                        <input
-                          class="form-control"
-                          v-model.trim="contact.eotp"
-                          :placeholder="$t('registration.enterOtpPlaceholder')"
-                          id="votp"
-                          :disabled="emailflag == 1"
-                          :class="{
-                            'is-invalid':
-                              emailotp_submitted && $v.contact.eotp.$invalid
-                          }"
-                        >
-                        <div class="input-group-append">
-                          <button
-                            type="button"
-                            class="btn btn-green"
-                            @click="verifyEmailOtp()"
-                            :disabled="emailflag == 1 || contact.eotp == ''"
-                          >
-                            {{ emailButton }}
-                          </button>
-                        </div>
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="emailotp_submitted && !$v.contact.eotp.required"
-                      >
-                        {{ $t('registration.venterOtp') }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
-            <div class="row">
-              <div class="col-md-6 col-lg-4">
+            <!-- <div class="row">
+              <div class="col-md-12 col-lg-12">
                 <div class="form-group">
                   <label
                     for="states"
@@ -372,25 +324,369 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6 col-lg-4">
+            </div> -->
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+              Spouse Details
+            </div>
+             <div class="row">
+              <div class="d-block text-center">
+              <div size="180" class="user">
+              <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
+              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+                <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
+                </b-avatar>
+                </div>
+                </div>
+             </div> 
+            <br/>
+            <div class="row">
+               <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="title"
+                    class="control-label form-label"
+                  >
+                    Title
+                  
+                  </label>
+
+                  <v-select
+
+                    v-model="delegates[0].family[0].title"
+                    label="name"
+                    placeholder="Please Select title"
+                    :options="delegateTitles"
+                    :value="delegates[0].family[0].title"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.delegates[0].family[0].title.name.required &&
+                        $v.delegates[0].family[0].title.name.$error
+                    "
+                  >
+                    Please Select Title
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Full Name
+                  </label>
+                  <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].family[0].name"
+                    :placeholder="$t('registration.studentNamePlaceholder')"
+                    id="fullName"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].family[0].name.$invalid
+                    }"
+                  >
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
+                  </div> -->
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.isNameValid"
+                  >
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.delegates[0].family[0].name.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              Spouse Contacts Details
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Mobile Number
+                      </label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                          maxlength="10"
+                          minlength="10"
+                          v-model.trim="delegates[0].family[0].mobileNo"
+                          id="mobileNumber"
+                          :placeholder="$t('registration.mobilePlaceholder')"
+                          :disabled="flag == 1"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].mobileNo.$invalid
+                          }"
+                        >
+                       </div>
+                       <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.numeric"
+                      >
+                        {{ $t('registration.vmobile2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.isMobileValid"
+                      >
+                        Invalid Mobile Number
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.delegates[0].family[0].mobileNo.minLength ||
+                            !$v.delegates[0].family[0].mobileNo.maxLength)
+                        "
+                      >
+                        {{ $t('registration.vmobile3') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Email ID</label>
+                      <div class="input-group">
+                        <input
+                          type="email"
+                          class="form-control"
+                          v-model.trim="delegates[0].family[0].email"
+                          :placeholder="$t('registration.emailIdPlaceholder')"
+                          id="emailID"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].email.$invalid
+                          }"
+                        >
+                      </div>
+                    </div>
+                  </div>
+            </div>
+           </div>
+         <div class="card-form">
+          <div class="card-header card-header-alt">
+              Travel Details:
+            </div>
+          <h5>Arrival Details:-</h5>  
+          <div class="row">
+               <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="travel1"
+                    class="control-label form-label"
+                  >
+                    Mode of Travel
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <v-select
+                    v-model="delegates[0].travelDetail[0].travelModel"
+                    label="name"
+                    placeholder="Please Select Travel Mode"
+                    :options="travelModes"
+                    :value="delegates[0].travelDetail[0].travelModel"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.travelModel.name.required &&
+                        $v.travelModel.name.$error
+                    "
+                  >
+                   
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Vehicle/Flight/Train No.
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[0].vehicleNumber"
+                    placeholder="Please Enter Vehicle/Flight/Train No."
+                    id="vehicleNo"
+                    :class="{
+                      'is-invalid': submitted && $v.travelDetail.vehicleNumber.$invalid
+                    }"
+                  >
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.travelDetail.vehicleNumber.required"
+                  >
+                  Please Enter Vehicle/Flight/Train No.
+                  </div>
+                   <div
+                    class="text-danger"
+                    v-if="submitted && !$v.vehicleNumber.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.vehicleNumber.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="form-group" v-if="delegates[0].travelDetail[0].travelModel.name == 'Flight'">
+                  <label class="control-label form-label">
+                    Arrival To
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="delegates[0].travelDetail[0].arrivalTo.name"
+                    label="name"
+                    placeholder="Please Select Travel Mode"
+                    :options="airportTerminal"
+                    :value="delegates[0].travelDetail[0].arrivalTo.name"
+                  />
+                </div>
+                <div class="form-group" v-if="delegates[0].travelDetail[0].travelModel.name == 'Train'">
+                  <label class="control-label form-label">
+                    Arrival To
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="delegates[0].travelDetail[0].arrivalTo"
+                    label="name"
+                    placeholder="Please Select Travel Mode"
+                    :options="railwayStation"
+                    :value="delegates[0].travelDetail[0].arrivalTo.name"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row" v-if="delegates[0].travelDetail[0].travelModel.name == 'Train' && delegates[0].travelDetail[0].arrivalTo.name == 'Other'">
+              <div class="col-md-12 col-lg-12">
+                <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[0].other"
+                    placeholder="Please Specify"
+                    id="specify"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].travelDetail[0].other.$invalid
+                    }"
+                  >
+              </div>
+            </div>
+            <div class="row">
+               <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="travel"
+                    class="control-label form-label"
+                  >
+                    Start Travel Date & Time
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <div class="fp-holder">
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Travel Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[0].travelDate"
+                    id="ddateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.travelDate.required"
+                  >
+                    Please Select Start Travel Date
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                     Arrival Date & Time
+                    <span class="text-danger">*</span>
+                  </label>
+                  <div class="fp-holder">
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Arrival Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[0].arrivalDate"
+                    id="dadateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.arrivalDate.required"
+                  >
+                    Please Select Arrival Travel Date
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h5>Departure Details:-</h5>  
+             <div class="row">
+               <div class="col-md-4 col-lg-4">
                 <div class="form-group">
                   <label
                     for="districts"
                     class="control-label form-label"
                   >
-                    District
+                    Mode of Travel
                     <span class="text-danger">*</span>
                   </label>
 
                   <v-select
 
-                    v-model="address.district"
-                    label="displayName"
-                    :placeholder="$t('registration.districtPlaceholder')"
-                    :options="districts"
-                    :value="address.district"
+                    v-model="delegates[0].travelDetail[0].dtravelModel"
+                    label="name"
+                    placeholder="Please Enter Your Mode of Travel"
+                    :options="travelModes"
+                    :value="delegates[0].travelDetail[0].dtravelModel"
                   />
-                  <div
+                  <!-- <div
                     class="text-danger"
                     v-if="
                       !$v.address.district.required &&
@@ -398,219 +694,415 @@
                     "
                   >
                     {{ $t('registration.vdistrict') }}
-                  </div>
+                  </div> -->
                 </div>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="col-md-4 col-lg-4">
                 <div class="form-group">
                   <label class="control-label form-label">
-                    Pincode
+                    Vehicle/Flight/Train No.
                     <span class="text-danger">*</span>
                   </label>
                   <input
+                    type="text"
                     class="form-control"
-                    v-model.trim="address.pincode"
-                    oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                    placeholder="Enter Your Pincode"
-                    maxlength="6"
-                    minlength="6"
-                    id="pincode"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[0].rvehicleNumber"
+                    placeholder="Please Specify Vehicle/Flight/Train No."
+                    id="vehicleNumber"
                     :class="{
-                      'is-invalid':
-                        submitted && $v.address.pincode.$invalid
+                      'is-invalid': submitted && $v.delegates.travelDetail.rvehicleNumber.$invalid
                     }"
                   >
-                  <div
+                  <!-- <div
                     class="text-danger"
-                    v-if="submitted && !$v.address.pincode.required"
+                    v-if="submitted && !$v.basic.fullName.required"
                   >
-                    {{ $t('registration.pincode') }}
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.address.pincode.numeric"
-                  >
-                    {{ $t('registration.pincode2') }}
+                    {{ $t('registration.vstudnetName1') }}
                   </div>
                   <div
                     class="text-danger"
-                    v-if="
-                      submitted &&
-                        (!$v.address.pincode.minLength ||
-                        !$v.address.pincode.maxLength)
-                    "
+                    v-if="submitted && !$v.basic.fullName.isNameValid"
                   >
-                    {{ $t('registration.pincode3') }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-form">
-            <div class="card-header card-header-alt">
-              Educational Details
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label
-                        for="exam"
-                        class="control-label form-label"
-                      >
-                        Select Qualification
-                        <span class="text-danger">*</span>
-                      </label>
-                      <v-select
-                        v-model="qualification.qualificationName"
-                        label="displayName"
-                        placeholder="Select Qualification"
-                        :options="Class"
-                      />
-                      <div
-                        class="text-danger"
-                        v-if="
-                          !$v.qualification.qualificationName.required &&
-                            $v.qualification.qualificationName.$error
-                        "
-                      >
-                        {{ $t('registration.veducationLevel') }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card-form">
-            <div class="card-header card-header-alt">
-              Other Details
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label
-                        for="exam"
-                        class="control-label form-label"
-                      >
-                        Select Training Location Preference
-                        <span class="text-danger">*</span>
-                      </label>
-                      <v-select
-                        v-model="other.preference"
-                        label="location"
-                        placeholder="Select Training Location Preference"
-                        :options="preferenceOptions"
-                      />
-                      <div
-                        class="text-danger"
-                        v-if="
-                          !$v.other.preference.required &&
-                            $v.other.preference.$error
-                        "
-                      >
-                        {{ $t('registration.vPreferenceError') }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md">
-                    <div class="form-group">
-                      <label
-                        for="exam"
-                        class="control-label form-label"
-                      >
-                        Select Referral
-                        <span class="text-danger">*</span>
-                      </label>
-                      <v-select
-                        v-model="other.reference"
-                        label="refferal"
-                        placeholder="Select Referral"
-                        :options="referralOptions"
-                      />
-                      <div
-                        class="text-danger"
-                        v-if="
-                          !$v.other.reference.required &&
-                            $v.other.reference.$error
-                        "
-                      >
-                        {{ $t('registration.vReferralError') }}
-                      </div>
-                    </div>
+                    {{ $t('registration.vstudnetName2') }}
                   </div>
                   <div
-                    class="col-md"
-                    v-show="other.reference.refferal === 'Other'"
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.maxLength"
                   >
-                    <div class="form-group">
-                      <label
-                        for="exam"
-                        class="control-label form-label"
-                      >
-                        Please Specify
-                        <span class="text-danger">*</span>
-                      </label>
-                      <textarea
-                        type="textarea"
-                        class="form-control"
-                        minLength="5"
-                        maxLength="200"
-                        v-model.trim="pleaseSpecify"
-                        placeholder="Please Specify"
-                        ipleaseSpecifyInvalidd="fullName"
-                        :class="{
-                          'is-invalid': submitted && pleaseSpecifyInvalid
-                        }"
-                      />
-                      <div
-                        class="text-danger"
-                        v-if="
-                          submitted && pleaseSpecifyInvalid
-                        "
-                      >
-                        Text should be between 5 to 200 charachters
-                      </div>
-                    </div>
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
                   </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div> -->
                 </div>
               </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-12 d-flex justify-content-center">
+              <div class="col-md-4 col-lg-4">
                 <div class="form-group">
-                  <div class="custom-control custom-checkbox">
-                    <input
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                    Return Date & Time
+                    <span class="text-danger">*</span>
+                  </label>
+
+                  <div class="fp-holder">
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Departure Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[0].departureDate"
+                    id="dddateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.departureDate.required"
+                  >
+                    Please Select Departure Travel Date
+                  </div>
+                </div>
+              </div>
+            </div>
+          <h4>Spouse Travel Details: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input
                       type="checkbox"
                       class="custom-control-input"
-                      id="customCheck3"
-                      value="checkbox3text"
+                      id="customCheck4"
+                      value="checkbox4text"
                       v-model="checked"
+                      @click="copyData"
                     >
                     <label
                       class="custom-control-label"
-                      for="customCheck3"
+                      for="customCheck4"
                     >
-                      I agree to
-                      <a
-                        href="javascript:void(0)"
-                        id="show-btn"
-                        v-b-modal.modal-lg
-                        @click="$bvModal.show('tc-modal')"
-                      >Terms and Conditions.</a>
-                    </label>
+                      (Check If details are same as above)                  
+                    </label></h4>
+            <h5>Arrival Details:-</h5>  
+          <div class="row">
+               <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                    Mode of Travel
+                  </label>
+
+                  <v-select
+
+                    v-model="delegates[0].travelDetail[1].travelModel"
+                    label="name"
+                    placeholder="Please Enter Your Mode of Travel"
+                    :options="travelModes"
+                    :value="delegates[0].travelDetail[1].travelModel"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.address.district.required &&
+                        $v.address.district.$error
+                    "
+                  >
+                    {{ $t('registration.vdistrict') }}
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Vehicle/Flight/Train No.
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[1].vehicleNumber"
+                    placeholder="Please Specify Vehicle/Flight/Train No."
+                    id="vehicleNumber"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates.travelDetail.vehicleNumber.$invalid
+                    }"
+                  >
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
                   </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.isNameValid"
+                  >
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+
+                <div class="form-group" v-if="delegates[0].travelDetail[1].travelModel.name == 'Flight'">
+                  <label class="control-label form-label">
+                    Arrival To
+                  </label>
+                  <v-select
+                    v-model="delegates[0].travelDetail[1].arrivalTo.name"
+                    label="name"
+                    placeholder="Please Select Travel Mode"
+                    :options="airportTerminal"
+                    :value="delegates[0].travelDetail[1].arrivalTo.name"
+                  />
+                </div>
+                <div class="form-group" v-if="delegates[0].travelDetail[1].travelModel.name == 'Train'">
+                  <label class="control-label form-label">
+                    Arrival To
+                    <span class="text-danger">*</span>
+                  </label>
+                  <v-select
+                    v-model="delegates[0].travelDetail[1].arrivalTo"
+                    label="name"
+                    placeholder="Please Select Travel Mode"
+                    :options="railwayStation"
+                    :value="delegates[0].travelDetail[1].arrivalTo.name"
+                  />
                 </div>
               </div>
             </div>
+            <div class="row" v-if="delegates[0].travelDetail[1].travelModel.name == 'Train' && delegates[0].travelDetail[1].arrivalTo.name == 'Other'">
+              <div class="col-md-12 col-lg-12">
+                <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[1].other"
+                    placeholder="Please Specify"
+                    id="specify"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].travelDetail[1].other.$invalid
+                    }"
+                  >
+              </div>
+            </div>
+            <div class="row">
+               <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                     Start Travel Date & Time
+                   </label>
+
+                  <div class="fp-holder">
+                    
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Travel Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[1].travelDate"
+                    id="sdateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.travelDate.required"
+                  >
+                    Please Select Start Travel Date
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                     Arrival Date & Time
+                   </label>
+                  <div class="fp-holder">
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Arrival Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[1].arrivalDate"
+                    id="sadateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.arrivalDate.required"
+                  >
+                    Please Select Arrival Travel Date
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            <h5>Departure Details:-</h5>  
+             <div class="row">
+               <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                    Mode of Travel
+                  </label>
+
+                  <v-select
+                    v-model="delegates[0].travelDetail[0].dtravelModel.name"
+                    label="name"
+                    placeholder="Please Enter Your Mode of Travel "
+                    :options="travelModes"
+                    :value="delegates[0].travelDetail[0].dtravelModel.name"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.address.district.required &&
+                        $v.address.district.$error
+                    "
+                  >
+                    {{ $t('registration.vdistrict') }}
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Vehicle/Flight/Train No.
+                    </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].travelDetail[1].rvehicleNumber"
+                    placeholder="Please Specify Vehicle/Flight/Train No."
+                    id="vehicleNumber"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates.travelDetail.rvehicleNumber.$invalid
+                    }"  
+                  >
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
+                  </div> -->
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.isNameValid"
+                  >
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.fullName.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label
+                    for="districts"
+                    class="control-label form-label"
+                  >
+                    Return Date & Time
+                  </label>
+
+                  <div class="fp-holder">
+                    <Datepicker 
+                    format="YYYY-MM-DD h:i:s" 
+                    placeholder="Please Select Departure Date Time"
+                    min="2024-01-26"
+                    max="2024-01-30"
+                    v-model="delegates[0].travelDetail[1].departureDate"
+                    id="sddateTime"
+                    :input-class="{
+                        'form-control': 'form-control',
+                      }"/>
+                    </div>
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates.travelDetail.departureDate.required"
+                  >
+                    Please Select Departure Travel Date
+                  </div> -->
+                </div>
+              </div>
+            </div>
+            </div>
+          <br/>
+          <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+              Others:
+            </div>
+             <div class="rows">
+              <div class="col-md-12 col-lg-12">
+                <div class="form-group">
+                  <label
+                    for="states"
+                    class="control-label form-label"
+                  >Interested Site Seeing</label>
+                  <span class="text-danger">*</span>
+
+                  <v-select
+                    v-model="delegates[0].siteSeeing"
+                    label="name"
+                    placeholder="Please Select Site Seeing"
+                    :options="siteSeeing"
+                    :value="delegates[0].siteSeeing"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.delegates.siteSeeing.name.required &&
+                        $v.delegates.siteSeeing.name.$error
+                    "
+                  >
+                    {{ $t('registration.vstate') }}
+                  </div> -->
+                </div>
+              </div>
+             </div>
+          </div>
+          <br/>
+          <div class="card-form">
             <div class="form-action-alt">
               <button
-                :disabled="checked === false"
                 type="button"
                 class="btn btn-page"
                 @click="applicantRegister()"
@@ -619,85 +1111,9 @@
               </button>
             </div>
           </div>
-          <div class="help-wrapper">
-            <div class="copyright-holder">
-              <img
-                src="../../../public/assets/images/logo_mkcl.svg"
-                class="img-adj"
-                alt="MKCL"
-              >
-              <div class="copyright">
-                Powered by
-                <a
-                  href="https://www.mkcl.org"
-                  target="_blank"
-                >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
-              </div>
-            </div>
-          </div>
-        </div>
-        <b-modal
-          size="lg"
-          id="tc-modal"
-          hide-footer
-          hide-header
-        >
-          <div class="d-block text-center">
-            <h3 class="modal-title">
-              Terms & Conditions
-            </h3>
-          </div>
-          <div class="modal-content-alt">
-            <ol class="mb-2">
-              <li>
-                {{ $t('registration.term1') }}
-              </li>
-
-              <li>
-                {{ $t('registration.term2') }}
-              </li>
-              <li>
-                {{ $t('registration.term3') }}
-              </li>
-              <li>
-                {{ $t('registration.term4') }}
-              </li>
-              <li>
-                {{ $t('registration.term5') }}
-              </li>
-              <li>
-                {{ $t('registration.term6') }}
-              </li>
-              <li>
-                {{ $t('registration.term7') }}
-              </li>
-              <li>
-                {{ $t('registration.term71') }}
-              </li>
-              <li>
-                {{ $t('registration.term8') }}
-              </li>
-              <li>
-                {{ $t('registration.term9') }}
-              </li>
-              <li>
-                {{ $t('registration.term10') }}
-              </li>
-            </ol>
-            <span class="terms-info">I HEREBY ACKNOLWEDGE THAT I HAVE READ, UNDERSTOOD AND AGREE TO THE ABOVE TERMS & CONDITIONS RELATING TO USAGE OF MKCL DNExT APPLICATION PROCESS.
-            </span>
-          </div>
-          <div class="modal-button">
-            <b-button
-              class="btn-page"
-              type="submit"
-              @click="$bvModal.hide('tc-modal')"
-            >
-              {{ $t('registration.close') }}
-            </b-button>
-          </div>
-        </b-modal>
-      </div>
+          <br/>
+         </div>
+       </div>
     </div>
   </section>
 </template>
@@ -715,10 +1131,79 @@ import {
   requiredIf
 } from 'vuelidate/lib/validators'
 import Swal from 'sweetalert2'
+import VueCropper from 'vue-cropperjs'
+import Datepicker from 'vuejs-datetimepicker'
+import { ref } from 'vue'
+import axios from 'axios'
 var moment = require('moment')
 export default {
+  components: { 
+    VueCropper,
+    Datepicker 
+  },
+  props: ['image_name'],
   data () {
+    const fileInput = ref(null);
+    const fileInput1 = ref(null);
+    const profilePictureUrl = ref(null);
+    const profilePictureUrl1 = ref(null);
+    
+    const handleFileChange = (event) => {
+       const file = event.target.files[0];
+       profilePictureUrl.value = URL.createObjectURL(file);
+       console.log(profilePictureUrl.value);
+       const  formData = new FormData();
+        formData.append('file',file);
+        
+       axios.post('http://172.1.0.81:9292/photo/uploadFile',formData)
+       .then((response) => {
+        console.log(response);
+        this.delegates[0].photoPath = response.data;
+        this.$toasted.success('Image Uploaded Successfully', {
+          theme: 'bubble',
+          position: 'top-center',
+          duration: 3000
+        });
+       }); 
+    }
+
+    const handleFileChange1 = (event) => {
+       const file1 = event.target.files[0];
+       profilePictureUrl1.value = URL.createObjectURL(file1);
+       console.log(profilePictureUrl1.value);
+       const formData1 = new FormData();
+        formData1.append('file',file1);
+        
+       axios.post('http://172.1.0.81:9292/photo/uploadFile',formData1)
+       .then((response) => {
+        console.log(response);
+        this.delegates[0].sphotoPath = response.data;
+        this.$toasted.success('Image Uploaded Successfully', {
+          theme: 'bubble',
+          position: 'top-center',
+          duration: 3000
+        });
+       }); 
+    }
+
     return {
+      // mime_type: '',
+      // cropedImage: '',
+      // autoCrop: false,
+      // selectedFile: '',
+      // image: '',
+      // dialog: false,
+      // files: '',
+      fileInput,
+      fileInput1,
+      profilePictureUrl,
+      profilePictureUrl1,
+      handleFileChange,
+      handleFileChange1,
+      checked: false,
+      mainProps: { blank: true, blankColor: '#777', width: 30, height: 30, class: 'm1' },
+      file: null,
+      imageUrl: null,
       address: {
         district: null,
         pincode: null,
@@ -746,91 +1231,196 @@ export default {
           referral: ''
         }
       },
-      student_cred: {},
-      isGenderSelected: false,
-      iconChange: 'mdi mdi-eye',
-      iconChangeCnf: 'mdi mdi-eye',
-      submitted: false,
-      button: 'Verify',
-      emailButton: 'Verify',
-      checked: false,
-      countries: [],
-      states: [],
-      districts: [],
-      talukas: [],
-      degree: [],
-      universities: [],
-      faculties: [],
-      courses: [],
-      preferenceOptions: [],
-      referralOptions: [],
-      password: '',
-      cnfpassword: '',
-      countryId: null,
-      universityId: null,
-      facultyId: null,
-      courseId: null,
-      stateId: null,
+      
       timer: 0,
-      districtId: null,
-      isEnabled: true,
-      otp_submitted: false,
-      emailotp_submitted: false,
-      sendOtpFlag: false,
-      sendEmailOtpFlag: false,
-      showOtpField: false,
-      showEmailOtpField: false,
       isAgeValid: null,
-      PasswordInputType: 'password',
-      PasswordInput: 'password',
-      flag: 0,
-      emailflag: 0,
-      otp_d: {
-        mobileNumber: '',
-        votp: ''
-      },
-      pleaseSpecify: '',
-      commonDateConfig: {
+       commonDateConfig: {
         dateFormat: 'Y-m-d',
         maxDate: this.maxDate,
         minDate: this.minDate
       },
-      mode: [
-        {
-          value: 'Mobile',
-          text: 'Mobile'
-        },
-        {
-          value: 'Laptop',
-          text: 'Laptop'
-        },
-        {
-          value: 'Desktop',
-          text: 'Desktop'
-        },
-        {
-          value: ' MKCL ALC',
-          text: ' MKCL ALC'
-        }
-      ],
+     
       years: [],
       customDate: null,
-      gender: [
-        { value: 'Male', text: 'Male' },
-        { value: 'Female', text: 'Female' },
-        { value: 'Transgender', text: 'Transgender' }
-      ],
-      EducationLevels: [],
-      Class: [],
-
-      Options: [
-        { text: 'हो/Yes', value: true },
-        { text: 'नाही/No', value: false }
-      ],
-      showGuardianFlag: false
+      submitted:false,
+      delegateFinal:[{
+        titleId: null,
+        designationId: null,
+        stateId: null,
+        delegatePhotoId: null,
+        firstname: '',
+        middlename: '',
+        lastname: '',
+        email: '',
+        mobileNo: null,
+        spouseName: '',
+        spouseEmail: '',
+        spouseMobileNo: '',
+        spouseTitleId: '',
+        spousePhotoId: null,
+        visitingPlacesIds: '',
+        totalTravelDetailSize: null,
+        travelDetails: [
+            {
+                arrivalTravelMode: null,
+                arrivalVehicleNumber: null,
+                travelStartDate: '',
+                arrivalStartDate: '',
+                departureTravelMode: null,
+                departureDate: '',
+                departureVehicleNumber: null,
+                isDelegate: false,
+			        	arriveTo:''
+            },
+            {
+                arrivalTravelMode: null,
+                arrivalVehicleNumber: null,
+                travelStartDate: '',
+                arrivalStartDate: '',
+                departureTravelMode: null,
+                departureDate: '',
+                departureVehicleNumber: null,
+                isDelegate: false,
+          			arriveTo:''
+          }
+        ]
+      }],
+      delegates:[{
+        firstname:'',
+        lastname:'',
+        middlename:'',     
+        email:'',
+        mobileNo:'',
+        state:{
+          name : '',
+          code : '',
+          id : ''
+        },
+        photoPath:'',
+        sphotoPath:'',
+        title: {
+          name :'',
+          id: null
+        },
+        designation:{
+          name :'',
+          type:'',
+          id: null
+        },
+        family: [
+          {
+              name : '',
+              title: {
+                name :'',
+                id: null
+              }, 
+              email: '',
+              mobileNo: '',   
+          }
+        ],
+         travelDetail: [
+          {
+            travelModel : {
+              type :'',
+              id: null
+            },
+            dtravelModel : {
+              type :'',
+              id: null
+            },
+            vehicleNumber : '',
+            rvehicleNumber:'',
+            arrivalTo : {
+              id: null,
+              name:''
+            },
+            travelDate : '',
+            arrivalDate : '',
+            departureDate : '',
+            isDelegate : null,
+          },
+          {
+            travelModel : {
+              name :'',
+              id: null
+            },
+            dtravelModel : {
+              name :'',
+              id: null
+            },
+            vehicleNumber : '',
+            arrivalTo : {
+              id: null,
+              name:''
+            },
+            travelDate : '',
+            arrivalDate : '',
+            departureDate : '',
+            isDelegate : null,
+          }
+         ],
+         siteSeeing: {
+          name :'',
+          id: null
+        }
+        }],
+         title:{
+          name :'',
+          id: null
+        },
+         travelmode:{
+          name :'',
+          id: null
+        },
+        returntravelmode:{
+          name :'',
+          id: null
+        },
+        stravelmode:{
+          name :'',
+          id: null
+        },
+        sreturntravelmode:{
+          name :'',
+          id: null
+        },
+        siteSeeing :[],
+        delegateDesignation : [],
+        airportTerminal : [
+          {
+            id : 1,
+            name : 'Terminal-1'
+          },      
+          {
+            id : 2,
+            name : 'Terminal-2'
+          }
+        ],
+        railwayStation : [
+          {
+            id : 1,
+            name : 'Mumbai Central'
+          },      
+          {
+            id : 2,
+            name : 'Bandra Terminus'
+          },
+          {
+            id : 3,
+            name : 'Chhatrapati Shivaji Maharaj Terminus'
+          },
+          {
+            id : 4,
+            name : 'Other'
+          }
+        ],
+        delegateTitles : [],
+        States : [],
+        travelModes :[]
     }
   },
   computed: {
+    
     pleaseSpecifyInvalid () {
       if (this.other.reference.refferal === 'Other') {
         if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
@@ -847,6 +1437,53 @@ export default {
   //   Datepicker
   // },
   validations: {
+    delegates:{
+      $each :{
+        firstname:required,
+        lastname:required,  
+        email:required,
+        mobileNo : required,
+        state:{
+          name : required,
+          code : required,
+          id : required
+        },
+        photoPath:required,
+        title: {
+          name :{
+            required
+          }
+        },
+        designation:{required},
+        family:{
+          $each:{
+              name : required,
+              title: {
+                name :required,
+              }, 
+               mobileNo: required,   
+          }},
+         travelDetail:{
+          $each:{
+            travelModel : {
+              name :required,
+            },
+            dtravelModel : {
+              name :required,
+            },
+            vehicleNumber : {required},
+            travelDate : {required},
+            arrivalDate : {required},
+            arrivalFrom : {required},
+            departureDate : {required},
+            isDelegate : {required},
+          }
+         },
+         siteSeeing: {
+          name :{required}
+         } 
+        }
+      },
     address: {
       pincode: {
         required,
@@ -922,11 +1559,19 @@ export default {
     // vm.getAllDistricts();
   },
   mounted () {
-    // this.getDistrictsByStateId()
-    this.getClassDetails()
-    this.getPreferences()
-    this.getMaxMinDate()
-    this.getReferrals()
+    this.$nextTick(() => {
+      this.fileInput = this.$refs.fileInput;
+      // Now fileInput is guaranteed to be available
+    });
+    this.$nextTick(() => {
+      this.fileInput1 = this.$refs.fileInput1;
+      // Now fileInput is guaranteed to be available
+    });
+    var designationSubtype = this.$route.query.subtype;
+    this.fetchUserDesignation(designationSubtype.toLowerCase())
+    this.fetchUserTitle()
+    this.fetchUserVistingPlaces()
+    this.fetchUserModeOfTravel()
   },
   methods: {
     changeLanguage (lang) {
@@ -934,6 +1579,184 @@ export default {
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {
       })
+    },
+
+    fetchUserDesignation(paramDesignation){
+      const vm = this
+      axios
+           .get(
+             "http://172.1.0.81:9292/designation/getDesignations/"+paramDesignation
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null){
+                 vm.delegateDesignation = response.data;
+              } else{
+               vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false) 
+
+    },
+
+    fetchUserTitle(){
+     const vm = this
+      axios
+           .get(
+             "http://172.1.0.81:9292/title/getAllTitles"
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null){
+                 vm.delegateTitles = response.data;
+              } else{
+               vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false) 
+    },
+
+    fetchUserVistingPlaces(){
+      const vm = this
+      axios
+           .get(
+             "http://172.1.0.81:9292/visitingPlaces/getAllVisitingPlaces"
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null){
+                 vm.siteSeeing = response.data;
+              } else{
+               vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false) 
+    },
+
+    fetchUserModeOfTravel(){
+      const vm = this
+      axios
+           .get(
+             "http://172.1.0.81:9292/travelMode/getAllTravelModes"
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null){
+                 vm.travelModes = response.data;
+              } else{
+               vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false) 
+    },
+    openFileInput() {
+      if (this.fileInput) {
+        this.fileInput.click();
+      }
+    },
+    openFileInput1() {
+      if (this.fileInput1) {
+        this.fileInput1.click();
+      }
+    },
+      handleFileChange() {
+      // Process the file and save the image URL
+      if (this.file) {
+        // Perform file upload logic here (e.g., using Axios or other methods)
+        // After successful upload, set the imageUrl to the URL of the uploaded image
+        // For demonstration purposes, using a FileReader to preview the image locally
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageUrl = reader.result;
+        };
+        reader.readAsDataURL(this.file);
+      }
+    },
+    copyData(){
+      this.delegates[0].travelDetail[1] = this.delegates[0].travelDetail[0];
+    },
+    saveImage() {
+      const userId = this.$route.params.user_id
+      this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
+      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
+        const formData = new FormData()
+        formData.append('profile_photo', blob, 'name.jpeg')
+        axios
+          .post('/api/user/' + userId + '/profile-photo', formData)
+          .then((response) => {
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }, this.mime_type)
+    },
+    onFileSelect(e) {
+      const file = e.target.files[0]
+      this.mime_type = file.type
+      console.log(this.mime_type)
+      if (typeof FileReader === 'function') {
+        this.dialog = true
+        const reader = new FileReader()
+        reader.onload = (event) => {
+          this.selectedFile = event.target.result
+          this.$refs.cropper.replace(this.selectedFile)
+        }
+        reader.readAsDataURL(file)
+      } else {
+        alert('Sorry, FileReader API not supported')
+      }
     },
 
     validateAge () {
@@ -961,15 +1784,6 @@ export default {
         this.isMobileValid = true
         return true
       }
-    },
-    onAccept () {
-      const vm = this
-      vm.checked = true
-      vm.$bvModal.hide('tc-modal')
-    },
-    genderSelected () {
-      const vm = this
-      vm.isGenderSelected = true
     },
     async starter () {
       const vm = this
@@ -1315,65 +2129,113 @@ export default {
     },
     applicantRegister () {
       const vm = this
-      vm.submitted = true
-      vm.$v.$touch()
-      if (vm.flag !== 1 || vm.emailflag !== 1) {
-        Swal.fire({
-          title: 'Please Verify Mobile Number and Email ID',
-          icon: 'error'
-        })
-      } else if (!vm.$v.$invalid && !this.pleaseSpecifyInvalid) {
-        var sendData = {}
-        sendData.basic = this.basic
-        sendData.basic.dateOfBirth = this.basic.dateOfBirth + ' 00:00:00'
-        sendData.address = this.address
-        sendData.address.district = this.address.district.displayName
-        sendData.address.state = this.address.state.displayName
-        sendData.basic.gender = this.basic.gender.value
-        sendData.qualification = this.qualification
-        sendData.qualification.qualificationId = this.qualification.qualificationName.qualificationId
-        sendData.qualification.qualificationName = this.qualification.qualificationName.displayName
-        sendData.contact = this.contact
-        sendData.other = this.other
-        sendData.other.preference = this.other.preference.location
-        sendData.other.reference = this.other.reference.refferal
-        if (sendData.other.reference === 'Other') {
-          sendData.other.reference = {
-            other: this.pleaseSpecify
-          }
-        }
-        sendData.roleName = 'Applicant'
-        new MQL()
-          .setActivity('o.[RegisterUser]')
-          .setData(sendData)
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('RegisterUser', true)
-            if (rs.isValid('RegisterUser')) {
-              if (res.result.result === 'Success') {
-                this.$toasted.success('Registration Successfull', {
-                  theme: 'bubble',
-                  position: 'top-center',
-                  duration: 3000
-                })
-                this.$router.push({
-                  name: 'success'
-                })
-              } else {
-                this.$toasted.error(res.result.result, { duration: 3000 })
-              }
-            } else {
-              rs.showErrorToast('RegisterUser')
-            }
-          })
-      } else {
-        Swal.fire({
-          title: 'Please fill all the fields properly',
-          icon: 'error'
-        })
+      //console.log( this.$store.getters['getStateId'])
+      vm.delegateFinal[0].titleId = vm.delegates[0].title.id
+      vm.delegateFinal[0].designationId = vm.delegates[0].designation.id
+      vm.delegateFinal[0].stateId = vm.$store.getters['getStateId']
+      vm.delegateFinal[0].delegatePhotoId = vm.delegates[0].photoPath
+      vm.delegateFinal[0].firstname =  vm.delegates[0].firstname
+      vm.delegateFinal[0].middlename = vm.delegates[0].middlename
+      vm.delegateFinal[0].lastname = vm.delegates[0].lastname
+      vm.delegateFinal[0].email = vm.delegates[0].email
+      vm.delegateFinal[0].mobileNo = vm.delegates[0].mobileNo
+      vm.delegateFinal[0].spouseName = vm.delegates[0].family[0].name
+      vm.delegateFinal[0].spouseEmail = vm.delegates[0].family[0].email
+      vm.delegateFinal[0].spouseMobileNo = vm.delegates[0].family[0].mobileNo
+      vm.delegateFinal[0].spouseTitleId = vm.delegates[0].family[0].title.id
+      vm.delegateFinal[0].spousePhotoId = vm.delegates[0].sphotoPath
+      vm.delegateFinal[0].visitingPlacesIds = vm.delegates[0].siteSeeing.id
+      vm.delegateFinal[0].totalTravelDetailSize = 2
+      vm.delegateFinal[0].travelDetails[0].arrivalTravelMode= vm.delegates[0].travelDetail[0].travelModel.id
+      vm.delegateFinal[0].travelDetails[0].arrivalVehicleNumber= vm.delegates[0].travelDetail[0].vehicleNumber
+      vm.delegateFinal[0].travelDetails[0].travelStartDate = vm.delegates[0].travelDetail[0].travelDate
+      vm.delegateFinal[0].travelDetails[0].arrivalStartDate= vm.delegates[0].travelDetail[0].arrivalDate
+      vm.delegateFinal[0].travelDetails[0].departureTravelMode= vm.delegates[0].travelDetail[0].dtravelModel.id
+      vm.delegateFinal[0].travelDetails[0].departureDate= vm.delegates[0].travelDetail[0].departureDate
+      vm.delegateFinal[0].travelDetails[0].departureVehicleNumber= vm.delegates[0].travelDetail[0].rvehicleNumber
+      vm.delegateFinal[0].travelDetails[0].isDelegate= true
+			vm.delegateFinal[0].travelDetails[0].arriveTo=vm.delegates[0].travelDetail[0].arrivalTo.id+"##"+vm.delegates[0].travelDetail[0].arrivalTo.name
+      vm.delegateFinal[0].travelDetails[1].arrivalTravelMode= vm.delegates[0].travelDetail[1].travelModel.id
+      vm.delegateFinal[0].travelDetails[1].arrivalVehicleNumber= vm.delegates[0].travelDetail[1].vehicleNumber
+      vm.delegateFinal[0].travelDetails[1].travelStartDate = vm.delegates[0].travelDetail[1].travelDate
+      vm.delegateFinal[0].travelDetails[1].arrivalStartDate= vm.delegates[0].travelDetail[1].arrivalDate
+      vm.delegateFinal[0].travelDetails[1].departureTravelMode= vm.delegates[0].travelDetail[1].dtravelModel.id
+      vm.delegateFinal[0].travelDetails[1].departureDate= vm.delegates[0].travelDetail[1].departureDate
+      vm.delegateFinal[0].travelDetails[1].departureVehicleNumber= vm.delegates[0].travelDetail[1].rvehicleNumber
+      vm.delegateFinal[0].travelDetails[1].isDelegate= false
+			vm.delegateFinal[0].travelDetails[1].arriveTo=vm.delegates[0].travelDetail[1].arrivalTo.id+"##"+vm.delegates[0].travelDetail[1].arrivalTo.name
+
+      console.log(vm.delegateFinal[0])
+      let test ={
+        totalTravelDetailSize:1
       }
-    }
+
+
+          axios.post('http://172.1.0.81:9292/delegate/userId/'+vm.$store.getters['getUserId']+'/addDelegate',vm.delegateFinal[0],
+         {headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        }})
+       .then((response) => {
+        console.log(response);
+        this.delegates[0].photoPath = response.data;
+        this.$toasted.success('Submitted Success', {
+          theme: 'bubble',
+          position: 'top-center',
+          duration: 3000
+        });
+       });
+
+
+    },
 
   }
 }
 </script>
+<style>
+#sdateTime {
+  border: 1px solid black;
+}
+#sadateTime {
+  border: 1px solid black;
+}
+ #sddateTime {
+  border: 1px solid black;
+}
+#ddateTime {
+  border: 1px solid black;
+}
+#dadateTime {
+  border: 1px solid black;
+}
+#dddateTime {
+  border: 1px solid black;
+}
+
+ /* .user {
+  width: 140px;
+  height: 120px;
+  border-radius: 100%;
+  border: 3px solid #2e7d32;
+  position: relative;
+} */
+.profile-img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+.icon {
+  position: absolute;
+  top: 10px;
+  right: 0;
+  background: #e2e2e2;
+  border-radius: 100%;
+  width: 20px;
+  height: 20px;
+  line-height: 30px;
+  vertical-align: middle;
+  text-align: center;
+  color: #0000ff;
+  font-size: 8px;
+  cursor: pointer;
+} 
+</style>

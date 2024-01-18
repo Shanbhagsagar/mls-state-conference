@@ -452,9 +452,9 @@ export default {
   async created () {
     const vm = this
 
-    vm.token = sessionStorage.getItem('user-token')
-    // await vm.getPaperDetails();
-    await vm.getUserDetails()
+    // vm.token = sessionStorage.getItem('user-token')
+    // // await vm.getPaperDetails();
+    // await vm.getUserDetails()
   },
   methods: {
 

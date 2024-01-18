@@ -12,12 +12,11 @@
 
     <div
       class="wrapper"
-      :class="{ 'wrapper-lg' : $route.path == '/StudentDetails' || $route.path == '/HireUs' ||  $route.path=='/view-student-details-admin' || $route.path == '/' || $route.path == '/about' || $route.path == '/login' || $route.path == '/StudentDetails' || $route.path=='/logout' ||$route.path=='/registration'|| $route.path=='/termsandconditions'|| $route.path == '/studentregistration' || $route.path == '/recipentRegistration' || $route.path == '/success' || $route.path == '/reset-password' || $route.path== '/Profile' }"
-    >
+      :class="{ 'wrapper-lg' : $route.path == '/StudentDetails' || $route.path == '/HireUs' ||  $route.path=='/view-student-details-admin' || $route.path == '/' || $route.path == '/about' || $route.path == '/login' || $route.path == '/StudentDetails' || $route.path=='/logout' ||$route.path=='/registration'|| $route.path=='/termsandconditions'|| $route.path == '/studentregistration' || $route.path == '/recipentRegistration' || $route.path == '/success' || $route.path == '/reset-password' || $route.path== '/profile' || $route.path== '/delegateregistration'}">
       <!-- <headerbar v-if="$route.path!='/' && $route.path!='/donorRegistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/about' && $route.path!='/success'" /> -->
-      <sidebar v-if="$route.path!='/' && $route.path !== '/HireUs' && $route.path!=='/termsandconditions' && $route.path !== '/StudentDetails' && $route.path!='/studentregistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/registration' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/logout' && $route.path!='/about' && $route.path!='/success' && $route.path!= '/reset-password' && $route.path!= '/Profile'" />
+      <sidebar v-if="$route.path!='/' && $route.path !== '/HireUs' && $route.path!=='/termsandconditions' && $route.path !== '/StudentDetails' && $route.path!='/studentregistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/registration' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/logout' && $route.path!='/about' && $route.path!='/success' && $route.path!= '/reset-password' && $route.path!= '/profile' && $route.path!= '/delegateregistration'" />
       <div class="main-content">
-        <headerbar v-if="$route.path!='/' && $route.path !== '/HireUs' && $route.path!=='/termsandconditions' && $route.path!='/studentregistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration'&& $route.path!='/registration' && $route.path!='/login' && $route.path!='/logout' && $route.path!='/about' && $route.path!='/success' && $route.path!= '/reset-password'" />
+        <headerbar v-if="$route.path!='/' && $route.path !== '/HireUs' && $route.path!=='/termsandconditions' && $route.path!='/studentregistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/logout' && $route.path!='/about' && $route.path!='/success' && $route.path!= '/reset-password'" />
         <div class="content">
           <router-view :key="$route.fullPath" />
         </div>
@@ -56,5 +55,5 @@ export default {
 #app-loader {
   position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(255,255,255,0.8); z-index: 2000; display: flex; align-items: center; justify-content: center;
 }
-#login {background-image: url("../public/assets/images/bg-image.jpg");}
+#login {background-image: url("../public/assets/images/vidhan-bhavan.jpg");}
 </style>

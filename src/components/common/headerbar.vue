@@ -4,14 +4,13 @@
     class="headerbar"
   >
     <div class="applogo">
-      <!-- <div class="logo-title"><span> MKCL </span> DNExt </div> -->
-      <span class="logo">
+       <!-- <span class="logo">
         <img
           class="img-fluid"
-          src="../../../public/assets/images/logo_dnext.png"
+          src="../../../public/assets/images/Seal_of_Maharashtra.png"
           alt="MKCL DNExt"
         >
-      </span>
+      </span> -->
     </div>
 
     <!-- <b class="text-dark">Plasma Donation Project</b> -->
@@ -58,7 +57,8 @@
               src="../../../public/assets/images/user.png"
               alt="img"
             >
-            <b>   {{ userData.basic.fullName }}</b>
+            <!-- <b>   {{ userData.basic.fullName }}</b> -->
+            <b> {{ mobileNumber }} </b>
           </template>
           <b-dropdown-item to="/logout">
             <i class="mdi mdi-power" />Logout

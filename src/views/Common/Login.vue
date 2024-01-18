@@ -3,48 +3,21 @@
     <div class="card-login">
       <div class="row card-wrapper">
         <div class="col login-block">
-          <!-- i18n -->
-          <!-- <div class="top-left">
-           <b-dropdown
-            id="dropdown-right"
-            text="Select Language"
-            variant="light"
-            class="m-2 "
-          >
-            <b-dropdown-item
-              href="#"
-              @click="changeLanguage('en')"
-            >
-              English
-            </b-dropdown-item>
-             <b-dropdown-item
-              href="#"
-              @click="changeLanguage('mr')"
-            >
-              मराठी
-            </b-dropdown-item>
-          </b-dropdown>
-          </div> -->
-          <!-- i18n -->
           <a
-            href="https://dnext.mkcl.org/"
+            href="http://mls.org.in/"
             class="btn btn-back"
           >
             {{ $t('login.backToHome') }}
           </a>
           <div class="logo-wrapper">
-            <!-- <div class="logo-title"><span>MKCL</span> Mock Exams</div> -->
-            <!-- <img class="img-fluid" src="../../public/assets/images/emblem.png" alt="GOI">
-            <img class="img-fluid" src="../../public/assets/images/logo.png" alt="Pune ZP">-->
-            <!--<h1>MKCL EXAM LIVE</h1>-->
-            <img
+             <img
               class="img-fluid"
-              src="../../../public/assets/images/logo_dnext.png"
-              alt="MKCL DNExT"
+              src="../../../public/assets/images/vidhansabha.png"
+              alt="Maharashtra Legislature Secretariat"
             >
-          </div>
-          <!-- <div class="alert-warning">We are updating the portal, the Mock exams will start from Thursday 22nd October 2020 at 10.00 AM</div>
-          <br> -->
+          </div> 
+          <div class="text-center card-header"><b>Maharashtra Legislature Secretariat Conference 2024</b></div>
+          <br>
           <div class="form-wrapper">
             <form @submit.prevent="login()">
               <div
@@ -57,13 +30,13 @@
                 >{{ $t('login.loginId') }}</label>
                 <input
                   type="text"
-                  v-model.trim="cr.userName"
+                  v-model.trim="cr.username"
                   class="form-control"
                   :placeholder="$t('login.loginIdPlaceholder')"
                   :class="{
-                    'is-invalid': submitted && $v.cr.userName.$invalid,
+                    'is-invalid': submitted && $v.cr.username.$invalid,
                   }"
-                  ref="userName"
+                  ref="username"
                 >
                 <label
                   class="text-danger"
@@ -74,7 +47,7 @@
                 <label
                   for="email"
                   class="sr-only"
-                >पासवर्ड/Password</label>
+                >Password</label>
                 <input
                   type="password"
                   name="password"
@@ -101,39 +74,19 @@
                   name="btnlogin"
                   class="btn btn-page"
                   value="Login"
-                >
+                 >
               </div>
-              <div class="form-action-alter mt-3">
-                <div class="row">
-                  <div class="col-sm">
-                    <router-link to="/reset-password">
-                      {{ $t('login.forgotPassword') }}
-                    </router-link>
-                  </div>
-                  <div class="col-sm-auto">
-                    <router-link to="/registration">
-                      {{ $t('login.notRegister') }}
-                    </router-link>
-                  </div>
-                </div>
-              </div>
-            </form>
+             </form>
             <div class="help-wrapper">
               <div class="copyright-holder">
-                <img
-                  src="../../../public/assets/images/logo_mkcl.svg"
-                  class="img-adj"
-                  alt="MKCL"
-                >
                 <div class="copyright">
                   Powered by
                   <a
-                    href="https://www.mkcl.org"
+                    href="http://mls.org.in/"
                     target="_blank"
-                  >Maharashtra Knowledge Corporation Ltd</a>. (MKCL), Copyright © 2022. All rights reserved.<br>
+                  >Maharashtra Legislature Secretariat</a>, Copyright © {{ new Date().getFullYear() }}. All rights reserved.<br>
                 </div>
-                <!-- <div><br>Version 6.10.1, Updated On 10-June-2020 08:30 AM</div> -->
-              </div>
+               </div>
             </div>
           </div>
         </div>
@@ -147,11 +100,13 @@ import Toasted from 'vue-toasted'
 import Response from '@/plugins/response.js'
 import { required } from 'vuelidate/lib/validators'
 import { loadLanguageAsync } from '@/setup/i18n-setup.js'
+import bcryptjs from 'bcryptjs'
+import axios from 'axios'
 export default {
   data () {
     return {
       cr: {
-        userName: null,
+        username: null,
         password: null
       },
       submitted: false
@@ -159,7 +114,7 @@ export default {
   },
   validations: {
     cr: {
-      userName: { required },
+      username: { required },
       password: { required }
     }
   },
@@ -169,35 +124,52 @@ export default {
       vm.submitted = true
       vm.$v.$touch()
       if (!vm.$v.$invalid) {
-        new MQL()
-          .setActivity('o.[ApplicantLogin]')
-          .setData({ userName: this.cr.userName, password: this.cr.password })
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('ApplicantLogin', true)
-            if (rs.isValid('ApplicantLogin')) {
-              // this.$router.push({ name: 'StudentDetails' })
-
-              this.$router.push('/Profile')
-              this.$store.state.userName = this.cr.userName
-              // let token = rs.getHeaders().authorization
-              // // this.$store.state.roles.push(JSON.parse(atob(token.split('.')[1])).groups[0])
-              // let role = JSON.parse(atob(token.split('.')[1])).groups[0]
-              // this.$store.commit('SET_ROLE', role)
-              // if (role === 'applicant') {
-              //   this.$router.push({ name: 'StudentDetails' })
-              // } else if (role === 'admin') {
-              //   this.$router.push({ name: 'AdminDashboard' })
-              // }
-              vm.$toasted.success(this.$t('login.loginSuccess'), {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else {
-              rs.showErrorToast('ApplicantLogin')
-            }
-          })
+         var plainTextPassword = vm.cr.password;
+         var securePassword;
+         const salt = bcryptjs.genSaltSync(10); 
+         securePassword = bcryptjs.hashSync(plainTextPassword, salt); 
+          axios
+           .get(
+             "http://172.1.0.81:9292/auth/getAuth?username=" +
+               vm.cr.username +
+               "&password=" +
+               securePassword
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null)  {
+                 this.$store.state.authData =  response.data
+                 if(this.$store.state.authData != null){
+                  this.$store.state.userName = vm.cr.username                  
+                  this.$router.push({
+                     name: 'Profile'
+                   })
+                 } else {
+                  vm.$toasted.error('Username & Password does not match. Please try again.', {
+                      theme: 'bubble',
+                      position: 'top-center',
+                      duration: 3000
+                    });
+                 }
+                               
+              } else{
+               vm.$toasted.error('Username & Password does not match. Please try again.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             });
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error('Username & Password does not match. Please try again.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false)
       } else {
         vm.$toasted.error(this.$t('login.requiredData'), {
           theme: 'bubble',
@@ -206,7 +178,7 @@ export default {
         })
       }
     },
-    changeLanguage (lang) {
+     changeLanguage (lang) {
       this.$i18n.locale = lang
       this.$i18n.fallbackLocale = lang
       loadLanguageAsync(lang).then(() => {

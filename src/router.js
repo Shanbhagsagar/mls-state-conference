@@ -34,15 +34,15 @@ const router = new Router({
         icon: 'mdi mdi-information-variant',
       },
     },
-    {
-      path: '/registration',
-      name: 'Registration',
-      component: loadApplicantView('Registration'),
-      meta: {
-        title: 'Registration | MKCL DNExT',
-        icon: 'mdi mdi-information-variant',
-      },
-    },
+    // {
+    //   path: '/registration',
+    //   name: 'Registration',
+    //   component: loadApplicantView('Registration'),
+    //   meta: {
+    //     title: 'Delegate Registration',
+    //     icon: 'mdi mdi-information-variant',
+    //   },
+    // },
     {
       path: '/applicantDetails',
       name: 'ApplicantDetails',
@@ -58,7 +58,7 @@ const router = new Router({
       name: 'Registration',
       component: loadApplicantView('Registration'),
       meta: {
-        title: 'Registration | MKCL DNExT',
+        title: 'Delegate Registration',
         icon: 'mdi mdi-information-variant',
       },
     },
@@ -67,7 +67,7 @@ const router = new Router({
       name: 'Login',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Login | MKCL DNExT',
+        title: 'Maharashtra Legislature Secretariat',
         icon: 'mdi mdi-information-variant',
       },
       beforeEnter(routeTo, routeFrom, next) {
@@ -90,7 +90,7 @@ const router = new Router({
       name: 'Login',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Login | MKCL DNExT',
+        title: 'Login',
         icon: 'mdi mdi-information-variant',
       },
       beforeEnter(routeTo, routeFrom, next) {
@@ -104,7 +104,7 @@ const router = new Router({
       name: 'logout',
       component: loadCommonView('Login'),
       meta: {
-        title: 'Logout | MKCL DNExT',
+        title: 'Logout',
         icon: 'mdi mdi-information-variant',
       },
       beforeEnter(routeTo, routeFrom, next) {
@@ -146,7 +146,7 @@ const router = new Router({
       name: 'Profile',
       component: loadApplicantView('Profile'),
       meta: {
-        title: 'Profile | MKCL DNExT',
+        title: 'Profile',
         icon: 'mdi mdi-information-variant',
       },
     },

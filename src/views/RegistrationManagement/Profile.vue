@@ -1,118 +1,147 @@
 <template>
   <div class="content-area">
-    <div class="title-holder">
+     <div class="title-holder">
       <div class="title-block">
-        <h1 class="page-title">Applicant Profile</h1>
+        <h1 class="page-title">Delegates Profile</h1> 
       </div>
     </div>
-    <div class="content-area-alt">
-      <div class="card-sinfo">
-        <div class="row no-gutters">
-          <div class="col-md-4 card-items">
-            <div class="label">Applicant Name:</div>
-            <div class="value">
-              {{ userData.basic.fullName }}
-            </div>
-          </div>
-          <div class="col-md-4 card-items">
-            <div class="label">Gender:</div>
-            <div class="value">
-              {{ userData.basic.gender }}
-            </div>
-          </div>
-          <div class="col-md-4 card-items">
-            <div class="label">Date of Birth:</div>
-            <div class="value">
-              {{ userData.basic.dateOfBirth.slice(0, 11) }}
-            </div>
-          </div>
-        </div>
-        <div class="row no-gutters">
-          <div class="col-md-6 card-items">
-            <div class="label">Mobile Number:</div>
-            <div class="value">
-              {{ userData.contact.mobileNumber }}
-            </div>
-          </div>
-          <div class="col-md-6 card-items">
-            <div class="label">Email ID:</div>
-            <div class="value">
-              {{ userData.contact.emailID }}
-            </div>
-          </div>
-        </div>
-
-        <div class="row no-gutters">
-          <div class="col-md-4 card-items">
-            <div class="label">State:</div>
-            <div class="value">
-              {{ userData.address.state }}
-            </div>
-          </div>
-          <div class="col-md-4 card-items">
-            <div class="label">District:</div>
-            <div class="value">
-              {{ userData.address.district }}
-            </div>
-          </div>
-          <div class="col-md-4 card-items">
-            <div class="label">Pincode:</div>
-            <div class="value">
-              {{ userData.address.pincode }}
-            </div>
-          </div>
-        </div>
-        <div class="row no-gutters">
-          <div class="col-md-12 card-items">
-            <div class="label">Education Details:</div>
-            <div class="value">
-              {{ userData.qualification.qualificationName }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="row g-6 mb-6">
+                    <div v-if="this.$store.state.authData.state.biCameral == true" class="col-xl-3 col-sm-6 col-12">
+                        <div class="card bg-danger shadow  border-0" @click="routeCard('Chairman',0)">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="h5 font-semibold text-white text-m d-block mb-2">Chairman/DeputyChairman</span>
+                                        <span class="h3 font-bold text-white mb-0"> {{ this.designationData.chairman }} </span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-white text-lg rounded-circle">
+                                            <i class="bi bi-person-plus-fill text-danger"></i>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                        <div class="card bg-success shadow border-0" @click="routeCard('Speaker',0)">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="h5 font-semibold text-white text-m d-block mb-2">Speaker/DeputySpeaker</span>
+                                        <span class="h3 font-bold text-white mb-0">{{ this.designationData.speaker }}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-white text-lg rounded-circle">
+                                          <i class="bi bi-person-plus-fill text-success"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                        <div class="card bg-warning shadow border-0" @click="routeCard('Secretary',0)">
+                            <div class="card-body">
+                              <div class="row">
+                                    <div class="col">
+                                        <span class="h5 font-semibold text-white text-m d-block mb-2">Secretary</span>
+                                        <span class="h3 font-bold text-white mb-0">{{ this.designationData.secretary }}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-white text-white text-lg rounded-circle">
+                                          <i class="bi bi-person-plus-fill text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6 col-12">
+                        <div class="card bg-info shadow border-0" @click="routeCard('Officials',0)">
+                            <div class="card-body">
+                              <div class="row">
+                                    <div class="col">
+                                        <span class="h5 font-semibold text-white text-m d-block mb-2">Officials</span>
+                                        <span class="h3 text-white font-bold mb-0">{{ this.designationData.official }}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-white text-lg rounded-circle">
+                                          <i class="bi bi-person-plus-fill text-info"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
   </div>
 </template>
-<!-- ----------------------------------------------------------------- -->
-<!-- ----------------------------------------------------------------- -->
 <script>
 import MQL from "@/plugins/mql.js";
+import axios from "axios";
+
 export default {
   data() {
     return {
       mobileNumber: this.$store.state.userName,
       userData: {},
+      designationData : {}
     };
   },
   async created() {
     const vm = this;
-    vm.token = sessionStorage.getItem("user-token");
-    await vm.getUserDetails();
+  },
+  mounted(){
+    this.delegatesCounter(this.$store.state.authData.userId);
   },
   methods: {
-    getUserDetails() {
-      new MQL()
-        .setActivity("o.[query_29FEeTzI2PoubDvgSxG7KZY0T3X]")
-        .setData({ userName: this.mobileNumber })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity("query_29FEeTzI2PoubDvgSxG7KZY0T3X", true);
-          if (rs.isValid("query_29FEeTzI2PoubDvgSxG7KZY0T3X")) {
-            if (res !== null) {
-              this.userData = res[0];
-            }
-          } else {
-            rs.showErrorToast("query_29FEeTzI2PoubDvgSxG7KZY0T3X");
-          }
-        });
+     routeCard(subtype,numberOfDelegates){
+      if(numberOfDelegates == 0){
+        this.$router.push({
+            name: 'Registration',
+            query: {subtype}
+        })
+      }
     },
+    delegatesCounter(userId){
+       axios
+           .get(
+             "http://172.1.0.81:9292/user/getDelegatesCount/"+userId
+           )
+           .then(response => {
+             console.log(response);
+             if(response.data != null){
+                this.designationData = response.data;
+              } else{
+               vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              vm.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false) 
+    }
   },
 };
 </script>
-<!-- ----------------------------------------------------------------- -->
-<!-- ----------------------------------------------------------------- -->
 <style>
+ .card:hover {
+   height: 150px;
+   top: -10px;
+   transition: 0.5s; 
+   cursor: pointer;
+}
 .isDisabled {
   color: currentColor;
   cursor: not-allowed;
@@ -120,5 +149,4 @@ export default {
   text-decoration: none;
 }
 </style>
-<!-- ----------------------------------------------------------------- -->
-<!-- ----------------------------------------------------------------- -->
+

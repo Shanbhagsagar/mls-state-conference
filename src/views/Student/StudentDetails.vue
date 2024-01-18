@@ -316,7 +316,7 @@
               <div data-text="Obtained Marks:" class="td-data" />
               {{ data.value }}
             </template>
-            <!-- <template s v-slot:cell(paperAbbreviation)="data">
+             <template s v-slot:cell(paperAbbreviation)="data">
               <div data-text="Paper Abbrevation" class="td-data"></div>
               {{ data.value }}
             </template> -->
@@ -436,7 +436,7 @@
                 :sort-desc.sync="sortDesc"
                 :sort-direction="sortDirection"
               >
-                <!-- :filter="filter"
+                 :filter="filter"
                   @filtered="onFiltered" -->
       <!-- <template v-slot:cell(paperId)="data">
                   {{ data.value }}

@@ -37,16 +37,18 @@ export default {
   methods: {
     getAllDelegates() {
       let vm = this;
-      axios.get("http://localhost:6969/user/getAllUsers").then((response) => {
-        console.log(response);
-        if (response != null) {
-          for (let item of response.data) {
-            delete item.password;
-            delete item.stateId;
+      axios
+        .get(`${vm.$store.getters["getIpaddress"]}/user/getAllUsers`)
+        .then((response) => {
+          console.log(response);
+          if (response != null) {
+            for (let item of response.data) {
+              delete item.password;
+              delete item.stateId;
+            }
+            this.items = response.data;
           }
-          this.items = response.data;
-        }
-      });
+        });
     },
     onRowSelected(items) {
       this.selected = items;
@@ -58,7 +60,7 @@ export default {
       let userID = this.selected[0].id;
 
       axios
-        .get(`http://localhost:6969/user/getUserById/${userID}`)
+        .get(`${vm.$store.getters["getIpaddress"]}/user/getUserById/${userID}`)
         .then((response) => {
           console.log(response.data);
           this.$router.push({

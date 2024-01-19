@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ form.title }}
     <div class="row card-wrapper">
       <div class="col login-block">
         <div class="card-form">

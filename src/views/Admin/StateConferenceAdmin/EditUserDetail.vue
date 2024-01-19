@@ -131,7 +131,7 @@ export default {
     fetchStates() {
       const vm = this;
       axios
-        .get("http://localhost:6969/state/getAllStates")
+        .get(`${vm.$store.getters["getIpaddress"]}/state/getAllStates`)
         .then((response) => {
           if (response.data != null) {
             vm.states = response.data;
@@ -169,7 +169,10 @@ export default {
       };
       console.log(user);
       axios
-        .post(`http://localhost:6969/user/editUser/${this.id}`, user)
+        .post(
+          `${vm.$store.getters["getIpaddress"]}/user/editUser/${this.id}`,
+          user
+        )
         .then((response) => {
           if (response.data != null) {
             vm.$toasted.success(response.data, {

@@ -232,6 +232,24 @@ const router = new Router({
 
   },
   {
+    path: '/ViewUserDetails',
+    name: 'ViewUserDetails',
+    component: loadAdminSCAView('ViewUserDetails'),
+
+  },
+  {
+    path: '/EditUserDetail',
+    name: 'EditUserDetail',
+    component: loadAdminSCAView('EditUserDetail'),
+
+  },
+  {
+    path: '/CreateNewUser',
+    name: 'CreateNewUser',
+    component: loadAdminSCAView('CreateNewUser'),
+
+  },
+  {
     path: '/EditDelegateDetail',
     name: 'EditDelegateDetail',
     component: loadAdminSCAView('EditDelegateDetail'),

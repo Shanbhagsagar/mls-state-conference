@@ -1,8 +1,10 @@
 <template>
   <div>
-    <b-button variant="dark">Button</b-button>
-    <button v-on:click="changeMessage()" class="btn btn-outline-dark">
-      Edit Delegate Details
+    <button v-on:click="createUser()" class="btn btn-page">
+      Create User Details
+    </button>
+    <button v-on:click="editUser()" class="btn btn-page">
+      Edit User Details
     </button>
 
     <div>
@@ -35,30 +37,32 @@ export default {
   methods: {
     getAllDelegates() {
       let vm = this;
-      axios
-        .get("http://localhost:6969/admin/getAllDelegatesForAdmin")
-        .then((response) => {
-          console.log(response);
-          if (response != null) {
-            vm.items = response.data;
+      axios.get("http://localhost:6969/user/getAllUsers").then((response) => {
+        console.log(response);
+        if (response != null) {
+          for (let item of response.data) {
+            delete item.password;
+            delete item.stateId;
           }
-        });
+          this.items = response.data;
+        }
+      });
     },
     onRowSelected(items) {
       this.selected = items;
-      // console.log(this.selected);
+      console.log(this.selected);
     },
-    changeMessage() {
+    editUser() {
       let vm = this;
 
-      let delegateId = this.selected[0].id;
-      console.log(delegateId);
+      let userID = this.selected[0].id;
+
       axios
-        .get(`http://localhost:6969/delegate/getDelegateData/${delegateId}`)
+        .get(`http://localhost:6969/user/getUserById/${userID}`)
         .then((response) => {
           console.log(response.data);
           this.$router.push({
-            name: "EditDelegateDetail",
+            name: "EditUserDetail",
             params: { data: response.data },
           });
         })
@@ -69,6 +73,14 @@ export default {
             duration: 3000,
           });
         });
+    },
+    changeItem(array, index, newValue) {
+      return [...array.slice(0, index), newValue, ...array.slice(index + 1)];
+    },
+    createUser() {
+      this.$router.push({
+        name: "CreateNewUser",
+      });
     },
   },
   async created() {

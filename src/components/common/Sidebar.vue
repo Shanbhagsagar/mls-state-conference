@@ -6,10 +6,16 @@
           <li class="sidetitle">
             Menus
           </li>
-          <li>
+          <!-- <li>
             <router-link to="/ViewDelegatesDetails">
               <span class="icon color5"><i class="mdi mdi-human" /></span>
               All Delegates Details
+            </router-link>
+          </li> -->
+          <li>
+            <router-link to="/ViewUserDetails">
+              <span class="icon color5"><i class="mdi mdi-human" /></span>
+              All User Details
             </router-link>
           </li>
         </ul>

@@ -28,6 +28,10 @@
             </div>
               <!-- <img @click="openFileInput" class="profile-user-img img-circle" :src="profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png'" alt="User"/> -->
             </div>
+            <br/>
+            <div class="font-italic text-danger text-center">
+              (*Please Note: This Image will be used to create your Conference Id Card. Kindly upload appropriate image and file size should not be more than 10 MB. )
+             </div>
             <br/> 
             <div class="row">
               <div class="col-md-6 col-lg-6">
@@ -351,183 +355,9 @@
               </div>
             </div> -->
           </div>
-
-          <div class="card-form">
-            <div class="card-header card-header-alt mt-0">
-              <div v-if="this.$route.query.subtype == 'Officials'">
-                 Officer2 Personal Details
-                </div>
-                <div v-else>
-                  Spouse Details
-              </div>              
-            </div>
-             <div class="row">
-              <div class="d-block text-center">
-              <div size="180" class="user">
-              <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
-              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
-                <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
-                </b-avatar>
-                </div>
-                </div>
-             </div> 
-            <br/>
-            <div class="row">
-               <div class="col-md-6 col-lg-6">
-                <div class="form-group">
-                  <label
-                    for="title"
-                    class="control-label form-label"
-                  >
-                    Title
-                  
-                  </label>
-
-                  <v-select
-
-                    v-model="delegates[0].family[0].title"
-                    label="name"
-                    placeholder="Please Select title"
-                    :options="delegateTitles"
-                    :value="delegates[0].family[0].title"
-                  />
-                  <!-- <div
-                    class="text-danger"
-                    v-if="
-                      !$v.delegates[0].family[0].title.name.required &&
-                        $v.delegates[0].family[0].title.name.$error
-                    "
-                  >
-                    Please Select Title
-                  </div> -->
-                </div>
-              </div>
-              <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    Full Name
-                  </label>
-                  <input
-                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
-                    class="form-control"
-                    minLength="4"
-                    maxLength="100"
-                    v-model.trim="delegates[0].family[0].name"
-                    :placeholder="$t('registration.studentNamePlaceholder')"
-                    id="fullName"
-                    :class="{
-                      'is-invalid': submitted && $v.delegates[0].family[0].name.$invalid
-                    }"
-                  >
-                  <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.required"
-                  >
-                    {{ $t('registration.vstudnetName1') }}
-                  </div> -->
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.isNameValid"
-                  >
-                    {{ $t('registration.vstudnetName2') }}
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.basic.delegates[0].family[0].name.maxLength"
-                  >
-                    {{ $t('registration.vsMaxLength') }} 100 charachters
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.minLength"
-                  >
-                    {{ $t('registration.vsMinLength') }} 4 charachters
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div class="card-form">
             <div class="card-header card-header-alt">
-              <div v-if="this.$route.query.subtype == 'Officials'">
-                 Officer2 Contact Details
-                </div>
-                <div v-else>
-                  Spouse Contact Details
-              </div>  
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-lg-6">
-                    <div class="form-group">
-                      <label class="control-label form-label">
-                        Mobile Number
-                      </label>
-                      <div class="input-group">
-                        <input
-                          class="form-control"
-                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                          maxlength="10"
-                          minlength="10"
-                          v-model.trim="delegates[0].family[0].mobileNo"
-                          id="mobileNumber"
-                          :placeholder="$t('registration.mobilePlaceholder')"
-                          :disabled="flag == 1"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.delegates[0].family[0].mobileNo.$invalid
-                          }"
-                        >
-                       </div>
-                       <div
-                        class="text-danger"
-                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.numeric"
-                      >
-                        {{ $t('registration.vmobile2') }}
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.isMobileValid"
-                      >
-                        Invalid Mobile Number
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="
-                          submitted &&
-                            (!$v.delegates[0].family[0].mobileNo.minLength ||
-                            !$v.delegates[0].family[0].mobileNo.maxLength)
-                        "
-                      >
-                        {{ $t('registration.vmobile3') }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-lg-6">
-                    <div class="form-group">
-                      <label
-                        class="control-label form-label"
-                      >Email ID</label>
-                      <div class="input-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          v-model.trim="delegates[0].family[0].email"
-                          :placeholder="$t('registration.emailIdPlaceholder')"
-                          id="emailID"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.delegates[0].family[0].email.$invalid
-                          }"
-                        >
-                      </div>
-                    </div>
-                  </div>
-            </div>
-           </div>
-         <div class="card-form">
-          <div class="card-header card-header-alt">
-            Delegate Travel Details:
+            Delegate's Travel Details:
             </div>
           <h5>Arrival Details:-</h5>  
           <div class="row">
@@ -583,7 +413,7 @@
                   >
                   Please Enter Vehicle/Flight/Train No.
                   </div>
-                   <div
+                   <!-- <div
                     class="text-danger"
                     v-if="submitted && !$v.vehicleNumber.maxLength"
                   >
@@ -594,7 +424,7 @@
                     v-if="submitted && !$v.vehicleNumber.minLength"
                   >
                     {{ $t('registration.vsMinLength') }} 4 charachters
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="col-md-4 col-lg-4">
@@ -806,7 +636,188 @@
                 </div>
               </div>
             </div>
-          <h4>
+          </div> 
+
+          <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer2 Personal Details
+                </div>
+                <div v-else>
+                  Spouse Details
+              </div>              
+            </div>
+             <div class="row">
+              <div class="d-block text-center">
+              <div size="180" class="user">
+              <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
+              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+                <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
+                </b-avatar>
+                </div>
+                </div>
+             </div>
+             <br/> 
+             <div class="font-italic text-danger text-center">
+              (*Please Note: This Image will be used to create your Conference Id Card. Kindly upload appropriate image and file size should not be more than 10 MB. )
+             </div>
+            <br/>
+            <div class="row">
+               <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="title"
+                    class="control-label form-label"
+                  >
+                    Title
+                  
+                  </label>
+
+                  <v-select
+
+                    v-model="delegates[0].family[0].title"
+                    label="name"
+                    placeholder="Please Select title"
+                    :options="delegateTitles"
+                    :value="delegates[0].family[0].title"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.delegates[0].family[0].title.name.required &&
+                        $v.delegates[0].family[0].title.name.$error
+                    "
+                  >
+                    Please Select Title
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Full Name
+                  </label>
+                  <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].family[0].name"
+                    :placeholder="$t('registration.studentNamePlaceholder')"
+                    id="fullName"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].family[0].name.$invalid
+                    }"
+                  >
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
+                  </div> -->
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.isNameValid"
+                  >
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.delegates[0].family[0].name.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer2 Contact Details
+                </div>
+                <div v-else>
+                  Spouse Contact Details
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Mobile Number
+                      </label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                          maxlength="10"
+                          minlength="10"
+                          v-model.trim="delegates[0].family[0].mobileNo"
+                          id="mobileNumber"
+                          :placeholder="$t('registration.mobilePlaceholder')"
+                          :disabled="flag == 1"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].mobileNo.$invalid
+                          }"
+                        >
+                       </div>
+                       <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.numeric"
+                      >
+                        {{ $t('registration.vmobile2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.isMobileValid"
+                      >
+                        Invalid Mobile Number
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.delegates[0].family[0].mobileNo.minLength ||
+                            !$v.delegates[0].family[0].mobileNo.maxLength)
+                        "
+                      >
+                        {{ $t('registration.vmobile3') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Email ID</label>
+                      <div class="input-group">
+                        <input
+                          type="email"
+                          class="form-control"
+                          v-model.trim="delegates[0].family[0].email"
+                          :placeholder="$t('registration.emailIdPlaceholder')"
+                          id="emailID"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].email.$invalid
+                          }"
+                        >
+                      </div>
+                    </div>
+                  </div>
+            </div>
+           </div>
+   
+         <div class="card-form">
+           <div class="card-header card-header-alt">
             <div v-if="this.$route.query.subtype == 'Officials'">
                  Officer2 Travel Details
                 </div>
@@ -827,9 +838,8 @@
                       (Check If details are same as above)                  
                     </label>
               </div>  
-            
-                  </h4>
-            <h5>Arrival Details:-</h5>  
+            </div>
+           <h5>Arrival Details:-</h5>  
           <div class="row">
                <div class="col-md-4 col-lg-4">
                 <div class="form-group">
@@ -1390,6 +1400,7 @@ export default {
               id: null
             },
             vehicleNumber : '',
+            rvehicleNumber:'',
             arrivalTo : {
               id: null,
               name:''
@@ -1624,7 +1635,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/designation/getDesignations/"+paramDesignation
+            vm.$store.getters["getIpaddress"]+"designation/getDesignations/"+paramDesignation
            )
            .then(response => {
              console.log(response);
@@ -1655,7 +1666,7 @@ export default {
      const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/title/getAllTitles"
+            vm.$store.getters["getIpaddress"]+"title/getAllTitles"
            )
            .then(response => {
              console.log(response);
@@ -1685,7 +1696,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/visitingPlaces/getAllVisitingPlaces"
+            vm.$store.getters["getIpaddress"]+"visitingPlaces/getAllVisitingPlaces"
            )
            .then(response => {
              console.log(response);
@@ -1715,7 +1726,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/travelMode/getAllTravelModes"
+            vm.$store.getters["getIpaddress"]+"travelMode/getAllTravelModes"
            )
            .then(response => {
              console.log(response);
@@ -2285,6 +2296,13 @@ export default {
       params.append("firstname", vm.delegates[0].firstname);
       params.append("email", vm.delegates[0].email);
       params.append("mobileNo", vm.delegates[0].mobileNo);
+      if(this.$route.query.subtype != "Officials"){
+      params.append("spouseName", vm.delegates[0].family[0].name);
+      params.append("spouseEmail", vm.delegates[0].family[0].email);
+      params.append("spouseMobileNo", vm.delegates[0].family[0].mobileNo);
+      params.append("spouseTitleId", vm.delegates[0].family[0].title.id);
+      params.append("spousePhotoId", vm.delegates[0].sphotoPath);
+      }
       console.log();
       axios
         .post(

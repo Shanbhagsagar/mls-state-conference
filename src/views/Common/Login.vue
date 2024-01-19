@@ -77,6 +77,10 @@
                  >
               </div>
              </form>
+             <br/>
+             <div class="font-italic text-danger text-center">
+               Please enter the username and password as provided via official email by Maharashtra Legistrature Secretariat's IT Cell.
+             </div>
             <div class="help-wrapper">
               <div class="copyright-holder">
                 <div class="copyright">

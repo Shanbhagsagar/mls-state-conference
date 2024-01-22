@@ -23,7 +23,11 @@
           $route.path == '/success' ||
           $route.path == '/reset-password' ||
           $route.path == '/profile' ||
-          $route.path == '/delegateregistration',
+          $route.path == '/delegateregistration' ||
+          $route.path == '/LiasionOfficerDashboard' ||
+          $route.path == '/ViewLiasionOfficerList' ||
+          $route.path == '/NewLiasionOfficer' ||
+          $route.path == '/EditLiasionOfficer',
       }"
     >
       <!-- <headerbar v-if="$route.path!='/' && $route.path!='/donorRegistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/about' && $route.path!='/success'" /> -->
@@ -44,7 +48,11 @@
           $route.path != '/success' &&
           $route.path != '/reset-password' &&
           $route.path != '/profile' &&
-          $route.path != '/delegateregistration'
+          $route.path != '/delegateregistration' &&
+          $route.path !== '/LiasionOfficerDashboard' &&
+          $route.path !== '/ViewLiasionOfficerList' &&
+          $route.path != '/NewLiasionOfficer' &&
+          $route.path != '/EditLiasionOfficer'
         "
       />
       <div class="main-content">

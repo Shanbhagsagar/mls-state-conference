@@ -22,6 +22,15 @@
         />
       </div>
 
+      <a
+        href="javascript:void(0)"
+        type="button"
+        class="btn btn-danger btn-lg form-label"
+        @click="getReport(selectedState)"
+      >
+        Report
+      </a>
+
       <div class="card-header card-header-alt mt-0">
         <h1 class="page-title">Delegates's List:</h1>
       </div>
@@ -29,52 +38,78 @@
         <div v-for="(delegate, index) in delegates" :key="index">
           <div class="card">
             <div class="card-body">
-              <h4 class="font-weight-bold">
-                Delegate Name: {{ delegates[index].title.name }}
-                {{ delegates[index].firstname }} {{ delegates[index].lastname }}
-              </h4>
-              <h5 class="font-weight-normal">
-                <b>Delegate's Designation:</b>&nbsp;&nbsp;<span
-                  v-if="delegates[index].designation.name != ''"
-                  ><span v-if="delegates[index].designation.name == 'Other'">{{
-                    delegates[index].designationName
+              <div class="float-child">
+                <h4 class="font-weight-bold">
+                  Delegate Name: {{ delegates[index].title.name }}
+                  {{ delegates[index].firstname }}
+                  {{ delegates[index].lastname }}
+                </h4>
+                <h5 class="font-weight-normal">
+                  <b>Delegate's Designation:</b>&nbsp;&nbsp;<span
+                    v-if="delegates[index].designation.name != ''"
+                    ><span
+                      v-if="delegates[index].designation.name == 'Other'"
+                      >{{ delegates[index].designationName }}</span
+                    ><span v-else>{{
+                      delegates[index].designation.name
+                    }}</span></span
+                  ><span v-else> -</span>
+                </h5>
+                <h5 class="font-weight-normal">
+                  <b>Email:</b>&nbsp;&nbsp;<span
+                    v-if="delegates[index].email != ''"
+                    >{{ delegates[index].email }}</span
+                  ><span v-else> -</span>&nbsp;&nbsp;&nbsp;<b>Mobile Number:</b
+                  >&nbsp;&nbsp;<span v-if="delegates[index].mobileNo != ''">{{
+                    delegates[index].mobileNo
                   }}</span
-                  ><span v-else>{{
-                    delegates[index].designation.name
-                  }}</span></span
-                ><span v-else> -</span>
-              </h5>
-              <h5 class="font-weight-normal">
-                <b>Email:</b>&nbsp;&nbsp;<span
-                  v-if="delegates[index].email != ''"
-                  >{{ delegates[index].email }}</span
-                ><span v-else> -</span>&nbsp;&nbsp;&nbsp;<b>Mobile Number:</b
-                >&nbsp;&nbsp;<span v-if="delegates[index].mobileNo != ''">{{
-                  delegates[index].mobileNo
-                }}</span
-                ><span v-else> -</span>
-              </h5>
-              <h5 class="font-weight-normal">
-                <b>Delegate's Spouse Name:</b>&nbsp;&nbsp;<span
-                  v-if="delegates[index].family.length != 0"
-                  >{{ delegates[index].family[0].name }}</span
-                ><span v-else> -</span>
-              </h5>
+                  ><span v-else> -</span>
+                </h5>
+                <h5 class="font-weight-normal">
+                  <b>Delegate's Spouse Name:</b>&nbsp;&nbsp;<span
+                    v-if="delegates[index].family.length != 0"
+                    >{{ delegates[index].family[0].name }}</span
+                  ><span v-else> -</span>
+                </h5>
 
-              <div class="form-action-alt">
-                <button
-                  type="button"
-                  class="btn btn-page"
-                  @click="
-                    pushToLiasionOfficerPage(
-                      delegate.id,
-                      `${delegate.title.name} ${delegate.firstname} ${delegate.lastname}`,
-                      delegate.designation.name
-                    )
-                  "
-                >
-                  Add Liasion Officer
-                </button>
+                <div class="form-action-alt">
+                  <button
+                    type="button"
+                    class="btn btn-page"
+                    @click="
+                      pushToLiasionOfficerPage(
+                        delegate.id,
+                        `${delegate.title.name} ${delegate.firstname} ${delegate.lastname}`,
+                        delegate.designation.name
+                      )
+                    "
+                  >
+                    Add Liasion Officer
+                  </button>
+                </div>
+              </div>
+              <div class="float-child">
+                <div class="blue">
+                  <h2>Assigned Liasion Officer</h2>
+                  <p v-if="delegates[index].liaisonOfficers.length == 0">
+                    No Liasion Officer Assigned
+                  </p>
+
+                  <ul
+                    v-if="
+                      delegates[index] != null &&
+                      delegates[index].liaisonOfficers
+                    "
+                  >
+                    <li
+                      v-for="lo in delegates[index].liaisonOfficers"
+                      :key="lo.id"
+                    >
+                      Name - <b>{{ lo.name }} &nbsp;&nbsp;&nbsp;</b> MobileNo -
+                      <b>{{ lo.mobileNumber }}</b>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -102,49 +137,100 @@ export default {
     };
   },
   mounted() {
-    if (this.selectedStateId == null) {
-      this.fetchDelegatesList();
-    } else {
-      this.fetchDelegatesByStateId(this.selectedStateId);
-    }
-
     this.fetchStates();
     //this.selectedStateId = this.$route.params.selectedStateId;
   },
   created() {
     this.selectedStateId = this.$route.params.selectedStateId;
     this.selectedState = this.$route.params.selectedState;
+    if (this.selectedStateId === undefined || this.selectedState === null) {
+      console.log("not fired");
+      this.fetchDelegatesList();
+      console.log(this.selectedStateId);
+    } else {
+      console.log("stateFunc fired");
+      this.fetchDelegatesByStateId(this.selectedStateId);
+    }
   },
   methods: {
+    getReport(selectedState) {
+      this.$router.push({
+        name: "LiasionOfficerReport",
+        params: {
+          delegates: this.delegates,
+          selectedStateId: this.selectedStateId,
+          selectedState: this.selectedState,
+        },
+      });
+    },
     getSelectedItem(e) {
       const vm = this;
       this.selectedStateId = e.id;
-      console.log(e);
+      //console.log(e);
       axios
         .get(
-          `http://localhost:6969/delegate/getAllDelegatesByStateId/${this.selectedStateId}`
+          `${vm.$store.getters["getIpaddress"]}delegate/getAllDelegatesByStateId/${this.selectedStateId}`
         )
         .then((response) => {
           this.delegates = response.data;
+          this.delegates.forEach((value) => {
+            axios
+              .get(
+                `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+              )
+              .then((response) => {
+                if (response != null) {
+                  value.liaisonOfficers = response.data;
+                }
+              });
+            console.log(value);
+          });
         });
     },
     fetchDelegatesByStateId(stateId) {
       axios
         .get(
-          `http://localhost:6969/delegate/getAllDelegatesByStateId/${stateId}`
+          `${vm.$store.getters["getIpaddress"]}delegate/getAllDelegatesByStateId/${stateId}`
         )
         .then((response) => {
           this.delegates = response.data;
+          console.log("hi");
+          this.delegates.forEach((value) => {
+            axios
+              .get(
+                `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+              )
+              .then((response) => {
+                if (response != null) {
+                  value.liaisonOfficers = response.data;
+                }
+              });
+            console.log(value);
+          });
         });
     },
     fetchDelegatesList() {
       const vm = this;
       axios
-        .get(`http://localhost:6969/delegate/getAllDelegates`)
+        .get(`${vm.$store.getters["getIpaddress"]}delegate/getAllDelegates`)
         .then((response) => {
           // console.log(response);
           if (response.data != null) {
             vm.delegates = response.data;
+
+            this.delegates.forEach((value) => {
+              axios
+                .get(
+                  `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+                )
+                .then((response) => {
+                  if (response != null) {
+                    value.liaisonOfficers = response.data;
+                  }
+                });
+              //console.log(value);
+            });
+
             // console.log("Data: "+vm.delegates);
           } else {
             this.$toasted.error(
@@ -169,7 +255,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     pushToLiasionOfficerPage(delegateId, delegateName, designationName) {
-      console.log(delegateName);
+      console.log(delegateId);
       this.$router.push({
         name: "ViewLiasionOfficerList",
         params: {
@@ -184,7 +270,7 @@ export default {
     fetchStates() {
       const vm = this;
       axios
-        .get(`http://localhost:6969/state/getAllStates`)
+        .get(`${vm.$store.getters["getIpaddress"]}state/getAllStates`)
         .then((response) => {
           if (response.data != null) {
             vm.states = response.data;
@@ -213,6 +299,7 @@ export default {
     },
   },
 };
+//vm.$store.getters["getIpaddress"]
 </script>
 
 <style>
@@ -225,5 +312,15 @@ export default {
 
 .dashboard {
   margin-left: 0%;
+}
+.float-container {
+  border: 3px solid #fff;
+  padding: 20px;
+}
+
+.float-child {
+  width: 50%;
+  float: left;
+  padding: 20px;
 }
 </style>

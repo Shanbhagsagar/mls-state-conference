@@ -148,7 +148,7 @@ export default {
       if (filledImpFields === false) {
         axios
           .post(
-            `http://localhost:6969/laisionOfficer/editLaisionofficer/${this.id}`,
+            `${vm.$store.getters["getIpaddress"]}/laisionOfficer/editLaisionofficer/${this.id}`,
             lo
           )
           .then((response) => {
@@ -193,7 +193,7 @@ export default {
     fetchStates() {
       const vm = this;
       axios
-        .get(`http://localhost:6969/state/getAllStates`)
+        .get(`${vm.$store.getters["getIpaddress"]}/state/getAllStates`)
         .then((response) => {
           if (response.data != null) {
             vm.states = response.data;

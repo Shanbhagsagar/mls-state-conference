@@ -1,10 +1,21 @@
 <template>
   <div>
     <div style="padding: 70px 0px;">
-      <div class="rcorners2">
-        <p>Delegate Name -</p>
+      <div class="rcorners2" style="padding-bottom: 50px;">
+        <span style="padding-right: 20px; font-size: 20px;"
+          >Delegate Name - <b>{{ this.$route.params.delegateName }}</b></span
+        >
+        <span style="padding-right: 20px; font-size: 20px;"
+          >Designation - <b>{{ this.$route.params.designationName }}</b></span
+        >
+
+        <span
+          v-if="this.$route.params.selectedState !== undefined"
+          style="padding-right: 20px; font-size: 20px;"
+          >State -<b>{{ this.$route.params.selectedState.name }}</b></span
+        >
       </div>
-      {{ this.$route.params }}
+
       <button
         style="margin-right: 5px;"
         v-on:click="goBackToDashBoard()"
@@ -22,8 +33,19 @@
       <button style="margin: 5px;" v-on:click="editUser()" class="btn btn-page">
         Edit liasion Details
       </button>
+      <div class="rcorners3">
+        <span style="padding-right: 20px; font-size: 20px; text-align: center;"
+          >Liasion List
+        </span>
+      </div>
+      <h1 v-if="items.length == 0">
+        <div class="center">
+          No List Present
+        </div>
+      </h1>
       <div>
         <b-table
+          id="lotable"
           striped
           bordered
           hover
@@ -103,7 +125,10 @@ export default {
 
       if (filledImpFields === false) {
         axios
-          .post(`http://localhost:6969/laisionOfficer/createLaisionofficer`, lo)
+          .post(
+            `${vm.$store.getters["getIpaddress"]}/laisionOfficer/createLaisionofficer`,
+            lo
+          )
           .then((response) => {
             console.log(response);
             if (response != null) {
@@ -134,7 +159,9 @@ export default {
     getAllla() {
       let vm = this;
       axios
-        .get(`http://localhost:6969/laisionOfficer/getAllLaisionOfficers`)
+        .get(
+          `${vm.$store.getters["getIpaddress"]}/laisionOfficer/getAllLiasionOfficerForThatDelegate/${this.delegateId}`
+        )
         .then((response) => {
           //console.log(response);
           if (response != null) {
@@ -175,7 +202,7 @@ export default {
 
       axios
         .get(
-          `http://localhost:6969/laisionOfficer/getLaisionOfficerById/${loId}`
+          `${vm.$store.getters["getIpaddress"]}/laisionOfficer/getLaisionOfficerById/${loId}`
         )
         .then((response) => {
           if (response.data != null) {
@@ -208,7 +235,7 @@ export default {
     fetchStates() {
       const vm = this;
       axios
-        .get(`http://localhost:6969/state/getAllStates`)
+        .get(`${vm.$store.getters["getIpaddress"]}/state/getAllStates`)
         .then((response) => {
           if (response.data != null) {
             vm.states = response.data;
@@ -240,17 +267,33 @@ export default {
 </script>
 
 <style>
-.table > thead > tr > th {
+#lotable > thead > tr > th {
   font-size: 30px;
 }
-.table > tbody > tr > td {
+#lotable > tbody > tr > td {
   font-size: 20px;
 }
 .rcorners2 {
   border-radius: 25px;
   border: 2px solid;
   padding: 20px;
-  width: 200px;
+  width: auto;
   height: 70px;
+  padding-bottom: 20px;
+}
+
+.rcorners3 {
+  border-radius: 25px;
+  border: 2px solid peachpuff;
+  padding: 20px;
+  width: auto;
+  height: 70px;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid peachpuff;
+  padding: 10px;
 }
 </style>

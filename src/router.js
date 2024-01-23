@@ -23,6 +23,9 @@ function loadAdminView(view) {
 function loadAdminSCAView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Admin/StateConferenceAdmin/${view}.vue`)
 }
+function loadLiasionOfficerView(view) {
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/LiasionOfficer/${view}.vue`)
+}
 function loadCommonView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
 }
@@ -266,6 +269,36 @@ const router = new Router({
 
   },
   {
+    path: '/LiasionOfficerDashboard',
+    name: 'LiasionOfficerDashboard',
+    component: loadLiasionOfficerView('LiasionOfficerDashboard'),
+    props: true
+
+  },
+  {
+    path: '/ViewLiasionOfficerList',
+    name: 'ViewLiasionOfficerList',
+    component: loadLiasionOfficerView('ViewLiasionOfficerList'),
+    props: true
+
+  },
+  {
+    path: '/NewLiasionOfficer',
+    name: 'NewLiasionOfficer',
+    component: loadLiasionOfficerView('NewLiasionOfficer'),
+    props: true
+
+  },
+    ,
+  {
+    path: '/EditLiasionOfficer',
+    name: 'EditLiasionOfficer',
+    component: loadLiasionOfficerView('EditLiasionOfficer'),
+    props: true
+
+  },
+
+  {
     path: '/mock-exam-paper-configuration',
     name: 'MockExamPaperConfig',
     component: loadAdminView('MockExamPaperConfig'),
@@ -298,39 +331,40 @@ router.beforeEach((to, from, next) => {
 //     )
 //   ) {
 //     next();
-//   }else if(
+//   } else if (
 //     store.state.roles.some((obj) => obj === "admin") &&
 //     (
-//     to.name === "AdminDashboard" ||  
-//     to.name === "ViewAllStudentDetails" ||
-//     to.name === "ViewStudentDetailsByAdmin" ||
-//     to.name === "ViewStudentMarksByAdmin" ||
-//     to.name === "MockExamPaperConfig"
+//       to.name === "AdminDashboard" ||
+//       to.name === "ViewAllStudentDetails" ||
+//       to.name === "ViewStudentDetailsByAdmin" ||
+//       to.name === "ViewStudentMarksByAdmin" ||
+//       to.name === "MockExamPaperConfig"
 
-//   )
-//   ){
+//     )
+//   ) {
 //     next();
 //   }
-//    else if (
-//           to.name === "Registration" ||
-//            to.name === 'ThankyouPageAfterRegistration' ||
-//            to.name === 'About' ||
-//            to.name === 'MKCLTRYHomePage' ||
-//            to.name === 'RecipentRegistration' ||
-//            to.name === 'StudentRegistration' ||
-//            to.name === 'Login' ||
-//            to.name === 'logout' ||
-//            to.name === 'CdnUpload' ||
-//            to.name === 'TermsAndConditions' ||
-//            to.name === 'ResetPassword'||
-//            to.name === "StudentDetails"
-//          ) {
-//            next()
-//          } else {
-//            next({
-//              name: 'Login',
-//            })
-//          }
+//   else if (
+//     to.name === "Registration" ||
+//     to.name === 'ThankyouPageAfterRegistration' ||
+//     to.name === 'About' ||
+//     to.name === 'MKCLTRYHomePage' ||
+//     to.name === 'RecipentRegistration' ||
+//     to.name === 'StudentRegistration' ||
+//     to.name === 'Login' ||
+//     to.name === 'logout' ||
+//     to.name === 'CdnUpload' ||
+//     to.name === 'TermsAndConditions' ||
+//     to.name === 'ResetPassword' ||
+//     to.name === 'EditLiasionOfficer' ||
+//     to.name === "StudentDetails"
+//   ) {
+//     next()
+//   } else {
+//     next({
+//       name: 'Login',
+//     })
+//   }
 // });
 
 export default router;

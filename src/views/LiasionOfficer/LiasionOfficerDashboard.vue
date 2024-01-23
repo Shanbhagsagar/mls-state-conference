@@ -188,6 +188,7 @@ export default {
         });
     },
     fetchDelegatesByStateId(stateId) {
+      const vm = this;
       axios
         .get(
           `${vm.$store.getters["getIpaddress"]}delegate/getAllDelegatesByStateId/${stateId}`

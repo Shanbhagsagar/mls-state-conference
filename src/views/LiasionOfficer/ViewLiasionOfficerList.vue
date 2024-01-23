@@ -126,7 +126,7 @@ export default {
       if (filledImpFields === false) {
         axios
           .post(
-            `${vm.$store.getters["getIpaddress"]}/laisionOfficer/createLaisionofficer`,
+            `${vm.$store.getters["getIpaddress"]}laisionOfficer/createLaisionofficer`,
             lo
           )
           .then((response) => {
@@ -160,7 +160,7 @@ export default {
       let vm = this;
       axios
         .get(
-          `${vm.$store.getters["getIpaddress"]}/laisionOfficer/getAllLiasionOfficerForThatDelegate/${this.delegateId}`
+          `${vm.$store.getters["getIpaddress"]}laisionOfficer/getAllLiasionOfficerForThatDelegate/${this.delegateId}`
         )
         .then((response) => {
           //console.log(response);
@@ -197,12 +197,13 @@ export default {
       });
     },
     editUser() {
+      const vm = this;
       // console.log(this.selected);
       let loId = this.selected[0].id;
 
       axios
         .get(
-          `${vm.$store.getters["getIpaddress"]}/laisionOfficer/getLaisionOfficerById/${loId}`
+          `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLaisionOfficerById/${loId}`
         )
         .then((response) => {
           if (response.data != null) {
@@ -235,7 +236,7 @@ export default {
     fetchStates() {
       const vm = this;
       axios
-        .get(`${vm.$store.getters["getIpaddress"]}/state/getAllStates`)
+        .get(`${vm.$store.getters["getIpaddress"]}state/getAllStates`)
         .then((response) => {
           if (response.data != null) {
             vm.states = response.data;

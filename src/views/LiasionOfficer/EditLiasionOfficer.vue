@@ -124,6 +124,7 @@ export default {
   },
   methods: {
     submit() {
+      const vm = this;
       let lo = {
         name: this.laname,
         mobileNumber: this.mobileNo,

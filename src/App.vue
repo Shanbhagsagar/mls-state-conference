@@ -6,9 +6,55 @@
 
     <div
       class="wrapper"
-      :class="{ 'wrapper-lg' : $route.path == '/StudentDetails' || $route.path == '/HireUs' ||  $route.path=='/view-student-details-admin' || $route.path == '/' || $route.path == '/about' || $route.path == '/login' || $route.path == '/StudentDetails' || $route.path=='/logout' ||$route.path=='/registration'|| $route.path=='/termsandconditions'|| $route.path == '/studentregistration' || $route.path == '/recipentRegistration' || $route.path == '/success' || $route.path == '/reset-password' || $route.path== '/profile' || $route.path== '/delegateregistration'}">
+      :class="{
+        'wrapper-lg':
+          $route.path == '/StudentDetails' ||
+          $route.path == '/HireUs' ||
+          $route.path == '/view-student-details-admin' ||
+          $route.path == '/' ||
+          $route.path == '/about' ||
+          $route.path == '/login' ||
+          $route.path == '/StudentDetails' ||
+          $route.path == '/logout' ||
+          $route.path == '/registration' ||
+		      $route.path==  '/updateregistration'||
+          $route.path == '/termsandconditions' ||
+          $route.path == '/studentregistration' ||
+          $route.path == '/recipentRegistration' ||
+          $route.path == '/success' ||
+          $route.path == '/reset-password' ||
+          $route.path == '/profile' ||
+          $route.path == '/delegateregistration' ||
+          $route.path == '/LiasionOfficerDashboard' ||
+          $route.path == '/ViewLiasionOfficerList' ||
+          $route.path == '/NewLiasionOfficer' ||
+          $route.path == '/EditLiasionOfficer',
+      }"
+      >
       <!-- <headerbar v-if="$route.path!='/' && $route.path!='/donorRegistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/about' && $route.path!='/success'" /> -->
-      <sidebar v-if="$route.path!='/' && $route.path !== '/HireUs' && $route.path!=='/termsandconditions' && $route.path !== '/StudentDetails' && $route.path!='/studentregistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/registration' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/logout' && $route.path!='/about' && $route.path!='/success' && $route.path!= '/reset-password' && $route.path!= '/profile' && $route.path!= '/delegateregistration'" />
+      <sidebar v-if="
+          $route.path != '/' &&
+          $route.path !== '/HireUs' &&
+		      $route.path!='/updateregistration' &&
+          $route.path !== '/termsandconditions' &&
+          $route.path !== '/StudentDetails' &&
+          $route.path != '/studentregistration' &&
+          $route.path != '/updateDonor' &&
+          $route.path != '/updateRecipient' &&
+          $route.path != '/registration' &&
+          $route.path != '/recipentRegistration' &&
+          $route.path != '/login' &&
+          $route.path != '/logout' &&
+          $route.path != '/about' &&
+          $route.path != '/success' &&
+          $route.path != '/reset-password' &&
+          $route.path != '/profile' &&
+          $route.path != '/delegateregistration' &&
+          $route.path !== '/LiasionOfficerDashboard' &&
+          $route.path !== '/ViewLiasionOfficerList' &&
+          $route.path != '/NewLiasionOfficer' &&
+          $route.path != '/EditLiasionOfficer'
+        " />
       <div class="main-content">
         <headerbar
           v-if="
@@ -36,6 +82,7 @@
             $route.path !== '/termsandconditions' &&
             $route.path != '/studentregistration' &&
             $route.path != '/registration' &&
+            $route.path != '/updateregistration' &&
             $route.path === '/view-student-details-admin' &&
             $route.path !== '/view-all-student-details' &&
             $route.path !== '/view-student-details-marks-admin' &&

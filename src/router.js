@@ -66,6 +66,15 @@ const router = new Router({
       },
     },
     {
+      path: '/updateregistration',
+      name: 'UpdateRegistration',
+      component: loadApplicantView('UpdateRegistration'),
+      meta: {
+        title: 'Delegate Update Registration',
+        icon: 'mdi mdi-information-variant',
+      },
+    },
+    {
       path: '/',
       name: 'Login',
       component: loadCommonView('Login'),

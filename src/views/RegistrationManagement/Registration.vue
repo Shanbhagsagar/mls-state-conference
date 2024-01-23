@@ -5,12 +5,29 @@
         <div class="col login-block">
            <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
             <h1 class="modal-title">
-             {{ this.$route.query.subtype }} Registration 
+              <span v-if="this.$route.query.subtype == 'Officials'">
+                  Officials
+              </span>
+              <span v-if="this.$route.query.subtype == 'Chairman'">
+                  Chairman / Deputy Chairman
+              </span>
+              <span v-if="this.$route.query.subtype == 'Speaker'">
+                  Speaker / Deputy Speaker  
+              </span>
+              <span v-if="this.$route.query.subtype == 'Secretary'">
+                  Secretary  
+              </span>
+             Registration 
             </h1>
           </div>
          <div class="card-form">
             <div class="card-header card-header-alt mt-0">
-              Personal Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                Officer Personal Details:
+                </div>
+                <div v-else>
+                Personal Details:
+              </div>
             </div>
             <div class="row">
               <div class="d-block text-center">
@@ -23,6 +40,10 @@
             </div>
               <!-- <img @click="openFileInput" class="profile-user-img img-circle" :src="profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png'" alt="User"/> -->
             </div>
+            <br/>
+            <div class="font-italic text-danger text-center">
+              (*Please Note: This Image will be used to create your Conference Id Card. Kindly upload appropriate image and file size should not be more than 10 MB. )
+             </div>
             <br/> 
             <div class="row">
               <div class="col-md-6 col-lg-6">
@@ -34,12 +55,27 @@
                   <span class="text-danger">*</span>
 
                   <v-select
-                    v-model="delegates[0].designation"
-                    label="name"
-                    placeholder="Please Select your Designation"
-                    :options="delegateDesignation"
-                    :value="delegates[0].designation.name"
-                  />
+                      v-model="delegates[0].designation"
+                      label="name"
+                      :hidden="this.$route.query.subtype == 'Officials'"     
+                      placeholder="Please Select Your Designation"
+                      :options="delegateDesignation"
+                      :value="delegates[0].designation.name"
+                    />
+
+                  <div v-if="this.$route.query.subtype == 'Officials'">
+                      <input
+                      type="text"
+                      class="form-control"
+                      minLength="4"
+                      maxLength="100"
+                      v-model.trim="delegates[0].designationName"
+                      placeholder="Please Enter Your Designation"
+                      id="designations"
+                     >
+                  </div>
+               
+                    
                   <!-- <div
                     class="text-danger"
                     v-if="
@@ -212,7 +248,12 @@
 
           <div class="card-form">
             <div class="card-header card-header-alt">
-              Contacts Details
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer Contact Details:
+                </div>
+                <div v-else>
+                  Contact Details:
+              </div>
             </div>
 
             <div class="row">
@@ -326,174 +367,15 @@
               </div>
             </div> -->
           </div>
-
-          <div class="card-form">
-            <div class="card-header card-header-alt mt-0">
-              Spouse Details
-            </div>
-             <div class="row">
-              <div class="d-block text-center">
-              <div size="180" class="user">
-              <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
-              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
-                <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
-                </b-avatar>
-                </div>
-                </div>
-             </div> 
-            <br/>
-            <div class="row">
-               <div class="col-md-6 col-lg-6">
-                <div class="form-group">
-                  <label
-                    for="title"
-                    class="control-label form-label"
-                  >
-                    Title
-                  
-                  </label>
-
-                  <v-select
-
-                    v-model="delegates[0].family[0].title"
-                    label="name"
-                    placeholder="Please Select title"
-                    :options="delegateTitles"
-                    :value="delegates[0].family[0].title"
-                  />
-                  <!-- <div
-                    class="text-danger"
-                    v-if="
-                      !$v.delegates[0].family[0].title.name.required &&
-                        $v.delegates[0].family[0].title.name.$error
-                    "
-                  >
-                    Please Select Title
-                  </div> -->
-                </div>
-              </div>
-              <div class="col-md-12 col-lg-6">
-                <div class="form-group">
-                  <label class="control-label form-label">
-                    Full Name
-                  </label>
-                  <input
-                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
-                    class="form-control"
-                    minLength="4"
-                    maxLength="100"
-                    v-model.trim="delegates[0].family[0].name"
-                    :placeholder="$t('registration.studentNamePlaceholder')"
-                    id="fullName"
-                    :class="{
-                      'is-invalid': submitted && $v.delegates[0].family[0].name.$invalid
-                    }"
-                  >
-                  <!-- <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.required"
-                  >
-                    {{ $t('registration.vstudnetName1') }}
-                  </div> -->
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.isNameValid"
-                  >
-                    {{ $t('registration.vstudnetName2') }}
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.basic.delegates[0].family[0].name.maxLength"
-                  >
-                    {{ $t('registration.vsMaxLength') }} 100 charachters
-                  </div>
-                  <div
-                    class="text-danger"
-                    v-if="submitted && !$v.delegates[0].family[0].name.minLength"
-                  >
-                    {{ $t('registration.vsMinLength') }} 4 charachters
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div class="card-form">
             <div class="card-header card-header-alt">
-              Spouse Contacts Details
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 col-lg-6">
-                    <div class="form-group">
-                      <label class="control-label form-label">
-                        Mobile Number
-                      </label>
-                      <div class="input-group">
-                        <input
-                          class="form-control"
-                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                          maxlength="10"
-                          minlength="10"
-                          v-model.trim="delegates[0].family[0].mobileNo"
-                          id="mobileNumber"
-                          :placeholder="$t('registration.mobilePlaceholder')"
-                          :disabled="flag == 1"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.delegates[0].family[0].mobileNo.$invalid
-                          }"
-                        >
-                       </div>
-                       <div
-                        class="text-danger"
-                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.numeric"
-                      >
-                        {{ $t('registration.vmobile2') }}
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.isMobileValid"
-                      >
-                        Invalid Mobile Number
-                      </div>
-                      <div
-                        class="text-danger"
-                        v-if="
-                          submitted &&
-                            (!$v.delegates[0].family[0].mobileNo.minLength ||
-                            !$v.delegates[0].family[0].mobileNo.maxLength)
-                        "
-                      >
-                        {{ $t('registration.vmobile3') }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-lg-6">
-                    <div class="form-group">
-                      <label
-                        class="control-label form-label"
-                      >Email ID</label>
-                      <div class="input-group">
-                        <input
-                          type="email"
-                          class="form-control"
-                          v-model.trim="delegates[0].family[0].email"
-                          :placeholder="$t('registration.emailIdPlaceholder')"
-                          id="emailID"
-                          :class="{
-                            'is-invalid':
-                              submitted && $v.delegates[0].family[0].email.$invalid
-                          }"
-                        >
-                      </div>
-                    </div>
-                  </div>
-            </div>
-           </div>
-         <div class="card-form">
-          <div class="card-header card-header-alt">
-              Travel Details:
+              <div v-if="this.$route.query.subtype == 'Officials'">
+                 Officer Travel Details:
+                </div>
+                <div v-else>
+                  Delegate's Travel Details:
+              </div>
+            
             </div>
           <h5>Arrival Details:-</h5>  
           <div class="row">
@@ -549,7 +431,7 @@
                   >
                   Please Enter Vehicle/Flight/Train No.
                   </div>
-                   <div
+                   <!-- <div
                     class="text-danger"
                     v-if="submitted && !$v.vehicleNumber.maxLength"
                   >
@@ -560,7 +442,7 @@
                     v-if="submitted && !$v.vehicleNumber.minLength"
                   >
                     {{ $t('registration.vsMinLength') }} 4 charachters
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="col-md-4 col-lg-4">
@@ -772,8 +654,180 @@
                 </div>
               </div>
             </div>
-          <h4>Spouse Travel Details: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input
+          </div> 
+        <div v-if="this.$route.query.subtype != 'Officials'">
+          <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+                Spouse Details:
+            </div>
+             <div class="row">
+              <div class="d-block text-center">
+              <div size="180" class="user">
+              <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
+              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+                <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
+                </b-avatar>
+                </div>
+                </div>
+             </div>
+             <br/> 
+             <div class="font-italic text-danger text-center">
+              (*Please Note: This Image will be used to create your Conference Id Card. Kindly upload appropriate image and file size should not be more than 10 MB. )
+             </div>
+            <br/>
+            <div class="row">
+               <div class="col-md-6 col-lg-6">
+                <div class="form-group">
+                  <label
+                    for="title"
+                    class="control-label form-label"
+                  >
+                    Title
+                  
+                  </label>
+
+                  <v-select
+
+                    v-model="delegates[0].family[0].title"
+                    label="name"
+                    placeholder="Please Select title"
+                    :options="delegateTitles"
+                    :value="delegates[0].family[0].title"
+                  />
+                  <!-- <div
+                    class="text-danger"
+                    v-if="
+                      !$v.delegates[0].family[0].title.name.required &&
+                        $v.delegates[0].family[0].title.name.$error
+                    "
+                  >
+                    Please Select Title
+                  </div> -->
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <div class="form-group">
+                  <label class="control-label form-label">
+                    Full Name
+                  </label>
+                  <input
+                    oninput="this.value=this.value.replace(/[^[a-zA-Z.-.'-'\s]/g,'');"
+                    class="form-control"
+                    minLength="4"
+                    maxLength="100"
+                    v-model.trim="delegates[0].family[0].name"
+                    :placeholder="$t('registration.studentNamePlaceholder')"
+                    id="fullName"
+                    :class="{
+                      'is-invalid': submitted && $v.delegates[0].family[0].name.$invalid
+                    }"
+                  >
+                  <!-- <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.required"
+                  >
+                    {{ $t('registration.vstudnetName1') }}
+                  </div> -->
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.isNameValid"
+                  >
+                    {{ $t('registration.vstudnetName2') }}
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.basic.delegates[0].family[0].name.maxLength"
+                  >
+                    {{ $t('registration.vsMaxLength') }} 100 charachters
+                  </div>
+                  <div
+                    class="text-danger"
+                    v-if="submitted && !$v.delegates[0].family[0].name.minLength"
+                  >
+                    {{ $t('registration.vsMinLength') }} 4 charachters
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-form">
+            <div class="card-header card-header-alt">
+                  Spouse Contact Details:
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label class="control-label form-label">
+                        Mobile Number
+                      </label>
+                      <div class="input-group">
+                        <input
+                          class="form-control"
+                          oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                          maxlength="10"
+                          minlength="10"
+                          v-model.trim="delegates[0].family[0].mobileNo"
+                          id="mobileNumber"
+                          :placeholder="$t('registration.mobilePlaceholder')"
+                          :disabled="flag == 1"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].mobileNo.$invalid
+                          }"
+                        >
+                       </div>
+                       <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.numeric"
+                      >
+                        {{ $t('registration.vmobile2') }}
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="submitted && !$v.delegates[0].family[0].mobileNo.isMobileValid"
+                      >
+                        Invalid Mobile Number
+                      </div>
+                      <div
+                        class="text-danger"
+                        v-if="
+                          submitted &&
+                            (!$v.delegates[0].family[0].mobileNo.minLength ||
+                            !$v.delegates[0].family[0].mobileNo.maxLength)
+                        "
+                      >
+                        {{ $t('registration.vmobile3') }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label
+                        class="control-label form-label"
+                      >Email ID</label>
+                      <div class="input-group">
+                        <input
+                          type="email"
+                          class="form-control"
+                          v-model.trim="delegates[0].family[0].email"
+                          :placeholder="$t('registration.emailIdPlaceholder')"
+                          id="emailID"
+                          :class="{
+                            'is-invalid':
+                              submitted && $v.delegates[0].family[0].email.$invalid
+                          }"
+                        >
+                      </div>
+                    </div>
+                  </div>
+            </div>
+           </div>
+   
+          <div class="card-form">
+           <div class="card-header card-header-alt">
+                  Spouse Travel Details: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input
                       type="checkbox"
                       class="custom-control-input"
                       id="customCheck4"
@@ -786,8 +840,9 @@
                       for="customCheck4"
                     >
                       (Check If details are same as above)                  
-                    </label></h4>
-            <h5>Arrival Details:-</h5>  
+                    </label>
+            </div>
+           <h5>Arrival Details:-</h5>  
           <div class="row">
                <div class="col-md-4 col-lg-4">
                 <div class="form-group">
@@ -972,13 +1027,12 @@
                   >
                     Mode of Travel
                   </label>
-
                   <v-select
-                    v-model="delegates[0].travelDetail[0].dtravelModel.name"
+                    v-model="delegates[0].travelDetail[1].dtravelModel"
                     label="name"
                     placeholder="Please Enter Your Mode of Travel "
                     :options="travelModes"
-                    :value="delegates[0].travelDetail[0].dtravelModel.name"
+                    :value="delegates[0].travelDetail[1].dtravelModel.name"
                   />
                   <!-- <div
                     class="text-danger"
@@ -1065,8 +1119,9 @@
               </div>
             </div>
             </div>
+         </div>   
           <br/>
-          <div class="card-form">
+          <!-- <div class="card-form">
             <div class="card-header card-header-alt mt-0">
               Others:
             </div>
@@ -1086,7 +1141,7 @@
                     :options="siteSeeing"
                     :value="delegates[0].siteSeeing"
                   />
-                  <!-- <div
+                   <div
                     class="text-danger"
                     v-if="
                       !$v.delegates.siteSeeing.name.required &&
@@ -1094,18 +1149,18 @@
                     "
                   >
                     {{ $t('registration.vstate') }}
-                  </div> -->
+                  </div> 
                 </div>
               </div>
              </div>
-          </div>
+          </div> -->
           <br/>
           <div class="card-form">
             <div class="form-action-alt">
               <button
                 type="button"
                 class="btn btn-page"
-                @click="applicantRegister()"
+                @click="applicantRegister(userId)"
               >
                 Register
               </button>
@@ -1158,12 +1213,12 @@ export default {
        axios.post(this.$store.getters["getIpaddress"]+'photo/uploadFile',formData)
        .then((response) => {
         console.log(response);
-        this.delegates[0].photoPath = response.data;
-        this.$toasted.success('Image Uploaded Successfully', {
+         this.delegates[0].photoPath = response.data;
+         this.$toasted.success('Image Uploaded Successfully', {
           theme: 'bubble',
           position: 'top-center',
           duration: 3000
-        });
+          });         
        }); 
     }
 
@@ -1173,7 +1228,6 @@ export default {
        console.log(profilePictureUrl1.value);
        const formData1 = new FormData();
         formData1.append('file',file1);
-        
        axios.post(this.$store.getters["getIpaddress"]+'photo/uploadFile',formData1)
        .then((response) => {
         console.log(response);
@@ -1200,6 +1254,7 @@ export default {
       profilePictureUrl1,
       handleFileChange,
       handleFileChange1,
+      userId:this.$store.state.authData.userId,
       checked: false,
       mainProps: { blank: true, blankColor: '#777', width: 30, height: 30, class: 'm1' },
       file: null,
@@ -1246,6 +1301,7 @@ export default {
       delegateFinal:[{
         titleId: null,
         designationId: null,
+        designationName:'',
         stateId: null,
         delegatePhotoId: null,
         firstname: '',
@@ -1270,7 +1326,8 @@ export default {
                 departureDate: '',
                 departureVehicleNumber: null,
                 isDelegate: false,
-			        	arriveTo:''
+			        	arriveTo:'',
+                other:''
             },
             {
                 arrivalTravelMode: null,
@@ -1281,7 +1338,8 @@ export default {
                 departureDate: '',
                 departureVehicleNumber: null,
                 isDelegate: false,
-          			arriveTo:''
+          			arriveTo:'',
+                other:''
           }
         ]
       }],
@@ -1307,6 +1365,7 @@ export default {
           type:'',
           id: null
         },
+        designationName:'',
         family: [
           {
               name : '',
@@ -1338,6 +1397,7 @@ export default {
             arrivalDate : '',
             departureDate : '',
             isDelegate : null,
+            other:''
           },
           {
             travelModel : {
@@ -1349,6 +1409,7 @@ export default {
               id: null
             },
             vehicleNumber : '',
+            rvehicleNumber:'',
             arrivalTo : {
               id: null,
               name:''
@@ -1357,6 +1418,7 @@ export default {
             arrivalDate : '',
             departureDate : '',
             isDelegate : null,
+            other:''
           }
          ],
          siteSeeing: {
@@ -1386,6 +1448,7 @@ export default {
         },
         siteSeeing :[],
         delegateDesignation : [],
+        designationName:'',
         airportTerminal : [
           {
             id : 1,
@@ -1478,10 +1541,7 @@ export default {
             departureDate : {required},
             isDelegate : {required},
           }
-         },
-         siteSeeing: {
-          name :{required}
-         } 
+         }
         }
       },
     address: {
@@ -1585,7 +1645,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/designation/getDesignations/"+paramDesignation
+            vm.$store.getters["getIpaddress"]+"designation/getDesignations/"+paramDesignation
            )
            .then(response => {
              console.log(response);
@@ -1616,7 +1676,7 @@ export default {
      const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/title/getAllTitles"
+            vm.$store.getters["getIpaddress"]+"title/getAllTitles"
            )
            .then(response => {
              console.log(response);
@@ -1646,7 +1706,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/visitingPlaces/getAllVisitingPlaces"
+            vm.$store.getters["getIpaddress"]+"visitingPlaces/getAllVisitingPlaces"
            )
            .then(response => {
              console.log(response);
@@ -1676,7 +1736,7 @@ export default {
       const vm = this
       axios
            .get(
-             "http://172.1.0.81:9292/travelMode/getAllTravelModes"
+            vm.$store.getters["getIpaddress"]+"travelMode/getAllTravelModes"
            )
            .then(response => {
              console.log(response);
@@ -1727,21 +1787,6 @@ export default {
     copyData(){
       this.delegates[0].travelDetail[1] = this.delegates[0].travelDetail[0];
     },
-    saveImage() {
-      const userId = this.$route.params.user_id
-      this.cropedImage = this.$refs.cropper.getCroppedCanvas().toDataURL()
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        const formData = new FormData()
-        formData.append('profile_photo', blob, 'name.jpeg')
-        axios
-          .post('/api/user/' + userId + '/profile-photo', formData)
-          .then((response) => {
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
-      }, this.mime_type)
-    },
     onFileSelect(e) {
       const file = e.target.files[0]
       this.mime_type = file.type
@@ -1787,351 +1832,19 @@ export default {
     },
     async starter () {
       const vm = this
-
-      // await vm.getAllCountries()
-
-      // vm.countryId = vm.countries.filter(
-      //   (country) => country.countryName == 'India'
-      // )[0].countryId
-      vm.countryId = '001'
-      await vm.getStatesByCountryId()
-      await vm.getPreferences()
-      // vm.stateId = vm.states.filter(
-      //   (state) => state.STATE_NAME == 'Maharashtra'
-      // )[0].STATE_CODE
-      // vm.stateId = '21'
-      // await vm.getDistrictsByStateId()
-
-      // await vm.getTalukaByDistrictId();
     },
 
-    getEmailOtp () {
-      const vm = this
-
-      this.showEmailOtpField = true
-      new MQL()
-        .setActivity('o.[SendEmailOTP]')
-        .setData({ contact: { emailID: this.contact.emailID } })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('SendEmailOTP', true)
-          if (rs.isValid('SendEmailOTP')) {
-            if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your Email ID', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-              this.$toasted.info(
-                'Please wait for 30 seconds before resending OTP',
-                {
-                  theme: 'bubble',
-                  position: 'top-center',
-                  duration: 3000
-                }
-              )
-              this.sendEmailOtpFlag = true
-
-              vm.timer = setTimeout(function () {
-                vm.sendEmailOtpFlag = false
-              }, 30000)
-            } else {
-              this.showEmailOtpField = false
-              this.$toasted.error('Email ID already exists', { duration: 3000 })
-              rs.showErrorToast('SendEmailOTP')
-            }
-          }
-        })
-    },
-    getOtp () {
-      const vm = this
-
-      this.showOtpField = true
-      new MQL()
-        .setActivity('o.[SendMobileOTP]')
-        .setData({ contact: { mobileNumber: this.contact.mobileNumber } })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('SendMobileOTP', true)
-
-          if (rs.isValid('SendMobileOTP')) {
-            if (res.result.result === undefined) {
-              this.$toasted.success('OTP sent to your Mobile Number', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-              this.$toasted.info(
-                'Please wait for 30 seconds before resending OTP',
-                {
-                  theme: 'bubble',
-                  position: 'top-center',
-                  duration: 3000
-                }
-              )
-              this.sendOtpFlag = true
-
-              vm.timer = setTimeout(function () {
-                vm.sendOtpFlag = false
-              }, 30000)
-            } else {
-              this.showOtpField = false
-              this.$toasted.error('Mobile Number already exists', { duration: 3000 })
-              rs.showErrorToast('SendMobileOTP')
-            }
-          } else {
-            rs.showErrorToast('SendMobileOTP')
-          }
-        })
-    },
-    verifyEmailOtp () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[VerifyEmailOTP]')
-        .setData({ email: this.contact.emailID, verifyOTP: this.contact.eotp })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('VerifyEmailOTP', true)
-          if (rs.isValid('VerifyEmailOTP')) {
-            if (res.result.verifyOTP === 'OTPFOUND') {
-              this.sendEmailOtpFlag = true
-              this.emailflag = 1
-
-              this.emailButton = 'Verified'
-              if (vm.timer) {
-                clearTimeout(vm.timer)
-                vm.timer = 0
-              }
-              this.$toasted.success('OTP Verified', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else if (res.result.verifyOTP === 'OTPNOTFOUND') {
-              this.emailflag = 0
-
-              this.$toasted.error('Invalid OTP ', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else if (res.result.verifyOTP === 'OTPKEYNOTFOUND') {
-              this.emailflag = 0
-
-              this.$toasted.error('OTP Expired ', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else {
-              this.emailflag = 0
-
-              this.$toasted.error('Invalid OTP', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            }
-          } else {
-            rs.showErrorToast('VerifyEmailOTP')
-          }
-        })
-    },
-    verifyOtp () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[VerifyMobileOTP]')
-        .setData({ mobileNumber: this.contact.mobileNumber, verifyOTP: this.contact.votp })
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('VerifyMobileOTP', true)
-          if (rs.isValid('VerifyMobileOTP')) {
-            if (res.result.verifyOTP === 'OTPFOUND') {
-              this.sendOtpFlag = true
-              this.flag = 1
-
-              this.button = 'Verified'
-              if (vm.timer) {
-                clearTimeout(vm.timer)
-                vm.timer = 0
-              }
-              this.$toasted.success('OTP Verified', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else if (res.result.verifyOTP === 'OTPNOTFOUND') {
-              this.flag = 0
-
-              this.$toasted.error('Invalid OTP ', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else if (res.result.verifyOTP === 'OTPKEYNOTFOUND') {
-              this.flag = 0
-
-              this.$toasted.error('OTP Expired ', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            } else {
-              this.flag = 0
-
-              this.$toasted.error('Invalid OTP', {
-                theme: 'bubble',
-                position: 'top-center',
-                duration: 3000
-              })
-            }
-          } else {
-            rs.showErrorToast('VerifyMobileOTP')
-          }
-        })
-    },
-    getStatesByCountryId () {
-      return new Promise((resolve) => {
-        const vm = this
-
-        // vm.countryId = vm.student.selectedCountry.countryId
-        vm.countryName = 'India'
-        new MQL()
-          .setActivity('o.[query_293ccRYOvTADqM5DVvZGDX6ceNb]')
-          .setData({ countryName: vm.countryName })
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('query_293ccRYOvTADqM5DVvZGDX6ceNb', true)
-            if (rs.isValid('query_293ccRYOvTADqM5DVvZGDX6ceNb')) {
-              if (res == null) {
-                res = []
-              }
-
-              vm.districts = []
-              vm.states = res
-
-              //  if (vm.initflag){
-              vm.student.selectedState = vm.states.find(
-                (state) => state.stateName === 'Maharashtra'
-              ).stateId
-              resolve()
-            } else {
-              rs.showErrorToast('query_293ccRYOvTADqM5DVvZGDX6ceNb')
-            }
-          })
-      })
-    },
-
-    getDistrictsByStateId () {
-      return new Promise((resolve) => {
-        const vm = this
-
-        new MQL()
-          .setActivity('o.[query_293k2pcHKiS7GMwuDb9e1veS2g4]')
-          .setData({ stateName: this.address.state.displayName })
-          .fetch()
-          .then((rs) => {
-            let res = rs.getActivity('query_293k2pcHKiS7GMwuDb9e1veS2g4', true)
-            if (rs.isValid('query_293k2pcHKiS7GMwuDb9e1veS2g4')) {
-              if (res == null) {
-                res = []
-              }
-              vm.address.district = null
-              vm.districts = []
-              vm.districts = res
-              resolve()
-            } else {
-              rs.showErrorToast('query_293k2pcHKiS7GMwuDb9e1veS2g4')
-            }
-          })
-      })
-    },
-
-    getMaxMinDate () {
-      new MQL()
-        .setActivity('o.[BirthDateRange]')
-        .setData()
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('BirthDateRange', true)
-          if (rs.isValid('BirthDateRange')) {
-            this.currentDateTime = res.result.now
-            this.minDate = res.result.minDate
-            this.maxDate = res.result.maxDate
-          } else {
-            rs.showErrorToast('BirthDateRange')
-          }
-        })
-    },
-
-    getClassDetails () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[query_2942pqjL5MapX6N3RrGZeVmgHql]')
-        // .setData(data)
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_2942pqjL5MapX6N3RrGZeVmgHql', true)
-          if (rs.isValid('query_2942pqjL5MapX6N3RrGZeVmgHql')) {
-            if (res !== null) {
-              vm.Class = []
-              vm.Class = res
-              // if (vm.userDetails[0].selectedClass == null) {
-              //   vm.userDetails[0].selectedClass = vm.Class[0];
-              // }
-            }
-          } else {
-            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
-          }
-        })
-    },
-    getPreferences () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[query_29KhBLz03rP3i795THixK9jJTfl]')
-        // .setData(data)
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_29KhBLz03rP3i795THixK9jJTfl', true)
-          if (rs.isValid('query_29KhBLz03rP3i795THixK9jJTfl')) {
-            if (res !== null) {
-              vm.preferenceOptions = []
-              vm.preferenceOptions = res
-              // if (vm.userDetails[0].selectedClass == null) {
-              //   vm.userDetails[0].selectedClass = vm.Class[0];
-              // }
-            }
-          } else {
-            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
-          }
-        })
-    },
-    getReferrals () {
-      const vm = this
-      new MQL()
-        .setActivity('o.[query_29KjCJHLzLgJLlA77DwHNGJ58Ve]')
-        // .setData(data)
-        .fetch()
-        .then((rs) => {
-          let res = rs.getActivity('query_29KjCJHLzLgJLlA77DwHNGJ58Ve', true)
-          if (rs.isValid('query_29KjCJHLzLgJLlA77DwHNGJ58Ve')) {
-            if (res !== null) {
-              vm.referralOptions = []
-              vm.referralOptions = res
-              // if (vm.userDetails[0].selectedClass == null) {
-              //   vm.userDetails[0].selectedClass = vm.Class[0];
-              // }
-            }
-          } else {
-            rs.showErrorToast('query_2942pqjL5MapX6N3RrGZeVmgHql')
-          }
-        })
-    },
-    applicantRegister() {
+    applicantRegister(userId) {
       const vm = this;
       //console.log( this.$store.getters['getStateId'])
       vm.delegateFinal[0].titleId = vm.delegates[0].title.id;
-      vm.delegateFinal[0].designationId = vm.delegates[0].designation.id;
+      if(this.$route.query.subtype == 'Officials'){
+        vm.delegateFinal[0].designationId = 11;
+        vm.delegateFinal[0].designationName = vm.delegates[0].designationName
+      }else{
+        vm.delegateFinal[0].designationId = vm.delegates[0].designation.id;
+        vm.delegateFinal[0].designationName = vm.delegates[0].designation.name;
+      }
       vm.delegateFinal[0].stateId = vm.$store.getters["getStateId"];
       vm.delegateFinal[0].delegatePhotoId = vm.delegates[0].photoPath;
       vm.delegateFinal[0].firstname = vm.delegates[0].firstname;
@@ -2139,13 +1852,7 @@ export default {
       vm.delegateFinal[0].lastname = vm.delegates[0].lastname;
       vm.delegateFinal[0].email = vm.delegates[0].email;
       vm.delegateFinal[0].mobileNo = vm.delegates[0].mobileNo;
-      vm.delegateFinal[0].spouseName = vm.delegates[0].family[0].name;
-      vm.delegateFinal[0].spouseEmail = vm.delegates[0].family[0].email;
-      vm.delegateFinal[0].spouseMobileNo = vm.delegates[0].family[0].mobileNo;
-      vm.delegateFinal[0].spouseTitleId = vm.delegates[0].family[0].title.id;
-      vm.delegateFinal[0].spousePhotoId = vm.delegates[0].sphotoPath;
       vm.delegateFinal[0].visitingPlacesIds = vm.delegates[0].siteSeeing.id;
-      vm.delegateFinal[0].totalTravelDetailSize = 2;
       vm.delegateFinal[0].travelDetails[0].arrivalTravelMode =
         vm.delegates[0].travelDetail[0].travelModel.id;
       vm.delegateFinal[0].travelDetails[0].arrivalVehicleNumber =
@@ -2185,81 +1892,65 @@ export default {
         "##" +
         vm.delegates[0].travelDetail[1].arrivalTo.name;
 
-      let totalTravelDetailSize = 2;
+      if(vm.delegates[0].travelDetail[0].travelModel.name == 'Train' && vm.delegates[0].travelDetail[0].arrivalTo.name == 'Other'){
+        vm.delegateFinal[0].travelDetails[0].other = vm.delegates[0].travelDetail[0].other;   
+       }
+        
+       
+      if(vm.delegates[0].travelDetail[1].travelModel.name == 'Train' && vm.delegates[0].travelDetail[1].arrivalTo.name == 'Other'){
+        vm.delegateFinal[0].travelDetails[1].other = vm.delegates[0].travelDetail[1].other;   
+       }
 
-      const params = new FormData();
-      params.append("totalTravelDetailSize", 2);
-      for (let i = 0; i < totalTravelDetailSize; i++) {
-        params.append(
-          "travelDetails[" + i + "][arrivalTravelMode]",
-          vm.delegates[0].travelDetail[0].travelModel.id
-        );
-        params.append(
-          "travelDetails[" + i + "][arrivalVehicleNumber]",
-          vm.delegates[0].travelDetail[i].vehicleNumber
-        );
-        params.append(
-          "travelDetails[" + i + "][travelStartDate]",
-          vm.delegates[0].travelDetail[i].travelDate
-        );
-        params.append(
-          "travelDetails[" + i + "][arrivalStartDate]",
-          vm.delegates[0].travelDetail[i].arrivalDate
-        );
-        params.append(
-          "travelDetails[" + i + "][departureTravelMode]",
-          vm.delegates[0].travelDetail[i].dtravelModel.id
-        );
-        params.append(
-          "travelDetails[" + i + "][departureDate]",
-          vm.delegates[0].travelDetail[i].departureDate
-        );
-        params.append(
-          "travelDetails[" + i + "][departureVehicleNumber]",
-          vm.delegates[0].travelDetail[i].rvehicleNumber
-        );
-        params.append(
-          "travelDetails[" + i + "][arriveTo]",
-          vm.delegates[0].travelDetail[i].arrivalTo.id +
-            "##" +
-            vm.delegates[0].travelDetail[i].arrivalTo.name
-        );
-      }
-      params.append("travelDetails[0][isDelegate]", true);
-      params.append("travelDetails[1][isDelegate]", false);
-      params.append("titleId", vm.delegates[0].title.id);
-      params.append("designationId", vm.delegates[0].designation.id);
-      params.append("stateId", vm.$store.getters["getStateId"]);
-      params.append("delegatePhotoId", vm.delegates[0].photoPath);
-      params.append("middlename", vm.delegates[0].middlename);
-      params.append("visitingPlacesIds", vm.delegates[0].siteSeeing.id);
-      params.append("lastname", vm.delegates[0].lastname);
-      params.append("email", vm.delegates[0].email);
-      params.append("mobileNo", vm.delegates[0].mobileNo);
+        let family = [
+        {
+          spouseName: vm.delegates[0].family[0].name,
+          spouseEmail: vm.delegates[0].family[0].email,
+          spouseMobileNo: vm.delegates[0].family[0].mobileNo,
+          spouseTitleId: vm.delegates[0].family[0].title.id,
+          spousePhotoId: vm.delegates[0].sphotoPath,
+        },
+      ];
+
+      vm.delegateFinal[0].family = family;
+
+      console.log(vm.delegateFinal[0]);
       axios
         .post(
-          vm.$store.getters["getIpaddress"]+"delegate/userId/" +
-            vm.$store.getters["getUserId"] +
-            "/addDelegate",
-          params,
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-            },
-          }
+          // vm.$store.getters["getIpaddress"]+"delegate/userId/" +
+          //   vm.$store.getters["getUserId"] +
+          //   "/addDelegate",
+          this.$store.getters["getIpaddress"]+"delegate/registerDelegate/"+userId,
+          vm.delegateFinal[0]
         )
         .then((response) => {
           console.log(response);
-          // this.delegates[0].photoPath = response.data;
-          this.$toasted.success("Submitted Successfully", {
+          if(response.data == 'Saved'){
+            this.$toasted.success("Submitted Successfully", {
             theme: "bubble",
             position: "top-center",
             duration: 3000,
           });
-          this.$router.push({
+           this.$router.push({
             name: 'Profile'
-        })
-        });
+            })
+          }else{
+            vm.$toasted.error("Inetrnal Server Error Unable to Save Data ", {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+          } 
+          // this.delegates[0].photoPath = response.data;
+          
+        }) .catch(error => {
+             console.log(error)
+              vm.$toasted.error("Unable to register Please try later", {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           });
     },
 
   }

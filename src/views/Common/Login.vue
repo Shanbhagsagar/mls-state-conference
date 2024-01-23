@@ -16,7 +16,7 @@
               alt="Maharashtra Legislature Secretariat"
             >
           </div> 
-          <div class="text-center card-header"><b>Maharashtra Legislature Secretariat Conference 2024</b></div>
+          <!-- <div class="text-center card-header"><b>Maharashtra Legislature Secretariat Conference 2024</b></div> -->
           <br>
           <div class="form-wrapper">
             <form @submit.prevent="login()">
@@ -77,6 +77,10 @@
                  >
               </div>
              </form>
+             <br/>
+             <div class="font-italic text-danger text-center">
+               Please enter the username and password as provided to Secretary of your Assembly/Council via official email by Maharashtra Legistrature Secretariat's IT Cell.
+             </div>
             <div class="help-wrapper">
               <div class="copyright-holder">
                 <div class="copyright">

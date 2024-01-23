@@ -32,93 +32,93 @@ function loadCommonView(view) {
 
 const router = new Router({
   routes: [{
-    path: '/studentregistration',
-    name: 'StudentRegistration',
-    component: loadStudentView('StudentRegistration'),
-    meta: {
-      title: 'Registration | MKCL DNExT',
-      icon: 'mdi mdi-information-variant',
+      path: '/studentregistration',
+      name: 'StudentRegistration',
+      component: loadStudentView('StudentRegistration'),
+      meta: {
+        title: 'Registration | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+      },
     },
-  },
-  // {
-  //   path: '/registration',
-  //   name: 'Registration',
-  //   component: loadApplicantView('Registration'),
-  //   meta: {
-  //     title: 'Delegate Registration',
-  //     icon: 'mdi mdi-information-variant',
-  //   },
-  // },
-  {
-    path: '/applicantDetails',
-    name: 'ApplicantDetails',
-    component: loadView('Applicant/ApplicantDetails'),
-    meta: {
-      title: 'ApplicantDetails | MKCL DNExT',
-      icon: 'mdi mdi-information-variant',
-      requiresAuth: true
+    // {
+    //   path: '/registration',
+    //   name: 'Registration',
+    //   component: loadApplicantView('Registration'),
+    //   meta: {
+    //     title: 'Delegate Registration',
+    //     icon: 'mdi mdi-information-variant',
+    //   },
+    // },
+    {
+      path: '/applicantDetails',
+      name: 'ApplicantDetails',
+      component: loadView('Applicant/ApplicantDetails'),
+      meta: {
+        title: 'ApplicantDetails | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+        requiresAuth: true
+      },
     },
-  },
-  {
-    path: '/registration',
-    name: 'Registration',
-    component: loadApplicantView('Registration'),
-    meta: {
-      title: 'Delegate Registration',
-      icon: 'mdi mdi-information-variant',
+    {
+      path: '/registration',
+      name: 'Registration',
+      component: loadApplicantView('Registration'),
+      meta: {
+        title: 'Delegate Registration',
+        icon: 'mdi mdi-information-variant',
+      },
     },
-  },
-  {
-    path: '/',
-    name: 'Login',
-    component: loadCommonView('Login'),
-    meta: {
-      title: 'Maharashtra Legislature Secretariat',
-      icon: 'mdi mdi-information-variant',
+    {
+      path: '/',
+      name: 'Login',
+      component: loadCommonView('Login'),
+      meta: {
+        title: 'Maharashtra Legislature Secretariat',
+        icon: 'mdi mdi-information-variant',
+      },
+      beforeEnter(routeTo, routeFrom, next) {
+        store.dispatch('AUTH_LOGOUT').then(() => {
+          next()
+        })
+      },
     },
-    beforeEnter(routeTo, routeFrom, next) {
-      store.dispatch('AUTH_LOGOUT').then(() => {
-        next()
-      })
+    {
+      path: '/login',
+      name: 'Login',
+      component: loadCommonView('Login'),
+      meta: {
+        title: 'Login | MKCL DNExT',
+        icon: 'mdi mdi-information-variant',
+      },
     },
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: loadCommonView('Login'),
-    meta: {
-      title: 'Login | MKCL DNExT',
-      icon: 'mdi mdi-information-variant',
+    {
+      path: '*', redirect: '/',
+      name: 'Login',
+      component: loadCommonView('Login'),
+      meta: {
+        title: 'Login',
+        icon: 'mdi mdi-information-variant',
+      },
+      beforeEnter(routeTo, routeFrom, next) {
+        store.dispatch('AUTH_LOGOUT').then(() => {
+          next()
+        })
+      },
     },
-  },
-  {
-    path: '*', redirect: '/',
-    name: 'Login',
-    component: loadCommonView('Login'),
-    meta: {
-      title: 'Login',
-      icon: 'mdi mdi-information-variant',
+    {
+      path: '/logout',
+      name: 'logout',
+      component: loadCommonView('Login'),
+      meta: {
+        title: 'Logout',
+        icon: 'mdi mdi-information-variant',
+      },
+      beforeEnter(routeTo, routeFrom, next) {
+        store.dispatch('AUTH_LOGOUT').then(() => {
+          next()
+        })
+      },
     },
-    beforeEnter(routeTo, routeFrom, next) {
-      store.dispatch('AUTH_LOGOUT').then(() => {
-        next()
-      })
-    },
-  },
-  {
-    path: '/logout',
-    name: 'logout',
-    component: loadCommonView('Login'),
-    meta: {
-      title: 'Logout',
-      icon: 'mdi mdi-information-variant',
-    },
-    beforeEnter(routeTo, routeFrom, next) {
-      store.dispatch('AUTH_LOGOUT').then(() => {
-        next()
-      })
-    },
-  },
 
   {
     path: '/about',

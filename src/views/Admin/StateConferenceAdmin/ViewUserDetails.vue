@@ -6,7 +6,7 @@
     <button v-on:click="editUser()" class="btn btn-page">
       Edit User Details
     </button>
-
+    <br/> <br/>
     <div>
       <b-table
         striped
@@ -38,7 +38,7 @@ export default {
     getAllDelegates() {
       let vm = this;
       axios
-        .get(`${vm.$store.getters["getIpaddress"]}/user/getAllUsers`)
+        .get(`${vm.$store.getters["getIpaddress"]}user/getAllUsers`)
         .then((response) => {
           console.log(response);
           if (response != null) {
@@ -60,7 +60,7 @@ export default {
       let userID = this.selected[0].id;
 
       axios
-        .get(`${vm.$store.getters["getIpaddress"]}/user/getUserById/${userID}`)
+        .get(`${vm.$store.getters["getIpaddress"]}user/getUserById/${userID}`)
         .then((response) => {
           console.log(response.data);
           this.$router.push({

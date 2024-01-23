@@ -5,6 +5,7 @@
         <div class="col login-block">
            <div class="logo-wrapper logo-wrapper-alt logo-wrapper-alt2">
             <h1 class="modal-title">
+              Update
               <span v-if="this.$route.query.subtype == 'official'">
                   Officials
               </span>
@@ -17,7 +18,7 @@
               <span v-if="this.$route.query.subtype == 'secretary'">
                   Secretary  
               </span>
-             Registration 
+             Registration Details
             </h1>
           </div>
          <div class="card-form">
@@ -32,9 +33,13 @@
             <div class="row">
               <div class="d-block text-center">
               <div size="180" class="user">
+               <span v>
+
+               </span>
               <input @change="handleFileChange" ref="fileInput" type="file" style="display: none">
-              <b-avatar size="180" :src="profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+              <b-avatar size="180" :src="liveImageUrl || (profilePictureUrl ? profilePictureUrl : '../../../public/assets/images/no-image-icon-23485.png')" class="profile-img" badge-variant="info">
               <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput"></i></template>
+
             </b-avatar>
             </div>
             </div>
@@ -129,12 +134,12 @@
                     maxLength="100"
                     v-model.trim="delegates[0].firstname"
                      placeholder="Please Enter Your First Name"
-                    id="firstname"
+                     id="firstname"
                     :class="{
                       'is-invalid': submitted && $v.delegates[0].firstname.$invalid
                     }"
                   >
-                  <div
+                 <div
                     class="text-danger"
                     v-if="submitted && !$v.delegates[0].firstname.required"
                   >
@@ -509,6 +514,7 @@
                     max="2024-01-30"
                     v-model="delegates[0].travelDetail[0].travelDate"
                     id="ddateTime"
+                    :value="delegates[0].travelDetail[0].travelDate"
                     :input-class="{
                         'form-control': 'form-control',
                       }"/>
@@ -664,7 +670,7 @@
               <div class="d-block text-center">
               <div size="180" class="user">
               <input @change="handleFileChange1" ref="fileInput1" type="file" style="display: none">
-              <b-avatar size="180" :src="profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png'" class="profile-img" badge-variant="info">
+              <b-avatar size="180" :src="liveSpouseImageUrl || (profilePictureUrl1 ? profilePictureUrl1 : '../../../public/assets/images/no-image-icon-23485.png')" class="profile-img" badge-variant="info">
                 <template #badge><i class="bi bi-pencil-square text-white" @click="openFileInput1"></i></template>
                 </b-avatar>
                 </div>
@@ -770,7 +776,7 @@
                           v-model.trim="delegates[0].family[0].mobileNo"
                           id="mobileNumber"
                           :placeholder="$t('registration.mobilePlaceholder')"
-                           :class="{
+                          :class="{
                             'is-invalid':
                               submitted && $v.delegates[0].family[0].mobileNo.$invalid
                           }"
@@ -1031,7 +1037,7 @@
                     label="name"
                     placeholder="Please Enter Your Mode of Travel "
                     :options="travelModes"
-                    :value="delegates[0].travelDetail[1].dtravelModel.name"
+                    :value="delegates[0].travelDetail[1].dtravelModel"
                   />
                   <!-- <div
                     class="text-danger"
@@ -1120,7 +1126,7 @@
             </div>
          </div>   
           <br/>
-          <!-- <div class="card-form">
+          <div v-if="isSiteSeeingEnabled == true" class="card-form">
             <div class="card-header card-header-alt mt-0">
               Others:
             </div>
@@ -1140,7 +1146,7 @@
                     :options="siteSeeing"
                     :value="delegates[0].siteSeeing"
                   />
-                   <div
+                   <!-- <div
                     class="text-danger"
                     v-if="
                       !$v.delegates.siteSeeing.name.required &&
@@ -1148,20 +1154,20 @@
                     "
                   >
                     {{ $t('registration.vstate') }}
-                  </div> 
+                  </div>  -->
                 </div>
               </div>
              </div>
-          </div> -->
+          </div> 
           <br/>
           <div class="card-form">
             <div class="form-action-alt">
               <button
                 type="button"
                 class="btn btn-page"
-                @click="checkValidation(userId)"
+                @click="applicantRegister(delegates[0].id)"
               >
-                Register
+                Update Registration
               </button>
             </div>
           </div>
@@ -1189,7 +1195,8 @@ import VueCropper from 'vue-cropperjs'
 import Datepicker from 'vuejs-datetimepicker'
 import { ref } from 'vue'
 import axios from 'axios'
-var moment = require('moment')
+import moment from 'moment'
+// var moment = require('moment')
 export default {
   components: { 
     VueCropper,
@@ -1202,7 +1209,8 @@ export default {
     const profilePictureUrl = ref(null);
     const profilePictureUrl1 = ref(null);
     
-    const handleFileChange = (event) => { 
+    const handleFileChange = (event) => {
+       this.liveImageUrl = null;
        const file = event.target.files[0];
        profilePictureUrl.value = URL.createObjectURL(file);
        console.log(profilePictureUrl.value);
@@ -1211,17 +1219,51 @@ export default {
         
        axios.post(this.$store.getters["getIpaddress"]+'photo/uploadFile',formData)
        .then((response) => {
+        console.log(response);
          this.delegates[0].photoPath = response.data;
-         this.$toasted.success('Image Uploaded Successfully', {
+         if(this.delegates[0].photoPath != null && this.delegates[0].photoPath != undefined && this.delegates[0].photoPath != ''){
+          axios
+           .get(this.$store.getters["getIpaddress"]+"photo/checkIfPhotoFileIsPresent/"+ this.delegates[0].photoPath)
+           .then(response => {
+             if(response.data != null){
+                if(response.data == true){
+                    this.$toasted.success('Image Uploaded Successfully', {
                     theme: 'bubble',
                     position: 'top-center',
                     duration: 3000
                     });
-              
+                }else{
+                  this.$toasted.error('Internal Server Error. Kindly contact the administrator', {
+                    theme: 'bubble',
+                    position: 'top-center',
+                    duration: 3000
+                  })   
+                }
+                
+              } else{
+               this.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              this.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false)
+          }        
        }); 
     }
 
     const handleFileChange1 = (event) => {
+       this.liveSpouseImageUrl = null;
        const file1 = event.target.files[0];
        profilePictureUrl1.value = URL.createObjectURL(file1);
        console.log(profilePictureUrl1.value);
@@ -1231,12 +1273,45 @@ export default {
        .then((response) => {
         console.log(response);
         this.delegates[0].sphotoPath = response.data;
-        this.$toasted.success('Image Uploaded Successfully', {
+        if(this.delegates[0].sphotoPath != null && this.delegates[0].sphotoPath != undefined && this.delegates[0].sphotoPath != ''){
+          axios
+           .get(this.$store.getters["getIpaddress"]+"photo/checkIfPhotoFileIsPresent/"+ this.delegates[0].sphotoPath)
+           .then(response => {
+             if(response.data != null){
+                if(response.data == true){
+                    this.$toasted.success('Image Uploaded Successfully', {
                     theme: 'bubble',
                     position: 'top-center',
                     duration: 3000
-         });
-       });
+                    });
+                }else{
+                  this.$toasted.error('Internal Server Error. Kindly contact the administrator', {
+                    theme: 'bubble',
+                    position: 'top-center',
+                    duration: 3000
+                  })   
+                }
+                
+              } else{
+               this.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              this.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false)
+          }
+       }); 
     }
 
     return {
@@ -1247,14 +1322,18 @@ export default {
       // image: '',
       // dialog: false,
       // files: '',
+      fetchDelegate:{},
       fileInput,
       fileInput1,
       profilePictureUrl,
       profilePictureUrl1,
+      subtypeData:this.$route.query.subtype,
       handleFileChange,
       handleFileChange1,
       userId:this.$store.state.authData.userId,
+      delegatesId:this.$route.query.delegateId,
       checked: false,
+      isSiteSeeingEnabled:false,
       mainProps: { blank: true, blankColor: '#777', width: 30, height: 30, class: 'm1' },
       file: null,
       imageUrl: null,
@@ -1297,8 +1376,11 @@ export default {
       years: [],
       customDate: null,
       submitted:false,
+      liveImageUrl:'',
+      liveSpouseImageUrl:'',
       delegateFinal:[{
         titleId: null,
+        id: null,
         designationId: null,
         designationName:'',
         stateId: null,
@@ -1313,6 +1395,7 @@ export default {
         spouseMobileNo: '',
         spouseTitleId: '',
         spousePhotoId: null,
+        familyId:null,
         visitingPlacesIds: '',
         totalTravelDetailSize: null,
         travelDetails: [
@@ -1326,7 +1409,8 @@ export default {
                 departureVehicleNumber: null,
                 isDelegate: false,
 			        	arriveTo:'',
-                other:''
+                other:'',
+                id: null
             },
             {
                 arrivalTravelMode: null,
@@ -1338,11 +1422,13 @@ export default {
                 departureVehicleNumber: null,
                 isDelegate: false,
           			arriveTo:'',
-                other:''
+                other:'',
+                id:null
           }
         ]
       }],
       delegates:[{
+        id:null,
         firstname:'',
         lastname:'',
         middlename:'',     
@@ -1373,17 +1459,18 @@ export default {
                 id: null
               }, 
               email: '',
-              mobileNo: '',   
+              mobileNo: '',
+              id:null   
           }
         ],
          travelDetail: [
           {
             travelModel : {
-              type :'',
+              name :'',
               id: null
             },
             dtravelModel : {
-              type :'',
+              name :'',
               id: null
             },
             vehicleNumber : '',
@@ -1396,7 +1483,8 @@ export default {
             arrivalDate : '',
             departureDate : '',
             isDelegate : null,
-            other:''
+            other:'',
+            id:null
           },
           {
             travelModel : {
@@ -1417,7 +1505,8 @@ export default {
             arrivalDate : '',
             departureDate : '',
             isDelegate : null,
-            other:''
+            other:'',
+            id:null
           }
          ],
          siteSeeing: {
@@ -1482,7 +1571,7 @@ export default {
     }
   },
   computed: {
-    
+ 
     pleaseSpecifyInvalid () {
       if (this.other.reference.refferal === 'Other') {
         if (this.pleaseSpecify.length >= 5 && this.pleaseSpecify.length < 200) {
@@ -1626,11 +1715,13 @@ export default {
       this.fileInput1 = this.$refs.fileInput1;
       // Now fileInput is guaranteed to be available
     });
+    this.fetchDelegateDetails(this.$route.query.delegateId)
     var designationSubtype = this.$route.query.subtype;
     this.fetchUserDesignation(designationSubtype.toLowerCase())
     this.fetchUserTitle()
     this.fetchUserVistingPlaces()
     this.fetchUserModeOfTravel()
+    this.fetchCustomParameter()
   },
   methods: {
     changeLanguage (lang) {
@@ -1640,23 +1731,28 @@ export default {
       })
     },
 
-    checkValidation(userId){
-      const vm = this 
-      if(vm.delegates[0].photoPath != null && vm.delegates[0].photoPath != '' && vm.delegates[0].photoPath != undefined ){
-        axios
-           .get(this.$store.getters["getIpaddress"]+"photo/checkIfPhotoFileIsPresent/"+ this.delegates[0].photoPath)
+    formattedDate(dateTimeString) {
+      if(dateTimeString != null){
+          return moment(dateTimeString,'DD-MM-YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss');
+      }else{
+        return '';
+      }
+    },
+
+    fetchCustomParameter(){
+      const vm = this
+      axios
+           .get(
+            this.$store.getters["getIpaddress"]+"cp/ENABLE_SITE_SEEING")
            .then(response => {
-             if(response.data != null){
-                if(response.data == true){
-                    this.applicantRegister(userId)
-                }else{
-                  this.$toasted.error('Please Insert the profile pic', {
-                    theme: 'bubble',
-                    position: 'top-center',
-                    duration: 3000
-                  })   
-                }
-                
+            console.log("Response Here :");
+            console.log(typeof response.data);
+            console.log(response.data);
+             if(response != null){
+
+              console.log(response.data);
+              vm.isSiteSeeingEnabled = response.data;
+
               } else{
                this.$toasted.error('Some error occurred. Kindly contact the administrator.', {
                theme: 'bubble',
@@ -1675,14 +1771,154 @@ export default {
              this.errored = true
            })
            .finally(() => this.loading = false)
-      } else {
-        this.$toasted.error('Kindly upload the photo of delegate.', {
-               theme: 'bubble',
-               position: 'top-center',
-               duration: 3000
-        })
-      }
     },
+
+    fetchDelegateDetails(delegateId){
+        const vm = this
+        axios
+             .get(
+              vm.$store.getters["getIpaddress"]+"delegate/getDelegateData/"+delegateId
+             )
+             .then(response => {
+               if(response.data != null){
+                 console.log(response.data); 
+                 vm.fetchDelegate = response.data;
+                 vm.delegates[0].id = vm.fetchDelegate.id; 
+                 vm.delegates[0].firstname = vm.fetchDelegate.firstname;
+                 vm.delegates[0].middlename = vm.fetchDelegate.middlename;
+                 vm.delegates[0].lastname  = vm.fetchDelegate.lastname;
+                 vm.delegates[0].mobileNo = vm.fetchDelegate.mobileNo;
+                 vm.delegates[0].email = vm.fetchDelegate.email;
+                 if(this.$route.query.subtype == 'official'){
+                  vm.delegateFinal[0].designationId = 11;
+                  vm.delegates[0].designationName = vm.fetchDelegate.designationName
+                }else{
+                  vm.delegates[0].designation.id =vm.fetchDelegate.designation.id
+                  vm.delegates[0].designation.name = vm.fetchDelegate.designation.name
+                  vm.delegates[0].designation.type = vm.fetchDelegate.designation.type
+                }
+                
+                 vm.delegates[0].title.id =  vm.fetchDelegate.title.id
+                 vm.delegates[0].title.name =  vm.fetchDelegate.title.name
+                 if(vm.fetchDelegate.photo != null && vm.fetchDelegate.photo != '' && vm.fetchDelegate.photo != undefined){
+                   vm.delegates[0].photoPath = vm.fetchDelegate.photo.id
+                   vm.liveImageUrl = vm.$store.getters['getIpaddress']+'photo/downloadFile/'+ vm.fetchDelegate.photo.id
+                 }
+
+                 if(vm.fetchDelegate.travelDetail.length > 0){
+                   if(vm.fetchDelegate.travelDetail[0].arrivalTravelMode != null && vm.fetchDelegate.travelDetail[0].arrivalTravelMode != '' && vm.fetchDelegate.travelDetail[0].arrivalTravelMode != undefined){
+                        vm.delegates[0].travelDetail[0].travelModel = vm.fetchDelegate.travelDetail[0].arrivalTravelMode
+                   } 
+                   if(vm.fetchDelegate.travelDetail[0].arrivalVehicleNumber != null && vm.fetchDelegate.travelDetail[0].arrivalVehicleNumber != '' && vm.fetchDelegate.travelDetail[0].arrivalVehicleNumber != undefined){
+                      vm.delegates[0].travelDetail[0].vehicleNumber = vm.fetchDelegate.travelDetail[0].arrivalVehicleNumber
+                   }
+                  if(vm.fetchDelegate.travelDetail[0].travelStartDate != null && vm.fetchDelegate.travelDetail[0].travelStartDate != '' && vm.fetchDelegate.travelDetail[0].travelStartDate != undefined){
+                    vm.delegates[0].travelDetail[0].travelDate = vm.formattedDate(vm.fetchDelegate.travelDetail[0].travelStartDate)
+                  }
+                  if(vm.fetchDelegate.travelDetail[0].arrivalStartDate != null && vm.fetchDelegate.travelDetail[0].arrivalStartDate != '' && vm.fetchDelegate.travelDetail[0].arrivalStartDate != undefined){
+                      vm.delegates[0].travelDetail[0].arrivalDate = vm.formattedDate(vm.fetchDelegate.travelDetail[0].arrivalStartDate)
+                  }
+                    if(vm.fetchDelegate.travelDetail[0].departureTravelMode != null && vm.fetchDelegate.travelDetail[0].departureTravelMode != '' && vm.fetchDelegate.travelDetail[0].departureTravelMode != undefined){
+                      vm.delegates[0].travelDetail[0].dtravelModel = vm.fetchDelegate.travelDetail[0].departureTravelMode
+                    }
+                    if(vm.fetchDelegate.travelDetail[0].departureDate != null && vm.fetchDelegate.travelDetail[0].departureDate != '' && vm.fetchDelegate.travelDetail[0].departureDate != undefined){
+                      vm.delegates[0].travelDetail[0].departureDate = vm.formattedDate(vm.fetchDelegate.travelDetail[0].departureDate)
+                    }
+                    if(vm.fetchDelegate.travelDetail[0].departureVehicleNumber != null && vm.fetchDelegate.travelDetail[0].departureVehicleNumber != '' && vm.fetchDelegate.travelDetail[0].departureVehicleNumber != undefined){
+                        vm.delegates[0].travelDetail[0].rvehicleNumber = vm.fetchDelegate.travelDetail[0].departureVehicleNumber
+                    }
+                     if(vm.fetchDelegate.travelDetail[0].arrivalTo != null && vm.fetchDelegate.travelDetail[0].arrivalTo != '' && vm.fetchDelegate.travelDetail[0].arrivalTo != undefined){
+                       let splitStrings  = vm.fetchDelegate.travelDetail[0].arrivalTo.split("##");
+                       vm.delegates[0].travelDetail[0].arrivalTo.id = splitStrings[0];
+                       vm.delegates[0].travelDetail[0].arrivalTo.name = splitStrings[1];
+                    }
+                    if(vm.fetchDelegate.travelDetail[0].id != null && vm.fetchDelegate.travelDetail[0].id != '' && vm.fetchDelegate.travelDetail[0].id != undefined){
+                       vm.delegates[0].travelDetail[0].id = vm.fetchDelegate.travelDetail[0].id;
+                    }
+                    if(vm.fetchDelegate.travelDetail[0].other != null && vm.fetchDelegate.travelDetail[0].other != '' && vm.fetchDelegate.travelDetail[0].other != undefined){
+                       vm.delegates[0].travelDetail[0].other = vm.fetchDelegate.travelDetail[0].other;
+                    }
+                 }
+                if(vm.fetchDelegate.family.length > 0){
+                  if(vm.fetchDelegate.family[0].name != null && vm.fetchDelegate.family[0].name != '' && vm.fetchDelegate.family[0].name != undefined){
+                    vm.delegates[0].family[0].name = vm.fetchDelegate.family[0].name
+                  }
+                  if(vm.fetchDelegate.family[0].email != null && vm.fetchDelegate.family[0].email != '' && vm.fetchDelegate.family[0].email != undefined){
+                    vm.delegates[0].family[0].email = vm.fetchDelegate.family[0].email
+                  }
+                  if(vm.fetchDelegate.family[0].mobileNo != null && vm.fetchDelegate.family[0].mobileNo != '' && vm.fetchDelegate.family[0].mobileNo != undefined){
+                    vm.delegates[0].family[0].mobileNo = vm.fetchDelegate.family[0].mobileNo
+                  }
+                  if(vm.fetchDelegate.family[0].title != null && vm.fetchDelegate.family[0].title != '' && vm.fetchDelegate.family[0].title != undefined){
+                    vm.delegates[0].family[0].title.name = vm.fetchDelegate.family[0].title.name
+                    vm.delegates[0].family[0].title.id = vm.fetchDelegate.family[0].title.id
+                  }
+                  if( vm.fetchDelegate.family[0].photo != null &&  vm.fetchDelegate.family[0].photo != '' && vm.fetchDelegate.family[0].photo != undefined){
+                    vm.delegates[0].sphotoPath = vm.fetchDelegate.family[0].photo.id
+                    vm.liveSpouseImageUrl = vm.$store.getters['getIpaddress']+'photo/downloadFile/'+ vm.fetchDelegate.family[0].photo.id                    
+                  }
+                  if(vm.fetchDelegate.family[0].id != null && vm.fetchDelegate.family[0].id !='' && vm.fetchDelegate.family[0].id != undefined){
+                    vm.delegates[0].family[0].id = vm.fetchDelegate.family[0].id
+                  }
+                }
+                 if(vm.fetchDelegate.travelDetail.length > 1){
+                  if(vm.fetchDelegate.travelDetail[1].arrivalTravelMode != null && vm.fetchDelegate.travelDetail[1].arrivalTravelMode != '' && vm.fetchDelegate.travelDetail[1].arrivalTravelMode != undefined){
+                    vm.delegates[0].travelDetail[1].travelModel = vm.fetchDelegate.travelDetail[1].arrivalTravelMode
+                  }
+                  if(vm.fetchDelegate.travelDetail[1].arrivalVehicleNumber != null && vm.fetchDelegate.travelDetail[1].arrivalVehicleNumber != '' && vm.fetchDelegate.travelDetail[1].arrivalVehicleNumber != undefined){
+                    vm.delegates[0].travelDetail[1].vehicleNumber = vm.fetchDelegate.travelDetail[1].arrivalVehicleNumber
+                  }
+                  if(vm.fetchDelegate.travelDetail[1].travelStartDate != null && vm.fetchDelegate.travelDetail[1].travelStartDate != '' && vm.fetchDelegate.travelDetail[1].travelStartDate != undefined){
+                    vm.delegates[0].travelDetail[1].travelDate = vm.formattedDate(vm.fetchDelegate.travelDetail[1].travelStartDate)
+                  } 
+                  if(vm.fetchDelegate.travelDetail[1].arrivalStartDate != null && vm.fetchDelegate.travelDetail[1].arrivalStartDate != '' && vm.fetchDelegate.travelDetail[1].arrivalStartDate != undefined){
+                    vm.delegates[0].travelDetail[1].arrivalDate = vm.formattedDate(vm.fetchDelegate.travelDetail[1].arrivalStartDate)
+                  }
+                  if(vm.fetchDelegate.travelDetail[1].departureTravelMode != null && vm.fetchDelegate.travelDetail[1].departureTravelMode != '' && vm.fetchDelegate.travelDetail[1].departureTravelMode != undefined){
+                    vm.delegates[0].travelDetail[1].dtravelModel = vm.fetchDelegate.travelDetail[1].departureTravelMode
+                    // vm.delegates[0].travelDetail[1].dtravelModel = vm.fetchDelegate.travelDetail[1].departureTravelMode.name
+                  }
+                  if(vm.fetchDelegate.travelDetail[1].departureDate != null && vm.fetchDelegate.travelDetail[1].departureDate != '' && vm.fetchDelegate.travelDetail[1].departureDate != undefined){
+                    vm.delegates[0].travelDetail[1].departureDate = vm.formattedDate(vm.fetchDelegate.travelDetail[1].departureDate)
+                  }
+                   if(vm.fetchDelegate.travelDetail[1].departureVehicleNumber != null && vm.fetchDelegate.travelDetail[1].departureVehicleNumber != '' && vm.fetchDelegate.travelDetail[1].departureVehicleNumber != undefined){
+                    vm.delegates[0].travelDetail[1].rvehicleNumber = vm.fetchDelegate.travelDetail[1].departureVehicleNumber
+                   }
+                    if(vm.fetchDelegate.travelDetail[1].arrivalTo != null && vm.fetchDelegate.travelDetail[1].arrivalTo != '' && vm.fetchDelegate.travelDetail[1].arrivalTo != undefined){
+                      let splitStrings2  = vm.fetchDelegate.travelDetail[1].arrivalTo.split("##");
+                      vm.delegates[0].travelDetail[1].arrivalTo.id = splitStrings2[0];
+                      vm.delegates[0].travelDetail[1].arrivalTo.name = splitStrings2[1];
+                    }
+                    if(vm.fetchDelegate.travelDetail[1].id != null && vm.fetchDelegate.travelDetail[1].id != '' && vm.fetchDelegate.travelDetail[1].id != undefined){
+                       vm.delegates[0].travelDetail[1].id = vm.fetchDelegate.travelDetail[1].id;
+                    }
+                    if(vm.fetchDelegate.travelDetail[1].other != null && vm.fetchDelegate.travelDetail[1].other != '' && vm.fetchDelegate.travelDetail[1].other != undefined){
+                       vm.delegates[0].travelDetail[1].other = vm.fetchDelegate.travelDetail[1].other;
+                    } 
+                 }
+                 if(vm.fetchDelegate.visitingPlaces.length > 0){
+                   vm.delegates[0].siteSeeing.id = vm.fetchDelegate.visitingPlaces[0].id;
+                   vm.delegates[0].siteSeeing.name = vm.fetchDelegate.visitingPlaces[0].name;
+                 }
+                } else{
+                 vm.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+                 theme: 'bubble',
+                 position: 'top-center',
+                 duration: 3000
+               })
+               }
+             })
+             .catch(error => {
+               console.log(error)
+                vm.$toasted.error(error, {
+                 theme: 'bubble',
+                 position: 'top-center',
+                 duration: 3000
+               })
+               this.errored = true
+             })
+             .finally(() => this.loading = false) 
+      },
 
     fetchUserDesignation(paramDesignation){
       const vm = this
@@ -1691,7 +1927,7 @@ export default {
             vm.$store.getters["getIpaddress"]+"designation/getDesignations/"+paramDesignation
            )
            .then(response => {
-             console.log(response);
+            //  console.log(response);
              if(response.data != null){
                  vm.delegateDesignation = response.data;
               } else{
@@ -1722,7 +1958,7 @@ export default {
             vm.$store.getters["getIpaddress"]+"title/getAllTitles"
            )
            .then(response => {
-             console.log(response);
+            //  console.log(response);
              if(response.data != null){
                  vm.delegateTitles = response.data;
               } else{
@@ -1752,7 +1988,7 @@ export default {
             vm.$store.getters["getIpaddress"]+"visitingPlaces/getAllVisitingPlaces"
            )
            .then(response => {
-             console.log(response);
+            //  console.log(response);
              if(response.data != null){
                  vm.siteSeeing = response.data;
               } else{
@@ -1782,7 +2018,7 @@ export default {
             vm.$store.getters["getIpaddress"]+"travelMode/getAllTravelModes"
            )
            .then(response => {
-             console.log(response);
+            //  console.log(response);
              if(response.data != null){
                  vm.travelModes = response.data;
               } else{
@@ -1877,12 +2113,12 @@ export default {
       const vm = this
     },
 
-    applicantRegister(userId) {
+    applicantRegister(delegateId) {
       const vm = this;
-      
       //console.log( this.$store.getters['getStateId'])
+      vm.delegateFinal[0].id = vm.delegates[0].id;
       vm.delegateFinal[0].titleId = vm.delegates[0].title.id;
-      if(this.$route.query.subtype == 'official'){
+      if(vm.subtypeData == 'official'){
         vm.delegateFinal[0].designationId = 11;
         vm.delegateFinal[0].designationName = vm.delegates[0].designationName
       }else{
@@ -1916,6 +2152,7 @@ export default {
         vm.delegates[0].travelDetail[0].arrivalTo.id +
         "##" +
         vm.delegates[0].travelDetail[0].arrivalTo.name;
+        vm.delegateFinal[0].travelDetails[0].id = vm.delegates[0].travelDetail[0].id;
       vm.delegateFinal[0].travelDetails[1].arrivalTravelMode =
         vm.delegates[0].travelDetail[1].travelModel.id;
       vm.delegateFinal[0].travelDetails[1].arrivalVehicleNumber =
@@ -1935,7 +2172,7 @@ export default {
         vm.delegates[0].travelDetail[1].arrivalTo.id +
         "##" +
         vm.delegates[0].travelDetail[1].arrivalTo.name;
-
+        vm.delegateFinal[0].travelDetails[1].id = vm.delegates[0].travelDetail[1].id;
       if(vm.delegates[0].travelDetail[0].travelModel.name == 'Train' && vm.delegates[0].travelDetail[0].arrivalTo.name == 'Other'){
         vm.delegateFinal[0].travelDetails[0].other = vm.delegates[0].travelDetail[0].other;   
        }
@@ -1952,6 +2189,7 @@ export default {
           spouseMobileNo: vm.delegates[0].family[0].mobileNo,
           spouseTitleId: vm.delegates[0].family[0].title.id,
           spousePhotoId: vm.delegates[0].sphotoPath,
+          id: vm.delegates[0].family[0].id
         },
       ];
 
@@ -1963,13 +2201,13 @@ export default {
           // vm.$store.getters["getIpaddress"]+"delegate/userId/" +
           //   vm.$store.getters["getUserId"] +
           //   "/addDelegate",
-          this.$store.getters["getIpaddress"]+"delegate/registerDelegate/"+userId,
+          this.$store.getters["getIpaddress"]+"delegate/editDelegate/"+delegateId,
           vm.delegateFinal[0]
         )
         .then((response) => {
           console.log(response);
-          if(response.data == 'Saved'){
-            this.$toasted.success("Submitted Successfully", {
+          if(response.data == 'Edited'){
+            this.$toasted.success("Updated Successfully", {
             theme: "bubble",
             position: "top-center",
             duration: 3000,
@@ -1978,7 +2216,7 @@ export default {
             name: 'Profile'
             })
           }else{
-            vm.$toasted.error("Inetrnal Server Error Unable to Save Data ", {
+            vm.$toasted.error("Internal Server Error Unable to Save Data ", {
                theme: 'bubble',
                position: 'top-center',
                duration: 3000

@@ -140,14 +140,20 @@ export default {
                securePassword
            )
            .then(response => {
-             console.log(response);
+            //  console.log(response);
              if(response.data != null)  {
                  this.$store.state.authData =  response.data
                  if(this.$store.state.authData != null){
-                  this.$store.state.userName = vm.cr.username                  
-                  this.$router.push({
+                  this.$store.state.userName = vm.cr.username
+                  if(this.$store.state.authData.username == 'admin'){
+                    this.$router.push({
+                     name: 'ViewUserDetails'
+                   })  
+                  } else {
+                    this.$router.push({
                      name: 'Profile'
                    })
+                  }  
                  } else {
                   vm.$toasted.error('Username & Password does not match. Please try again.', {
                       theme: 'bubble',

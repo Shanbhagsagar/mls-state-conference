@@ -6,13 +6,14 @@
       </div>
     </div>
     <div class="row g-6 mb-6">
-                    <div v-if="this.$store.state.authData.state.biCameral == true" class="col-xl-3 col-sm-6 col-12">
-                        <div class="card bg-danger shadow profile-card border-0" @click="routeCard('Chairman',designationData.chairman)">
+                  
+                    <div v-if="this.$store.state.authData.state.biCameral == true && this.$store.state.authData.houseType == 'upperhouse'" class="col-xl-3 col-sm-6 col-12">
+                        <div class="card bg-danger shadow profile-card border-0" @click="routeCard('chairman',designationData.chairman)">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
                                         <span class="h5 font-semibold text-white text-m d-block mb-2">Chairman/DeputyChairman</span>
-                                        <span class="h3 font-bold text-white mb-0"> {{ this.designationData.chairman }} </span>
+                                        <span class="h3 font-bold text-white mb-0"> {{ this.designationData.chairman }} </span> 
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-white text-lg rounded-circle">
@@ -23,8 +24,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 col-12">
-                        <div class="card profile-card bg-success shadow border-0" @click="routeCard('Speaker',designationData.speaker)">
+                    <div v-if="this.$store.state.authData.state.biCameral == true && this.$store.state.authData.houseType == 'lowerhouse'"  class="col-xl-3 col-sm-6 col-12">
+                        <div class="card profile-card bg-success shadow border-0" @click="routeCard('speaker',designationData.speaker)">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="h5 font-semibold text-white text-m d-block mb-2">Speaker/DeputySpeaker</span>
+                                         <span class="h3 font-bold text-white mb-0">{{ this.designationData.speaker }}</span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="icon icon-shape bg-white text-lg rounded-circle">
+                                          <i class="bi bi-person-plus-fill text-success"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="this.$store.state.authData.state.biCameral == false && this.$store.state.authData.houseType == 'lowerhouse'"  class="col-xl-3 col-sm-6 col-12">
+                        <div class="card profile-card bg-success shadow border-0" @click="routeCard('speaker',designationData.speaker)">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col">
@@ -41,12 +59,12 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-sm-6 col-12">
-                        <div class="card profile-card bg-warning shadow border-0" @click="routeCard('Secretary',designationData.secretary)">
+                        <div class="card profile-card bg-warning shadow border-0" @click="routeCard('secretary',designationData.secretary)">
                             <div class="card-body">
                               <div class="row">
                                     <div class="col">
                                         <span class="h5 font-semibold text-white text-m d-block mb-2">Secretary</span>
-                                        <span class="h3 font-bold text-white mb-0">{{ this.designationData.secretary }}</span>
+                                        <span class="h3 font-bold text-white mb-0">{{ this.designationData.secretary }}</span> 
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-white text-white text-lg rounded-circle">
@@ -58,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-xl-3 col-sm-6 col-12">
-                        <div class="card profile-card bg-info shadow border-0" @click="routeCard('Officials',designationData.official)">
+                        <div class="card profile-card bg-info shadow border-0" @click="routeCard('official',designationData.official)">
                             <div class="card-body">
                               <div class="row">
                                     <div class="col">
@@ -75,6 +93,10 @@
                         </div>
                     </div> 
                 </div>
+                <!-- Chairman: {{ this.designationData.chairman }}
+                Speaker: {{ this.designationData.speaker }}
+                Secretary: {{ this.designationData.secretary }}
+                Officials: {{ this.designationData.official }} -->
             <div class="font-italic font-weight-bold text-danger text-center">
                <h3>Note: In case of absence of Spouse / Spouses you may add equal number of officials against them.(Maximum 8 persons allowed)</h3>
              </div>       
@@ -86,7 +108,9 @@
             <div v-for="(delegate, index) in delegates" :key="index"> 
               <div class="card">
                 <div class="card-body">
-                   <h4 class="font-weight-bold">Delegate Name: {{ delegates[index].title.name }} {{ delegates[index].firstname }} {{ delegates[index].lastname }}</h4> 
+                   <h4 class="font-weight-bold">Delegate Name: {{ delegates[index].title.name }} {{ delegates[index].firstname }} {{ delegates[index].lastname }}
+                    &nbsp;&nbsp;&nbsp;<button type="button" v-if="isEditEnabled == true" @click="routeUpdateRegistration(delegates[index].designation.type,delegates[index].id)" class="btn btn-primary">Edit</button>
+                  </h4> 
                    <h5 class="font-weight-normal"><b>Delegate's Designation:</b>&nbsp;&nbsp;<span v-if="delegates[index].designation.name != ''"><span v-if="delegates[index].designation.name == 'Other'">{{delegates[index].designationName}}</span><span v-else>{{delegates[index].designation.name}}</span></span><span v-else> -</span></h5>
                    <h5 class="font-weight-normal"><b>Email:</b>&nbsp;&nbsp;<span v-if="delegates[index].email != ''">{{ delegates[index].email }}</span><span v-else> -</span>&nbsp;&nbsp;&nbsp;<b>Mobile Number:</b>&nbsp;&nbsp;<span v-if="delegates[index].mobileNo != ''">{{ delegates[index].mobileNo }}</span><span v-else> -</span></h5>
                    <h5 class="font-weight-normal"><b>Delegate's Spouse Name:</b>&nbsp;&nbsp;<span v-if="delegates[index].family.length != 0">{{delegates[index].family[0].name}}</span><span v-else> -</span></h5>
@@ -114,50 +138,64 @@ export default {
       userData: {},
       designationData : {},
       delegates:[],
+      fetchUserId:this.$store.state.authData.userId,
       stateId:this.$store.state.authData.state.id,
-      noOfDelegates:null
+      noOfDelegates:null,
+      isEditEnabled:false
     };
   },
   async created() {
     const vm = this;
   },
   mounted(){
-    this.delegatesCounter(this.$store.state.authData.userId);
-    this.fetchDelegatesList(this.$store.state.authData.userId);
-    this.fetchExactCountOfDelegates(this.$store.state.authData.state.id);
+    this.fetchCustomParameter()
+    this.delegatesCounter(this.fetchUserId);
+    this.fetchDelegatesList(this.fetchUserId);
+    this.fetchExactCountOfDelegates(this.fetchUserId);
   },
   methods: {
      routeCard(subtype,numberOfDelegates){
-          let noDelegate = this.$store.getters[subtype]
-          // console.log("Officials: "+this.designationData.official);
-          // console.log("No of Delegates:   "+this.noOfDelegates);
-          if(subtype == 'Officials'){
-            if((this.designationData.official+this.noOfDelegates)<8){
-              this.$router.push({
-                  name: 'Registration',
-                  query: {subtype}
-              })
-            } else {
-              this.$toasted.error("You cannot add more than 8 persons in state's delegation.", {
-                  theme: 'bubble',
-                  position: 'top-center',
-                  duration: 6000
-                })
-            }
-          } else {
-            if(numberOfDelegates < noDelegate){
-                this.$router.push({
-                  name: 'Registration',
-                  query: {subtype}
-              })
-          } else {
-            this.$toasted.error("You cannot add more delegates", {
-                  theme: 'bubble',
-                  position: 'top-center',
-                  duration: 6000
-                })
-          }
-        }
+      axios
+           .get(
+            this.$store.getters["getIpaddress"]+"user/userIsAllowedToAddDelegateForThatDesignation/"+subtype+"/userId/"+this.fetchUserId
+           )
+           .then(response => {
+            //  console.log("Response1" + response);
+             if(response.data != null){
+                // vm.delegates = response.data;
+                // console.log("Data: "+vm.delegates);
+                // console.log(response.data);
+                if(response.data == true){
+                  this.$router.push({
+                          name: 'Registration',
+                          query: {subtype}
+                    })
+                }else{
+                  this.$toasted.error('You cannot add more delegates', {
+                    theme: 'bubble',
+                    position: 'top-center',
+                    duration: 3000
+                  })   
+                }
+                
+              } else{
+               this.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              this.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false)
           
     },
     fetchDelegatesList(userId){
@@ -190,11 +228,11 @@ export default {
            })
            .finally(() => this.loading = false) 
     },
-    fetchExactCountOfDelegates(stateId){
+    fetchExactCountOfDelegates(userId){
       const vm = this
       axios
            .get(
-            this.$store.getters["getIpaddress"]+"delegate/getCountofDelegatesAndFamilyforThatState/"+stateId
+            this.$store.getters["getIpaddress"]+"delegate/getCountofDelegatesAndFamilyforThatUser/"+userId
            )
            .then(response => {
              console.log("Response1" + response);
@@ -247,6 +285,45 @@ export default {
              this.errored = true
            })
            .finally(() => this.loading = false) 
+    },
+    routeUpdateRegistration(subtype,delegateId){
+      this.$router.push({
+         name: 'UpdateRegistration',
+         query: {subtype,delegateId}
+      })
+    },
+    fetchCustomParameter(){
+      const vm = this
+      axios
+           .get(
+            this.$store.getters["getIpaddress"]+"cp/ENABLE_DELEGATE_EDIT")
+           .then(response => {
+            console.log("Response Here :");
+            console.log(typeof response.data);
+            console.log(response.data);
+             if(response != null){
+
+              console.log(response.data);
+              vm.isEditEnabled = response.data;
+
+              } else{
+               this.$toasted.error('Some error occurred. Kindly contact the administrator.', {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             }
+           })
+           .catch(error => {
+             console.log(error)
+              this.$toasted.error(error, {
+               theme: 'bubble',
+               position: 'top-center',
+               duration: 3000
+             })
+             this.errored = true
+           })
+           .finally(() => this.loading = false)
     }
   },
 };

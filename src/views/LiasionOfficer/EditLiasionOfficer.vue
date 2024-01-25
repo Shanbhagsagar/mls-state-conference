@@ -7,6 +7,7 @@
         </button>
         <br />
         <br />
+        {{ this.$route.params }}
         <div class="form-group">
           <label class="control-label form-label">
             First Name
@@ -103,7 +104,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      delegateId: this.$route.params.data.delegateId.id,
+      delegateId: this.$route.params.delegateId,
       states: [],
       id: this.$route.params.data.id,
       laname: this.$route.params.data.name,
@@ -135,6 +136,9 @@ export default {
         address: this.Address,
       };
 
+      console.log("Objects : ");
+      console.log(lo);
+
       let filledImpFields = false;
 
       for (const [key, value] of Object.entries(lo)) {
@@ -153,7 +157,7 @@ export default {
             lo
           )
           .then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response != null) {
               this.$toasted.success(response.data, {
                 theme: "bubble",
@@ -225,7 +229,7 @@ export default {
       this.$router.push({
         name: "ViewLiasionOfficerList",
         params: {
-          delegateId: delegateId,
+          delegateId: this.delegateId,
           selectedStateId: this.selectedStateId,
           selectedState: this.selectedStateforDB,
           delegateName: this.delegateName,

@@ -200,6 +200,7 @@ export default {
       const vm = this;
       // console.log(this.selected);
       let loId = this.selected[0].id;
+      console.log(this.selected[0].id);
 
       axios
         .get(
@@ -209,7 +210,7 @@ export default {
           if (response.data != null) {
             this.$router.push({
               name: "EditLiasionOfficer",
-              params: { data: response.data },
+              params: { data: response.data, delegateId:this.delegateId },
             });
             // console.log(this.states);
           } else {

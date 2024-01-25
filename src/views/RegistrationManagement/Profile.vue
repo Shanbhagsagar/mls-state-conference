@@ -99,7 +99,23 @@
                 Officials: {{ this.designationData.official }} -->
             <div class="font-italic font-weight-bold text-danger text-center">
                <h3>Note: In case of absence of Spouse / Spouses you may add equal number of officials against them.(Maximum 8 persons allowed)</h3>
-             </div>       
+             </div>  
+          <div class="card-form">
+            <div class="card-header card-header-alt mt-0">
+                <h1 class="page-title">Reports:</h1>
+            </div>
+            <h4><b>1. Liasison Officer/ Hotel/ Accomodation Delegate Detail Report : </b>
+              &nbsp;&nbsp;&nbsp;
+              <button
+                style="margin-right: 5px;"
+                v-on:click="goToReport()"
+                class="btn btn-page"
+              >
+                <!-- <span style="font-size: 20px;">&#8592;</span> Report -->
+                 Click Here!!
+              </button>
+            </h4>            
+          </div>       
          <div class="card-form">
           <div class="card-header card-header-alt mt-0">
             <h1 class="page-title">Delegates's List:</h1>
@@ -324,6 +340,15 @@ export default {
              this.errored = true
            })
            .finally(() => this.loading = false)
+    },
+    goToReport(){
+      this.$router.push({
+        name: "DelegateStateBriefDetailReport",
+        params: {
+          selectedStateId: this.$store.state.authData.state.id,
+          selectedState: this.$store.state.authData.state,
+        },
+      });
     }
   },
 };

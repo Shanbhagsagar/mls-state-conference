@@ -175,7 +175,7 @@ export default {
         { key: "Sr.No" },
         { key: "Delegate" },
         { key: "Spouse" },
-        { key: "Liasion Officer" },
+        { key: "Hotel" },
       ],
     };
   },

@@ -17,18 +17,19 @@
           $route.path == '/StudentDetails' ||
           $route.path == '/logout' ||
           $route.path == '/registration' ||
-		      $route.path==  '/updateregistration'||
+		      $route.path ==  '/updateregistration'||
           $route.path == '/termsandconditions' ||
           $route.path == '/studentregistration' ||
           $route.path == '/recipentRegistration' ||
           $route.path == '/success' ||
           $route.path == '/reset-password' ||
           $route.path == '/profile' ||
+          $route.path == '/DelegateStateBriefDetailReport' ||
           $route.path == '/delegateregistration' ||
-          $route.path == '/LiasionOfficerDashboard' ||
-          $route.path == '/ViewLiasionOfficerList' ||
-          $route.path == '/NewLiasionOfficer' ||
-          $route.path == '/EditLiasionOfficer',
+          $route.path == '/LiasionOfficerReport' ||
+          $route.path == '/DriverReport' ||
+          $route.path == '/AccommodationReport' ||
+          $route.path == '/DelegateBriefDetailReport'
       }"
       >
       <!-- <headerbar v-if="$route.path!='/' && $route.path!='/donorRegistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/about' && $route.path!='/success'" /> -->
@@ -49,11 +50,12 @@
           $route.path != '/success' &&
           $route.path != '/reset-password' &&
           $route.path != '/profile' &&
+          $route.path != '/DelegateStateBriefDetailReport' &&
           $route.path != '/delegateregistration' &&
-          $route.path !== '/LiasionOfficerDashboard' &&
-          $route.path !== '/ViewLiasionOfficerList' &&
-          $route.path != '/NewLiasionOfficer' &&
-          $route.path != '/EditLiasionOfficer'
+          $route.path != '/LiasionOfficerReport' &&
+          $route.path != '/DriverReport' &&
+          $route.path != '/AccommodationReport' &&
+          $route.path != '/DelegateBriefDetailReport'
         " />
       <div class="main-content">
         <headerbar

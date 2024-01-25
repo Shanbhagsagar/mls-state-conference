@@ -173,18 +173,18 @@ export default {
         )
         .then((response) => {
           this.delegates = response.data;
-          this.delegates.forEach((value) => {
-            axios
-              .get(
-                `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
-              )
-              .then((response) => {
-                if (response != null) {
-                  value.liaisonOfficers = response.data;
-                }
-              });
-            console.log(value);
-          });
+          // this.delegates.forEach((value) => {
+          //   axios
+          //     .get(
+          //       `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+          //     )
+          //     .then((response) => {
+          //       if (response != null) {
+          //         value.liaisonOfficers = response.data;
+          //       }
+          //     });
+          //   console.log(value);
+          // });
         });
     },
     fetchDelegatesByStateId(stateId) {
@@ -196,18 +196,18 @@ export default {
         .then((response) => {
           this.delegates = response.data;
           console.log("hi");
-          this.delegates.forEach((value) => {
-            axios
-              .get(
-                `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
-              )
-              .then((response) => {
-                if (response != null) {
-                  value.liaisonOfficers = response.data;
-                }
-              });
-            console.log(value);
-          });
+          // this.delegates.forEach((value) => {
+          //   axios
+          //     .get(
+          //       `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+          //     )
+          //     .then((response) => {
+          //       if (response != null) {
+          //         value.liaisonOfficers = response.data;
+          //       }
+          //     });
+          //   console.log(value);
+          // });
         });
     },
     fetchDelegatesList() {
@@ -219,18 +219,18 @@ export default {
           if (response.data != null) {
             vm.delegates = response.data;
 
-            this.delegates.forEach((value) => {
-              axios
-                .get(
-                  `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
-                )
-                .then((response) => {
-                  if (response != null) {
-                    value.liaisonOfficers = response.data;
-                  }
-                });
-              //console.log(value);
-            });
+            // this.delegates.forEach((value) => {
+            //   axios
+            //     .get(
+            //       `${vm.$store.getters["getIpaddress"]}laisionOfficer/getLimitedLiasionOfficerForDelegate/${value.id}`
+            //     )
+            //     .then((response) => {
+            //       if (response != null) {
+            //         value.liaisonOfficers = response.data;
+            //       }
+            //     });
+            //   //console.log(value);
+            // });
 
             // console.log("Data: "+vm.delegates);
           } else {

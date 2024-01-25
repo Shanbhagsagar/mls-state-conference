@@ -23,11 +23,25 @@ function loadAdminView(view) {
 function loadAdminSCAView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Admin/StateConferenceAdmin/${view}.vue`)
 }
+
 function loadLiasionOfficerView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/LiasionOfficer/${view}.vue`)
 }
+
+function loadDriverView(view) {
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Driver/${view}.vue`)
+}
+
+function loadReportView(view) {
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Report/${view}.vue`)
+}
+
 function loadCommonView(view) {
   return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Common/${view}.vue`)
+}
+
+function loadAccommodationView(view) {
+  return () => import( /* webpackChunkName: "view-[request]" */ `@/views/Accommodation/${view}.vue`)
 }
 
 const router = new Router({
@@ -289,7 +303,6 @@ const router = new Router({
     props: true
 
   },
-    ,
   {
     path: '/EditLiasionOfficer',
     name: 'EditLiasionOfficer',
@@ -297,7 +310,101 @@ const router = new Router({
     props: true
 
   },
+  {
+    path: '/LiasionOfficerReport',
+    name: 'LiasionOfficerReport',
+    component: loadLiasionOfficerView('LiasionOfficerReport'),
+    props: true
 
+  },
+  {
+    path: '/DriverDashboard',
+    name: 'DriverDashboard',
+    component: loadDriverView('DriverDashboard'),
+    props: true
+
+  },
+  {
+    path: '/ViewDriverList',
+    name: 'ViewDriverList',
+    component: loadDriverView('ViewDriverList'),
+    props: true
+
+  },
+  {
+    path: '/NewDriver',
+    name: 'NewDriver',
+    component: loadDriverView('NewDriver'),
+    props: true
+
+  },
+  {
+    path: '/EditDriver',
+    name: 'EditDriver',
+    component: loadDriverView('EditDriver'),
+    props: true
+
+  },
+  {
+    path: '/DriverReport',
+    name: 'DriverReport',
+    component: loadDriverView('DriverReport'),
+    props: true
+
+  },
+
+  {
+    path: '/AccommodationDashboard',
+    name: 'AccommodationDashboard',
+    component: loadAccommodationView('AccommodationDashboard'),
+    props: true
+
+  },
+    ,
+  {
+    path: '/AccommodationList',
+    name: 'AccommodationList',
+    component: loadAccommodationView('AccommodationList'),
+    props: true
+
+  },
+
+  {
+    path: '/NewAccommodation',
+    name: 'NewAccommodation',
+    component: loadAccommodationView('NewAccommodation'),
+    props: true
+
+  },
+  {
+    path: '/EditAccommodation',
+    name: 'EditAccommodation',
+    component: loadAccommodationView('EditAccommodation'),
+    props: true
+
+  },
+    ,
+  {
+    path: '/AccommodationReport',
+    name: 'AccommodationReport',
+    component: loadAccommodationView('AccommodationReport'),
+    props: true
+
+  },
+  {
+    path: '/DelegateBriefDetailReport',
+    name: 'DelegateBriefDetailReport',
+    component: loadReportView('DelegateBriefDetailReport'),
+    props: true
+
+  },
+  {
+    path: '/DelegateStateBriefDetailReport',
+    name: 'DelegateStateBriefDetailReport',
+    component: loadApplicantView('DelegateStateBriefDetailReport'),
+    props: true
+
+  },
   {
     path: '/mock-exam-paper-configuration',
     name: 'MockExamPaperConfig',

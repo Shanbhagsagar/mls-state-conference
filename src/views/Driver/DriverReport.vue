@@ -7,6 +7,7 @@
     >
       <span style="font-size: 20px;">&#8592;</span> Go Back
     </button>
+    <!-- {{delegates}} -->
     <div class="center">
       <b
         v-if="
@@ -38,6 +39,7 @@
         <tbody>
           <tr v-for="(item, index) in delegates">
             <td width="1%" class="border border-dark">
+              <!-- {{ item }} -->
               {{ index + 1 }}
             </td>
             <td width="10%" class="border border-dark">
@@ -50,12 +52,14 @@
                   item.photo.id != undefined &&
                   item.photo.id != ''
                 "
-                ><img
-                  :src="
+                > {{item.photo.id}}
+            <img
+                  :src="loadImage(
                     `${getIpUrl}` + `photo/downloadFile/` + `${item.photo.id}`
-                  "
+                  )"
                   width="85"
-                  height="85" /></span
+                  height="85" /> 
+                  </span
               ><span v-else>-</span> -->
               <p>
                 <b> {{ item.designationName }}</b>
@@ -88,11 +92,13 @@
                   item.family[0].photo.id != undefined &&
                   item.family[0].photo.id != ''
                 "
-                ><img :src="
+                >{{item.family[0].photo.id}}
+                <img :src="
                     `${getIpUrl}` + `photo/downloadFile/` + `${item.family[0].photo.id}`
                   "
-                width="85" height="85" /></span
-              ><span v-else>-</span> -->
+                width="85" height="85" />
+                </span>
+              <span v-else>-</span> -->
 
               <p
                 v-if="
@@ -134,22 +140,26 @@
               <p v-else>-</p>
             </td>
             <td width="10%" class="border border-dark">
-              <p v-if="item.liaisonOfficers.length == 0">
-                No Liasion Officer Assigned
+              <p v-if="item.chauffeurs.length == 0">
+                No Driver Assigned
               </p>
-              <ul v-if="item != null && item.liaisonOfficers">
-                <li v-for="lo in item.liaisonOfficers" :key="lo.id">
+              <ul v-if="item != null && item.chauffeurs">
+                <li v-for="lo in item.chauffeurs" :key="lo.id">
                   <p>
-                    <b>{{ lo.name }} &nbsp; ({{ lo.designation }})</b>
+                    <b>{{ lo.name }}</b>
                   </p>
 
                   <p>
                     MobileNo -
-                    <b>{{ lo.mobileNumber }}</b>
+                    <b>{{ lo.mobileNo }}</b>
                   </p>
                   <p>
-                    email -
-                    <b>{{ lo.email }}</b>
+                    Vehicle Name -
+                    <b>{{ lo.vehicleName }}</b>
+                  </p>
+                  <p>
+                    Vehicle Number -
+                    <b>{{ lo.vehicleNumber }}</b>
                   </p>
                   <hr />
                 </li>
@@ -176,17 +186,43 @@ export default {
         { key: "Sr.No" },
         { key: "Delegate" },
         { key: "Spouse" },
-        { key: "Liasion Officer" },
+        { key: "Driver" },
       ],
     };
   },
   mounted() {
     this.displayGeneratedDateAndTime();
+    // this.loadImages();
   },
   methods: {
+    // async loadImages() {
+    //   try {
+    //     for (const delegate of this.delegates) {
+    //       await this.loadImage(delegate);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error loading images:', error);
+    //   }
+    // },
+    // async loadImage(delegate) {
+    //   try {
+    //     const loadedUrl = await this.downloadImage("http://172.1.0.165:6969/photo/downloadFile/226");
+    //     this.$set(delegate, 'loadedUrl', loadedUrl);
+    //   } catch (error) {
+    //     console.error(`Error loading image with id ${imageObject.id}:`, error);
+    //   }
+    // },
+    // async downloadImage(imageSrc) {
+    //   const image = await fetch(imageSrc);
+    //   const imageBlob = await image.blob();
+    //   const imageURL = URL.createObjectURL(imageBlob);
+    //   return imageURL;
+    // },
     goBackToDashboard() {
+      console.log(this.selectedStateId);
+      console.log(this.selectedState);
       this.$router.push({
-        name: "LiasionOfficerDashboard",
+        name: "DriverDashboard",
         params: {
           delegates: this.delegates,
           selectedStateId: this.selectedStateId,

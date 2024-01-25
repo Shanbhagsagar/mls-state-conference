@@ -508,7 +508,7 @@
 
                   <div class="fp-holder">
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Travel Date Time"
                     min="2024-01-26"
                     max="2024-01-30"
@@ -535,7 +535,7 @@
                   </label>
                   <div class="fp-holder">
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Arrival Date Time"
                     min="2024-01-26"
                     max="2024-01-30"
@@ -641,7 +641,7 @@
 
                   <div class="fp-holder">
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Departure Date Time"
                     min="2024-01-26"
                     max="2024-01-30"
@@ -978,7 +978,7 @@
                   <div class="fp-holder">
                     
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Travel Date Time"
                     min="2024-01-26"
                     max="2024-01-30"
@@ -1003,7 +1003,7 @@
                    </label>
                   <div class="fp-holder">
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Arrival Date Time"
                     min="2024-01-26"
                     max="2024-01-30"
@@ -1104,7 +1104,7 @@
 
                   <div class="fp-holder">
                     <Datepicker 
-                    format="YYYY-MM-DD h:i:s" 
+                    format="YYYY-MM-DD H:i:s" 
                     placeholder="Please Select Departure Date Time"
                     min="2024-01-26"
                     max="2024-01-30"

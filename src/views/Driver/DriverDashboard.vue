@@ -15,7 +15,7 @@
 
         <v-select
           label="name"
-          placeholder="Please Enter Your Mode of Travel"
+          placeholder="Please Select State"
           :options="states"
           v-model="selectedState"
           @input="getSelectedItem"
@@ -56,6 +56,9 @@
                   ><span v-else> -</span>
                 </h5>
                 <h5 class="font-weight-normal">
+                  <b>Delegate's State :</b> {{ delegates[index].state.name }}
+                </h5>
+                <h5 class="font-weight-normal">
                   <b>Email:</b>&nbsp;&nbsp;<span
                     v-if="delegates[index].email != ''"
                     >{{ delegates[index].email }}</span
@@ -71,50 +74,46 @@
                     >{{ delegates[index].family[0].name }}</span
                   ><span v-else> -</span>
                 </h5>
-                <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
                 <div class="form-action-alt">
                   <button
                     type="button"
                     class="btn btn-page"
                     @click="
-                      pushToAccommodationPage(
+                      pushToChauffeursPage(
                         delegate.id,
                         `${delegate.title.name} ${delegate.firstname} ${delegate.lastname}`,
                         delegate.designation.name
                       )
                     "
                   >
-                    Add Accommodation
+                    Add Driver
                   </button>
                 </div>
               </div>
               <div class="float-child">
                 <div class="blue">
-                  <h2>Assigned Accommodation Officer</h2>
-                  <p v-if="delegates[index].accommodation.length == 0">
-                    No Accommodation Assigned
+                  <h2>Assigned Driver</h2>
+                  <p v-if="delegates[index].chauffeurs.length == 0">
+                     No Driver Assigned
                   </p>
 
                   <ul
                     v-if="
-                      delegates[index] != null && delegates[index].accommodation
+                      delegates[index] != null &&
+                      delegates[index].chauffeurs
                     "
                   >
                     <li
-                      v-for="lo in delegates[index].accommodation"
+                      v-for="lo in delegates[index].chauffeurs"
                       :key="lo.id"
                     >
-                      hotelName -
-                      <b>{{ lo.hotelName }} &nbsp;&nbsp;&nbsp;</b> address -
-                      <b>{{ lo.address }}</b> &nbsp;&nbsp;&nbsp; description
-                      <b>{{ lo.description }}</b>
+                      Name - <b>{{ lo.name }} &nbsp;&nbsp;&nbsp;</b> MobileNo -
+                      <b>{{ lo.mobileNo }}</b>
                     </li>
                   </ul>
                 </div>
               </div>
-
-              <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
             </div>
           </div>
           <br />
@@ -148,17 +147,18 @@ export default {
     this.selectedStateId = this.$route.params.selectedStateId;
     this.selectedState = this.$route.params.selectedState;
     if (this.selectedStateId === undefined || this.selectedState === null) {
+      console.log("not fired");
       this.fetchDelegatesList();
-      //console.log("in If");
-      // console.log(this.selectedStateId);
+      console.log(this.selectedStateId);
     } else {
+      console.log("stateFunc fired");
       this.fetchDelegatesByStateId(this.selectedStateId);
     }
   },
   methods: {
     getReport(selectedState) {
       this.$router.push({
-        name: "AccommodationReport",
+        name: "DriverReport",
         params: {
           delegates: this.delegates,
           selectedStateId: this.selectedStateId,
@@ -176,18 +176,18 @@ export default {
         )
         .then((response) => {
           this.delegates = response.data;
-          // this.delegates.forEach((value) => {
-          //   axios
-          //     .get(
-          //       `${vm.$store.getters["getIpaddress"]}accommodation/getLimitedAccommodationListForDelegate/${value.id}`
-          //     )
-          //     .then((response) => {
-          //       if (response != null) {
-          //         value.accommodation = response.data;
-          //       }
-          //     });
-          //   console.log(value);
-          // });
+          this.delegates.forEach((value) => {
+            axios
+              .get(
+                `${vm.$store.getters["getIpaddress"]}chauffer/getLimitedChaufferForDelegate/${value.id}`
+              )
+              .then((response) => {
+                if (response != null) {
+                  value.chauffeurs = response.data;
+                }
+              });
+            console.log(value);
+          });
         });
     },
     fetchDelegatesByStateId(stateId) {
@@ -202,14 +202,14 @@ export default {
           // this.delegates.forEach((value) => {
           //   axios
           //     .get(
-          //       `${vm.$store.getters["getIpaddress"]}accommodation/getLimitedAccommodationListForDelegate/${value.id}`
+          //       `${vm.$store.getters["getIpaddress"]}chauffer/getLimitedChaufferForDelegate/${value.id}`
           //     )
           //     .then((response) => {
           //       if (response != null) {
-          //         value.accommodation = response.data;
+          //         value.chauffeurs = response.data;
           //       }
           //     });
-          //   // console.log(value);
+          //   console.log(value);
           // });
         });
     },
@@ -225,12 +225,11 @@ export default {
             // this.delegates.forEach((value) => {
             //   axios
             //     .get(
-            //       `${vm.$store.getters["getIpaddress"]}accommodation/getLimitedAccommodationListForDelegate/${value.id}`
+            //       `${vm.$store.getters["getIpaddress"]}chauffer/getLimitedChaufferForDelegate/${value.id}`
             //     )
             //     .then((response) => {
-            //       //  console.log(response);
             //       if (response != null) {
-            //         value.accommodation = response.data;
+            //         value.chauffeurs = response.data;
             //       }
             //     });
             //   //console.log(value);
@@ -249,7 +248,7 @@ export default {
           }
         })
         .catch((error) => {
-          //console.log(error);
+          console.log(error);
           this.$toasted.error(error, {
             theme: "bubble",
             position: "top-center",
@@ -259,10 +258,10 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
-    pushToAccommodationPage(delegateId, delegateName, designationName) {
-      //console.log(this.selectedStateId);
+    pushToChauffeursPage(delegateId, delegateName, designationName) {
+      console.log(delegateId);
       this.$router.push({
-        name: "AccommodationList",
+        name: "ViewDriverList",
         params: {
           delegateId: delegateId,
           selectedStateId: this.selectedStateId,

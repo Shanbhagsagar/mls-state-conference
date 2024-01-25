@@ -7,9 +7,9 @@
         </button>
         <br />
         <br />
-        <div class="form-group">
+       <div class="form-group">
           <label class="control-label form-label">
-            First Name
+            Full Name
           </label>
 
           <input
@@ -148,12 +148,12 @@ import axios from "axios";
 export default {
   data() {
     return {
-      delegateId: this.$route.params.data.delegate.id,
+      delegateId: this.$route.params.delegateId,
       states: [],
       id: this.$route.params.data.id,
       laname: this.$route.params.data.name,
       delegateName: this.$route.params.delegateName,
-      // designationName: this.$route.params.designationName,
+      designationName: this.$route.params.designationName,
       // designation: this.$route.params.data.designation,
       vehicleName: this.$route.params.data.vehicleName,
       vehicleNumber: this.$route.params.data.vehicleNumber,
@@ -162,7 +162,7 @@ export default {
       // email: this.$route.params.data.email,
       mobileNo: this.$route.params.data.mobileNo,
       // selectedState: this.$route.params.data.state,
-      // selectedStateId: this.$route.params.selectedStateId,
+      selectedStateId: this.$route.params.selectedStateId,
       items: null,
       selectedStateforDB: this.$route.params.selectedState,
     };
@@ -184,6 +184,8 @@ export default {
         // state: this.selectedState.id,
         // address: this.Address,
       };
+
+      console.log(lo);
 
       let filledImpFields = false;
 
@@ -230,6 +232,10 @@ export default {
       }
     },
     goBackToLiasionList() {
+      // console.log(this.selectedStateId);
+      // console.log(this.selectedStateforDB);
+      // console.log(this.delegateName);
+      // console.log(this.designationName);
       this.$router.push({
         name: "ViewDriverList",
         params: {

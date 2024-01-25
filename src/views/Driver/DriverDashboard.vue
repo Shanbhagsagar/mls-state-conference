@@ -260,6 +260,8 @@ export default {
     },
     pushToChauffeursPage(delegateId, delegateName, designationName) {
       console.log(delegateId);
+      console.log(delegateName);
+      console.log(designationName);
       this.$router.push({
         name: "ViewDriverList",
         params: {

@@ -3,7 +3,7 @@
     <div style="padding: 70px 0px;">
       <div class="rcorners2" style="padding-bottom: 50px;">
         <span style="padding-right: 20px; font-size: 20px;"
-          >Delegate Name - <b>{{ this.$route.params.delegateName }}</b></span
+          > Delegate Name - <b>{{ this.$route.params.delegateName }}</b></span
         >
         <span style="padding-right: 20px; font-size: 20px;"
           >Designation - <b>{{ this.$route.params.designationName }}</b></span
@@ -167,18 +167,22 @@ export default {
           console.log(response);
           if (response != null) {
             for (let item of response.data) {
-              item.delegate = `${item.delegate.firstname} ${item.delegate.lastname}`;
+             // item.delegate = `${item.delegate.firstname} ${item.delegate.lastname}`;
               // item.state = item.state.name;
               delete item.state;
             }
-            this.items = response.data;
+            vm.items = response.data;
              console.log("Fired Here");
-             console.log(items);
+             console.log(vm.items);
              console.log(response.data);
           }
         });
     },
     goBackToDashBoard() {
+      console.log(this.selectedStateId);
+      console.log(this.selectedStateDB);
+      console.log(this.delegateName);
+      console.log(this.designationName);
       this.$router.push({
         name: "DriverDashboard",
         params: {
@@ -214,7 +218,13 @@ export default {
           if (response.data != null) {
             this.$router.push({
               name: "EditDriver",
-              params: { data: response.data },
+              params: { data: response.data, 
+                delegateId: this.delegateId,
+                selectedStateId : this.selectedStateId,
+                selectedState : this.selectedStateDB,
+                delegateName : this.delegateName,
+                designationName : this.designationName
+               },
             });
             // console.log(this.states);
           } else {

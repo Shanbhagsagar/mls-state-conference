@@ -148,7 +148,8 @@ export default {
     this.selectedState = this.$route.params.selectedState;
     if (this.selectedStateId === undefined || this.selectedState === null) {
       console.log("not fired");
-      this.fetchDelegatesList();
+      // this.fetchDelegatesList();
+      this.fetchDelegatesByStateId(7);
       console.log(this.selectedStateId);
     } else {
       console.log("stateFunc fired");

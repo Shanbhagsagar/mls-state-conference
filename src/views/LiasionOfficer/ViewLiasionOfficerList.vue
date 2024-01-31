@@ -208,11 +208,18 @@ export default {
         )
         .then((response) => {
           if (response.data != null) {
+            console.log(this.selectedState);
             this.$router.push({
               name: "EditLiasionOfficer",
-              params: { data: response.data, delegateId:this.delegateId },
+              params: { data: response.data, 
+                delegateId:this.delegateId,
+                selectedStateId: this.selectedStateId,
+                selectedState: this.selectedStateDB,
+                delegateName: this.delegateName,
+                designationName: this.designationName
+            },
             });
-            // console.log(this.states);
+            console.log(this.states);
           } else {
             vm.$toasted.error(
               "Some error occurred. Kindly contact the administrator.",

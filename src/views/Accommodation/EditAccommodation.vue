@@ -86,7 +86,7 @@ export default {
       Address: this.$route.params.data.address,
       roomNo: this.$route.params.data.roomNo,
       selectedState: this.$route.params.data.state,
-      selectedStateId: this.$route.params.data.selectedStateId,
+      selectedStateId: this.$route.params.selectedStateId,
       items: null,
       selectedStateforDB: this.$route.params.selectedState,
     };

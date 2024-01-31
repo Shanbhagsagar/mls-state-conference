@@ -88,7 +88,11 @@
                   <a
                     href="http://mls.org.in/"
                     target="_blank"
-                  >Maharashtra Legislature Secretariat</a>, Copyright © {{ new Date().getFullYear() }}. All rights reserved.<br>
+                  >Maharashtra Legislature Secretariat</a>, Developed by
+                  <a
+                    href="https://www.mkcl.org/"
+                    target="_blank"
+                  >Maharashtra Knowledge Corporation Limited</a>, Copyright © {{ new Date().getFullYear() }}. All rights reserved.<br>
                 </div>
                </div>
             </div>

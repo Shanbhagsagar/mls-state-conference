@@ -147,8 +147,13 @@ export default {
   created() {
     this.selectedStateId = this.$route.params.selectedStateId;
     this.selectedState = this.$route.params.selectedState;
+    console.log("See..");
+    console.log(this.$route.params.selectedState);
+    console.log(this.$route.params.selectedStateId);
+    
     if (this.selectedStateId === undefined || this.selectedState === null) {
-      this.fetchDelegatesList();
+      // this.fetchDelegatesList();
+      this.fetchDelegatesByStateId(7);
       //console.log("in If");
       // console.log(this.selectedStateId);
     } else {

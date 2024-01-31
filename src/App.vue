@@ -29,7 +29,7 @@
           $route.path == '/LiasionOfficerReport' ||
           $route.path == '/DriverReport' ||
           $route.path == '/AccommodationReport' ||
-          $route.path == '/DelegateBriefDetailReport'
+          $route.path == '/DelegateBriefDetailReport' 
       }"
       >
       <!-- <headerbar v-if="$route.path!='/' && $route.path!='/donorRegistration' && $route.path!='/updateDonor' && $route.path!='/updateRecipient' && $route.path!='/recipentRegistration' && $route.path!='/login' && $route.path!='/about' && $route.path!='/success'" /> -->
@@ -55,7 +55,8 @@
           $route.path != '/LiasionOfficerReport' &&
           $route.path != '/DriverReport' &&
           $route.path != '/AccommodationReport' &&
-          $route.path != '/DelegateBriefDetailReport'
+          $route.path != '/DelegateBriefDetailReport' &&
+          $route.path != '/PublicDelegateReport'
         " />
       <div class="main-content">
         <headerbar
@@ -71,7 +72,8 @@
             $route.path != '/logout' &&
             $route.path != '/about' &&
             $route.path != '/success' &&
-            $route.path != '/reset-password'
+            $route.path != '/reset-password' &&
+            $route.path != '/PublicDelegateReport'
           "
         />
         <div class="content">

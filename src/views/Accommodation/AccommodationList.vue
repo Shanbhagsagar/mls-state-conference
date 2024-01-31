@@ -176,7 +176,7 @@ export default {
           if (response != null) {
             let i = 0;
             for (let item of response.data) {
-              item.delegate = `${item.delegate.firstname} ${item.delegate.lastname}`;
+              // item.delegate = `${item.delegate.firstname} ${item.delegate.lastname}`;
 
               delete item.version;
               item.No = i + 1;

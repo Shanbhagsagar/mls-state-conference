@@ -143,9 +143,10 @@ export default {
   created() {
     this.selectedStateId = this.$route.params.selectedStateId;
     this.selectedState = this.$route.params.selectedState;
-    if (this.selectedStateId === undefined || this.selectedState === null) {
+       if (this.selectedStateId === undefined || this.selectedState === null) {
       console.log("not fired");
-      this.fetchDelegatesList();
+      // this.fetchDelegatesList();
+      this.fetchDelegatesByStateId(7);
       console.log(this.selectedStateId);
     } else {
       console.log("stateFunc fired");
@@ -256,7 +257,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     pushToLiasionOfficerPage(delegateId, delegateName, designationName) {
-      console.log(delegateId);
+      console.log(this.selectedState);
       this.$router.push({
         name: "ViewLiasionOfficerList",
         params: {

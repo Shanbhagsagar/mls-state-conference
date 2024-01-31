@@ -406,6 +406,13 @@ const router = new Router({
 
   },
   {
+    path: '/PublicDelegateReport',
+    name: 'PublicDelegateReport',
+    component: loadReportView('PublicDelegateReport'),
+    props: true
+
+  },
+  {
     path: '/mock-exam-paper-configuration',
     name: 'MockExamPaperConfig',
     component: loadAdminView('MockExamPaperConfig'),

@@ -7,10 +7,10 @@
         </button>
         <br />
         <br />
-        {{ this.$route.params }}
+         <!-- {{this.$route.params}}  -->
         <div class="form-group">
           <label class="control-label form-label">
-            First Name
+            Full Name
           </label>
 
           <input
@@ -126,6 +126,7 @@ export default {
   methods: {
     submit() {
       const vm = this;
+      // log(state: this.selectedState.id);
       let lo = {
         name: this.laname,
         mobileNumber: this.mobileNo,
@@ -149,11 +150,12 @@ export default {
       }
 
       // console.log(filledImpFields);
-
+      console.log("Edit..");
+      console.log(vm.id);
       if (filledImpFields === false) {
         axios
           .post(
-            `${vm.$store.getters["getIpaddress"]}laisionOfficer/editLaisionofficer/${this.id}`,
+            `${vm.$store.getters["getIpaddress"]}laisionOfficer/editLaisionofficer/${vm.id}`,
             lo
           )
           .then((response) => {
@@ -184,6 +186,8 @@ export default {
       }
     },
     goBackToLiasionList() {
+      console.log(this.selectedStateforDB);
+
       this.$router.push({
         name: "ViewLiasionOfficerList",
         params: {
